@@ -1,0 +1,24 @@
+{
+  "name": "testrepo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tailwind build -i ./myapp/static/css/input.css -o ./myapp/static/css/output.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sc19jwh/TestRepo.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sc19jwh/TestRepo/issues"
+  },
+  "homepage": "https://github.com/sc19jwh/TestRepo#readme",
+  "dependencies": {
+    "autoprefixer": "^10.4.13",
+    "clean-css-cli": "^5.6.1",
+    "tailwindcss": "^3.2.4"
+  }
+}
