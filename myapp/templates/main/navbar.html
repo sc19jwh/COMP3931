@@ -1,0 +1,59 @@
+{% extends "./base.html" %}
+{% load static %}
+{% block content %}
+
+<body class="bg-gray-50">
+    <nav class="fixed w-full bg-white shadow">
+    <div class="container flex items-center justify-between py-5 px-10 mx-auto font-serif text-gray-600">
+        <div class="flex-initial">
+            <a href="/" class="flex items-center mb-2">
+                <img class="h-6" src="{% static 'images/logo.png' %}">
+            </a>
+        </div>
+        <div class="flex-1 text-center">
+            <a href="#" class="text-black {% if title == 'Home' %} border-b-2 border-custom-50 {% else %} border-b-2 border-transparent hover:border-custom-50 hover:text-gray-800{% endif %} mx-1.5 sm:mx-6">Home</a>
+            <a href="#" class="text-black {% if title == 'My Trips' %} border-b-2 border-custom-50 {% else %} border-b-2 border-transparent hover:border-custom-50 hover:text-gray-800{% endif %} mx-1.5 sm:mx-6">My Trips</a>
+            <a href="#" class="text-black {% if title == 'More Info' %} border-b-2 border-custom-50 {% else %} border-b-2 border-transparent hover:border-custom-50 hover:text-gray-800{% endif %} mx-1.5 sm:mx-6">More Info</a>
+        </div>
+        <div class="flex-initial">
+            {% if profile.image %}
+                <img class="rounded-full w-6 h-6 object-cover" src="data:image/jpeg;base64,{{ profile.image }}" alt="Profile Image">
+            {% else %}
+                <!-- ATTRIBUTION: No user image obtained from icon-libary.com - https://icon-library.com/images/no-user-image-icon/no-user-image-icon-27.jpg -->
+                <img class="rounded-full w-6 h-6 object-cover" src="{% static 'images/noprofilepic.jpg' %}" alt="Blank Profile Image">
+            {% endif %}
+        </div>
+    </div>
+    </nav>
+    
+    <div class="bg-cover flex flex-col items-center justify-center py-28 px-10 min-h-screen">
+        {% block mainbody %}{% endblock mainbody %}
+    </div>
+    
+
+    <footer class="bg-gray-100 flex items-center justify-between h-16 py-5 px-10 text-gray-600 font-serif">
+        <div class="flex">
+            <p class="mr-4">&copy; 2023 Your Company Name</p>
+            <nav class="flex">
+            <a href="#" class="mr-4 hover:text-gray-400">About</a>
+            <a href="#" class="mr-4 hover:text-gray-400">Contact</a>
+            <a href="#" class="mr-4 hover:text-gray-400">Privacy Policy</a>
+            </nav>
+        </div>
+        
+        <div class="flex">
+            <a href="#" class="mr-4 hover:text-gray-400">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/>
+            </svg>
+            </a>
+            <a href="#" class=" hover:text-gray-400">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/>
+            </svg>
+            </a>
+        </div>
+    </footer>      
+</body>
+
+{% endblock %}S

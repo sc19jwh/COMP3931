@@ -1,0 +1,26 @@
+{% extends "../navbar.html" %}
+{% load static %}
+{% block mainbody %}
+
+<h1 class="text-xl font-normal font-serif text-black mb-4">
+    You have {{trips|length}} trip{% if trips|length > 1 %}s{% endif %} saved:
+</h1>
+
+{% for trip in trips %}
+  <div class="flex items-center p-4 bg-white rounded-lg shadow w-2/3 mb-4 font-serif hover:transform hover:cursor-pointer hover:scale-105 transition-all">
+    <div class="w-2/6">
+        <p class="text-lg font-medium">{{ trip.title }}</p>
+        <div class="flex">
+            {% for destination in trip.destination_set.all %}
+                <img src="https://flagcdn.com/h240/{{ destination.country.alpha2code }}.png" class="w-6 h-4 mr-1">
+            {% endfor %}
+        </div>
+    </div>
+    <div class="w-4/6 pl-4">
+        <p class="text-sm text-gray-600">{{ trip.start_date|date:"d M Y" }}</p>
+        <p class="text-sm text-gray-600">{{ trip.end_date|date:"d M Y" }}</p>
+    </div>
+  </div>
+{% endfor %}
+
+{% endblock %}

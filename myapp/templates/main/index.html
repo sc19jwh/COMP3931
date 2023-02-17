@@ -1,0 +1,37 @@
+{% extends "./base.html" %}
+{% load static %}
+{% block content %}
+  
+<body class="bg-gray-50">
+    <div class="flex justify-center">
+        {% if user.is_authenticated %}
+            <a href ="/profile" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4">
+                Profile
+            </a>
+            <a href = "/signout" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4">
+                Sign Out
+            </a>
+            <a href = "/mytrips" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4">
+                My Trips
+            </a>
+        {% else %}
+            <a href ="/register" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4">
+                Register
+            </a>
+            <a href = "/signin" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4">
+                Sign In
+            </a>
+        {% endif %}
+    </div>
+    <select name="country" hx-get="{% url 'cities' %}" hx-trigger="change" hx-target="#cities">
+        <option selected>Open this select menu</option>
+        {% for country in countries%}
+            <option value="{{country.pk}}">{{country.name}}</option>
+        {% endfor %}
+    </select>
+    <div id="cities">
+        {% include 'partials/cities.html' %}
+    </div>
+</body>
+
+{% endblock %}

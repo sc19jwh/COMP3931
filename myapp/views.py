@@ -3,9 +3,10 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.core.files.base import ContentFile
+from django.db.models import Min, Max
+from django.template.loader import render_to_string
 # Other imports
 import base64
-import time
 # Folder imports
 from .utils.currency import *
 from .utils.cities import *
@@ -13,10 +14,10 @@ from .models import *
 from .forms import CreateUserForm, AuthenticationForm
 
 def home(request):
-    print(getExchangeRates("EUR")["USD"])
+    # print(getExchangeRates("EUR")["USD"])
     countries = Country.objects.filter()
     context = {'title': 'Home', 'countries': countries}
-    return render(request, 'index.html', context)
+    return render(request, 'main/index.html', context)
 
 def signin(request):
     warning = False
@@ -37,7 +38,7 @@ def signin(request):
             else:
                 warning = True
     context = {'title': 'Login', 'form': form, 'warning': warning}
-    return render(request, 'user_auth/signin.html', context)
+    return render(request, 'main/user_auth/signin.html', context)
 
 def signout(request):
     logout(request)
@@ -60,9 +61,9 @@ def register(request):
             Profile.objects.create(user=user)
             if user is not None:
                 login(request, user)
-                return redirect('home')
+                return redirect('setcountry')
     context = {'title': 'Register', 'form': form}
-    return render(request, 'user_auth/register.html', context)
+    return render(request, 'main/user_auth/register.html', context)
 
 def profile(request):
     if not request.user.is_authenticated:
@@ -74,4 +75,28 @@ def profile(request):
         user_profile.image = base64_data
         user_profile.save()
     context = {'title': 'User Profile', 'profile': Profile.objects.get(user=request.user)}
-    return render(request, 'user_auth/profile.html', context)
+    return render(request, 'main/user_auth/profile.html', context)
+
+def setcountry(request):
+    if not request.user.is_authenticated:
+        return redirect('home')
+    if request.method == 'POST':
+        selected_country_pk = request.POST.get('country')
+        selected_country = Country.objects.get(pk=selected_country_pk)
+        profile = request.user.profile
+        profile.nationality = selected_country
+        profile.save()
+        return redirect('home')
+    countries = Country.objects.filter()
+    context = {'title': 'Set Country', 'countries': countries}
+    return render(request, 'main/auser_auth/setcountry.html', context)
+
+def mytrips(request):
+    if not request.user.is_authenticated:
+        return redirect('home')
+    trips = Trip.objects.filter(user=request.user)
+    for trip in trips:
+        trip.start_date = trip.destination_set.aggregate(Min('start_date'))['start_date__min']
+        trip.end_date = trip.destination_set.aggregate(Max('end_date'))['end_date__max']
+    context = {'title': 'My Trips', 'profile': Profile.objects.get(user=request.user), 'trips': trips}
+    return render(request, 'main/trips/mytrips.html', context)

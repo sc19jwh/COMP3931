@@ -1,0 +1,6 @@
+<select>
+    <option selected>Open this select menu</option>
+    {% for city in cities%}
+        <option value="{{city.pk}}">{{city.name}}</option>
+    {% endfor %}
+</select>

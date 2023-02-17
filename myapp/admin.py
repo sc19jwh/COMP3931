@@ -6,10 +6,9 @@ class CountryAdmin(admin.ModelAdmin):
 
 class CityAdmin(admin.ModelAdmin):
     list_display= ('name', 'country')
-
-class ProfileAdmin(admin.ModelAdmin):
-    list_display= ('user', 'nationality', 'image')
   
 admin.site.register(Country, CountryAdmin)
 admin.site.register(City, CityAdmin)
-admin.site.register(Profile, ProfileAdmin)
+admin.site.register(Profile)
+admin.site.register(Trip)
+admin.site.register(Destination)
