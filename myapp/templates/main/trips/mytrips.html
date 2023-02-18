@@ -7,20 +7,24 @@
 </h1>
 
 {% for trip in trips %}
-  <div class="flex items-center p-4 bg-white rounded-lg shadow w-2/3 mb-4 font-serif hover:transform hover:cursor-pointer hover:scale-105 transition-all">
-    <div class="w-2/6">
-        <p class="text-lg font-medium">{{ trip.title }}</p>
-        <div class="flex">
-            {% for destination in trip.destination_set.all %}
-                <img src="https://flagcdn.com/h240/{{ destination.country.alpha2code }}.png" class="w-6 h-4 mr-1">
-            {% endfor %}
+    <div class="flex items-center p-4 bg-white rounded-lg shadow w-2/3 mb-4 font-serif hover:transform hover:cursor-pointer hover:scale-105 transition-all"
+    hx-get="/profile" hx-target="body" hx-push-url="true">
+        <div class="w-2/6">
+            <p class="text-lg font-medium">{{ trip.title }}</p>
+            <div class="flex">
+                {% for destination in trip.destination_set.all %}
+                    <img src="https://flagcdn.com/h240/{{ destination.country.alpha2code }}.png" class="w-6 h-4 mr-1">
+                {% endfor %}
+            </div>
         </div>
+        <div class="w-4/6 pl-4">
+            <p class="text-sm text-gray-600">{{ trip.start_date|date:"d M Y" }}</p>
+            <p class="text-sm text-gray-600">{{ trip.end_date|date:"d M Y" }}</p>
+        </div>
+        <!-- {% for destination in trip.destination_set.all %}
+            <div class="w-1/12 bg-image transform -skew-x-12" style="background-image: url('https://flagcdn.com/h40/{{ destination.country.alpha2code }}.png'); background-size: cover;">a</div>
+        {% endfor %} -->
     </div>
-    <div class="w-4/6 pl-4">
-        <p class="text-sm text-gray-600">{{ trip.start_date|date:"d M Y" }}</p>
-        <p class="text-sm text-gray-600">{{ trip.end_date|date:"d M Y" }}</p>
-    </div>
-  </div>
 {% endfor %}
 
 {% endblock %}

@@ -4,10 +4,10 @@
 
 <body class="bg-gray-50">
     <nav class="fixed w-full bg-white shadow">
-    <div class="container flex items-center justify-between py-5 px-10 mx-auto font-serif text-gray-600">
+    <div class="container flex items-center justify-between py-3 px-10 mx-auto font-serif text-gray-600">
         <div class="flex-initial">
             <a href="/" class="flex items-center mb-2">
-                <img class="h-6" src="{% static 'images/logo.png' %}">
+                <img class="h-8" src="{% static 'images/logo.png' %}">
             </a>
         </div>
         <div class="flex-1 text-center">
@@ -17,10 +17,12 @@
         </div>
         <div class="flex-initial">
             {% if profile.image %}
-                <img class="rounded-full w-6 h-6 object-cover" src="data:image/jpeg;base64,{{ profile.image }}" alt="Profile Image">
+                <img class="rounded-full w-6 h-6 object-cover hover:cursor-pointer" src="data:image/jpeg;base64,{{ profile.image }}" alt="Profile Image"
+                hx-get="/profile" hx-target="body" hx-push-url="true">
             {% else %}
                 <!-- ATTRIBUTION: No user image obtained from icon-libary.com - https://icon-library.com/images/no-user-image-icon/no-user-image-icon-27.jpg -->
-                <img class="rounded-full w-6 h-6 object-cover" src="{% static 'images/noprofilepic.jpg' %}" alt="Blank Profile Image">
+                <img class="rounded-full w-6 h-6 object-cover hover:cursor-pointer" src="{% static 'images/noprofilepic.jpg' %}" alt="Blank Profile Image"
+                hx-get="/profile" hx-target="body" hx-push-url="true">
             {% endif %}
         </div>
     </div>
