@@ -14,7 +14,6 @@ from .models import *
 from .forms import CreateUserForm, AuthenticationForm
 
 def home(request):
-    # print(getExchangeRates("EUR")["USD"])
     countries = Country.objects.filter(is_interrail=True)
     context = {'title': 'Home', 'countries': countries}
     return render(request, 'main/index.html', context)
@@ -101,3 +100,8 @@ def mytrips(request):
         trip.end_date = trip.destination_set.aggregate(Max('end_date'))['end_date__max']
     context = {'title': 'My Trips', 'profile': Profile.objects.get(user=request.user), 'trips': trips}
     return render(request, 'main/trips/mytrips.html', context)
+
+def currency(request):
+    countries = Country.objects.all()
+    context = {'title': 'Currency', 'countries': countries, 'profile': Profile.objects.get(user=request.user)}
+    return render(request, 'main/currency/manual.html', context)
