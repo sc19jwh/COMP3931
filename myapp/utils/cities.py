@@ -1,5 +1,18 @@
 from geopy.geocoders import Nominatim
 import gmplot
+import requests
+
+import requests
+
+def get_cities():
+    url = "https://wft-geo-db.p.rapidapi.com/v1/geo/cities"
+    querystring = {"countryIds":"ie"}
+    headers = {
+        "X-RapidAPI-Key": "c3557821c7msh7f56c57b74e8a14p1a4334jsn88f0dafefb74",
+        "X-RapidAPI-Host": "wft-geo-db.p.rapidapi.com"
+    }
+    response = requests.request("GET", url, headers=headers, params=querystring)
+    print(response.text)
 
 # INPUT: city as string
 # OUTPUT: two variables for latitude and longitude

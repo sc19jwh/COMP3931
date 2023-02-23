@@ -2,7 +2,10 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    path('', include('myapp.urls')),
+    # Include all of the main app urls under base url /
+    path('', include('myapp.urls_main')),
+    # Include all of the partials paths under partials/...
+    path('partials/', include('myapp.urls_partials')),
+    # Include admin page
     path('admin/', admin.site.urls),
-    # path("user/", include("django.contrib.auth.urls")),
 ]

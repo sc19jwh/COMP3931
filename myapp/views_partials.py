@@ -9,3 +9,9 @@ def cities(request):
     cities = City.objects.filter(country=country)
     context = {'cities': cities}
     return render(request, 'partials/cities.html', context)
+
+def set_country_flag(request):
+    id = request.GET.get('country')
+    country = Country.objects.get(id=id)
+    context = {'countryid': country.alpha2code}
+    return render(request, 'partials/set_country_flag.html', context)

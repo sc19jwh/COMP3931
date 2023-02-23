@@ -87,9 +87,10 @@ def setcountry(request):
         profile.nationality = selected_country
         profile.save()
         return redirect('home')
+    current_user_nationality = Profile.objects.get(user=request.user).nationality
     countries = Country.objects.filter()
-    context = {'title': 'Set Country', 'countries': countries}
-    return render(request, 'main/auser_auth/setcountry.html', context)
+    context = {'title': 'Set Country', 'countries': countries, 'current_user_nationality': current_user_nationality}
+    return render(request, 'main/user_auth/setcountry.html', context)
 
 def mytrips(request):
     if not request.user.is_authenticated:
