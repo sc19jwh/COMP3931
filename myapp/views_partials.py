@@ -20,12 +20,11 @@ def set_country_flag(request):
     return render(request, 'partials/set_country_flag.html', context)
 
 def currency_conversion(request):
-    # Initially default start and end currencies to users nationality
-    start_currency = Profile.objects.get(user=request.user).nationality.currency
-    result_currency = Profile.objects.get(user=request.user).nationality.currency
-    # Then get currencies from the selected fields
-    # start_currency = request.GET.get('country')
-    # result_currency = Country.objects.get(id=id).currency
+    # Retrieve currencies from the selected fields
+    if request.method == 'POST':
+        start_currency = Country.objects.get(id=request.POST.get('country')).currency
+        result_currency = Country.objects.get(id=request.POST.get('country2')).currency
     conversion = getExchangeRates(start_currency)[result_currency]
-    context = {'start_currency': start_currency, 'result_currency': result_currency, 'conversion': conversion}
+    formatted_conversion = "{:.2f}".format(round(conversion, 2))
+    context = {'profile': Profile.objects.get(user=request.user), 'start_currency': start_currency, 'result_currency': result_currency, 'conversion': formatted_conversion}
     return render(request, 'partials/currency_conversion.html', context)
