@@ -1,6 +1,6 @@
 # Django imports
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.contrib.auth import authenticate, login, logout
 from django.core.files.base import ContentFile
 from django.db.models import Min, Max
@@ -109,5 +109,8 @@ def currency(request):
 def configtrip(request, trip_id):
     countries = Country.objects.all()
     trip = get_object_or_404(Trip, id=trip_id)
-    context = {'title': 'Your Trip', 'trip': trip,'countries': countries, 'profile': Profile.objects.get(user=request.user)}
+    # Check if the trip belongs to the current user
+    if trip.user != request.user:
+        raise Http404
+    context = {'title': 'My Trips', 'trip': trip,'countries': countries, 'profile': Profile.objects.get(user=request.user)}
     return render(request, 'main/trips/configtrip.html', context)
