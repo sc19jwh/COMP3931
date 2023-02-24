@@ -10,4 +10,5 @@ urlpatterns = [
     path('setcountry', views.setcountry, name='setcountry'),
     path('mytrips', views.mytrips, name='mytrips'),
     path('currency', views.currency, name='currency'),
+    path('trip/<int:trip_id>', views.configtrip, name='configtrip')
 ]

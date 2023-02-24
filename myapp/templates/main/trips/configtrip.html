@@ -1,0 +1,21 @@
+{% extends "../navbar.html" %}
+{% load static %}
+{% block mainbody %}
+
+<h1 class="text-xl font-normal font-serif text-black mb-4">
+    {{trip.title}}
+</h1>
+
+{% for destination in trip.destination_set.all %}
+    <div class="flex items-center p-4 bg-white rounded-lg shadow w-2/3 mb-4 font-serif">
+        <div class="w-2/6">
+            <p class="text-lg font-medium">{{ destination.city }}</p>
+        </div>
+        <div class="w-4/6 pl-4">
+            <p class="text-sm text-gray-600">{{ destination.start_date|date:"d M Y" }}</p>
+            <p class="text-sm text-gray-600">{{ destination.end_date|date:"d M Y" }}</p>
+        </div>
+    </div>
+{% endfor %}
+
+{% endblock %}

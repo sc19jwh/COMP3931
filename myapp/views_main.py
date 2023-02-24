@@ -1,5 +1,5 @@
 # Django imports
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.core.files.base import ContentFile
@@ -105,3 +105,9 @@ def currency(request):
     countries = Country.objects.all()
     context = {'title': 'Currency', 'countries': countries, 'profile': Profile.objects.get(user=request.user)}
     return render(request, 'main/currency/manual.html', context)
+
+def configtrip(request, trip_id):
+    countries = Country.objects.all()
+    trip = get_object_or_404(Trip, id=trip_id)
+    context = {'title': 'Your Trip', 'trip': trip,'countries': countries, 'profile': Profile.objects.get(user=request.user)}
+    return render(request, 'main/trips/configtrip.html', context)
