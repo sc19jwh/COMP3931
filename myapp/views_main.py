@@ -91,9 +91,11 @@ def setcountry(request):
     context = {'title': 'Set Country', 'countries': countries, 'current_user_nationality': current_user_nationality}
     return render(request, 'main/user_auth/setcountry.html', context)
 
-def mytrips(request):
+def mytrips(request, username):
     if not request.user.is_authenticated:
-        return redirect('home')
+        return redirect('signin')
+    if User.objects.get(username=username) != request.user:
+        raise Http404
     trips = Trip.objects.filter(user=request.user)
     for trip in trips:
         trip.start_date = trip.destination_set.aggregate(Min('start_date'))['start_date__min']
@@ -106,11 +108,20 @@ def currency(request):
     context = {'title': 'Currency', 'countries': countries, 'profile': Profile.objects.get(user=request.user)}
     return render(request, 'main/currency/manual.html', context)
 
-def configtrip(request, trip_id):
+def configtrip(request, trip_id, username):
+    if not request.user.is_authenticated:
+        return redirect('signin')
+    if User.objects.get(username=username) != request.user:
+        raise Http404
+    if request.method == 'POST':
+        trip = get_object_or_404(Trip, id=trip_id)
+        country = get_object_or_404(Country, id=request.POST.get('country'))
+        city = get_object_or_404(City, id=request.POST.get('city'))
+        start_date = request.POST.get('start_date')
+        end_date = request.POST.get('end_date')
+        destination = Destination.objects.create(trip=trip,country=country,city=city,start_date=start_date,end_date=end_date)
     countries = Country.objects.all()
     trip = get_object_or_404(Trip, id=trip_id)
     # Check if the trip belongs to the current user
-    if trip.user != request.user:
-        raise Http404
     context = {'title': 'My Trips', 'trip': trip,'countries': countries, 'profile': Profile.objects.get(user=request.user)}
     return render(request, 'main/trips/configtrip.html', context)

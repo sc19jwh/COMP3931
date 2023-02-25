@@ -39,6 +39,6 @@ class Trip(models.Model):
 class Destination(models.Model):
     trip = models.ForeignKey("Trip", on_delete=models.CASCADE)
     country = models.ForeignKey("Country", on_delete=models.CASCADE)
-    city = models.CharField(max_length=50)
+    city = models.ForeignKey("City", on_delete=models.CASCADE)
     start_date = models.DateField()
     end_date = models.DateField()

@@ -8,7 +8,7 @@ urlpatterns = [
     path('profile', views.profile, name='profile'),
     path('signout', views.signout, name='signout'),
     path('setcountry', views.setcountry, name='setcountry'),
-    path('mytrips', views.mytrips, name='mytrips'),
+    path('<str:username>/mytrips', views.mytrips, name='mytrips'),
     path('currency', views.currency, name='currency'),
-    path('trip/<int:trip_id>', views.configtrip, name='configtrip')
+    path('<str:username>/trip/<int:trip_id>', views.configtrip, name='configtrip')
 ]

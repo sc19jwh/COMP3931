@@ -8,7 +8,7 @@
 
 {% for trip in trips %}
     <div class="flex items-center p-4 bg-white rounded-lg shadow w-2/3 mb-4 font-serif hover:transform hover:cursor-pointer hover:scale-105 transition-all"
-    hx-get="/trip/{{trip.id}}" hx-target="body" hx-push-url="true">
+    hx-get="trip/{{trip.id}}" hx-target="body" hx-push-url="true">
         <div class="w-2/6">
             <p class="text-lg font-medium">{{ trip.title }}</p>
             <div class="flex">

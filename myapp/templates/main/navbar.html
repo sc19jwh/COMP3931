@@ -13,7 +13,7 @@
             </div>
             <div class="flex-1 text-center">
                 <a href="#" class="text-black {% if title == 'Home' %} border-b-2 border-custom-50 {% else %} border-b-2 border-transparent hover:border-custom-50 hover:text-gray-800{% endif %} mx-1.5 sm:mx-6">Home</a>
-                <a href="/mytrips" class="text-black {% if title == 'My Trips' %} border-b-2 border-custom-50 {% else %} border-b-2 border-transparent hover:border-custom-50 hover:text-gray-800{% endif %} mx-1.5 sm:mx-6">My Trips</a>
+                <a href="{{ user.username }}/mytrips" class="text-black {% if title == 'My Trips' %} border-b-2 border-custom-50 {% else %} border-b-2 border-transparent hover:border-custom-50 hover:text-gray-800{% endif %} mx-1.5 sm:mx-6">My Trips</a>
                 <a href="/currency" class="text-black {% if title == 'Currency' %} border-b-2 border-custom-50 {% else %} border-b-2 border-transparent hover:border-custom-50 hover:text-gray-800{% endif %} mx-1.5 sm:mx-6">Currency</a>
             </div>
             <div class="flex-initial">
