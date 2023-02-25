@@ -114,12 +114,19 @@ def configtrip(request, trip_id, username):
     if User.objects.get(username=username) != request.user:
         raise Http404
     if request.method == 'POST':
-        trip = get_object_or_404(Trip, id=trip_id)
-        country = get_object_or_404(Country, id=request.POST.get('country'))
-        city = get_object_or_404(City, id=request.POST.get('city'))
-        start_date = request.POST.get('start_date')
-        end_date = request.POST.get('end_date')
-        destination = Destination.objects.create(trip=trip,country=country,city=city,start_date=start_date,end_date=end_date)
+        # If POST adding destination
+        if 'add_destination_form' in request.POST:
+            destination = Destination.objects.create(
+                trip=get_object_or_404(Trip, id=trip_id),
+                country=get_object_or_404(Country, id=request.POST.get('country')),
+                city=get_object_or_404(City, id=request.POST.get('city')),
+                start_date=request.POST.get('start_date'),
+                end_date=request.POST.get('end_date')
+            )
+        # If POST deleting destination
+        elif 'delete_destination_form' in request.POST:
+            destination = get_object_or_404(Destination, id=request.POST.get('delete_destination_form'))
+            destination.delete()
     countries = Country.objects.all()
     trip = get_object_or_404(Trip, id=trip_id)
     # Check if the trip belongs to the current user
