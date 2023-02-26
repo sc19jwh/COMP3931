@@ -62,7 +62,9 @@
     {% endif %}
 {% endfor %}
 
-<form class="text-center mt-6 w-1/5" hx-post="{{trip.id}}" hx-target="body">
+<button _="on click toggle the *display of the next <form/> on click remove me" class="text-center mt-6 w-1/5 px-5 py-2 font-serif text-white bg-custom-50 hover:bg-custom-100 font-medium rounded-lg text-sm">Add a destination</button>
+
+<form style="display: none;" class="text-center mt-6 w-1/5" hx-post="{{trip.id}}" hx-target="body">
     <!-- Invisible field identify which form -->
     <input type="hidden" name="add_destination_form" value="1">
     <select name="country" hx-get="{% url 'cities' %}" hx-trigger="change" hx-target="#cities" class="w-full text-center font-serif bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-4">
