@@ -9,7 +9,6 @@ from django.template.loader import render_to_string
 import base64
 # Folder imports
 from .utils.currency import *
-from .utils.cities import *
 from .models import *
 from .forms import CreateUserForm, AuthenticationForm
 

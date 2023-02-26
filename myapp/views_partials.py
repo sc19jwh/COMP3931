@@ -28,9 +28,3 @@ def currency_conversion(request):
     formatted_conversion = "{:.2f}".format(round(conversion, 2))
     context = {'profile': Profile.objects.get(user=request.user), 'start_currency': start_currency, 'result_currency': result_currency, 'conversion': formatted_conversion}
     return render(request, 'partials/currency_conversion.html', context)
-
-def trip_details(request, username, trip_id):
-    trip = get_object_or_404(Trip, id=trip_id)
-    print(trip.user.profile.nationality)
-    context = {'trip': trip}
-    return render(request, 'partials/trip_details.html', context)
