@@ -42,3 +42,19 @@ class Destination(models.Model):
     city = models.ForeignKey("City", on_delete=models.CASCADE)
     start_date = models.DateField()
     end_date = models.DateField()
+
+class TrainRoute(models.Model):
+    start_city = models.ForeignKey("City", on_delete=models.CASCADE, related_name='start_train_route')
+    end_city = models.ForeignKey("City", on_delete=models.CASCADE, related_name='end_train_route')
+    duration = models.IntegerField()
+
+    def __str__(self):
+        return self.start_city.name + " - " + self.end_city.name
+
+class FerryRoute(models.Model):
+    start_city = models.ForeignKey("City", on_delete=models.CASCADE, related_name='start_ferry_route')
+    end_city = models.ForeignKey("City", on_delete=models.CASCADE, related_name='end_ferry_route')
+    duration = models.IntegerField()
+
+    def __str__(self):
+        return self.start_city.name + " - " + self.end_city.name
