@@ -24,7 +24,8 @@ def currency_conversion(request):
     if request.method == 'POST':
         start_currency = Country.objects.get(id=request.POST.get('country')).currency
         result_currency = Country.objects.get(id=request.POST.get('country2')).currency
-    conversion = getExchangeRates(start_currency)[result_currency]
+        amount = request.POST.get('amount')
+    conversion = getExchangeRates(start_currency)[result_currency] * float(amount)
     formatted_conversion = "{:.2f}".format(round(conversion, 2))
-    context = {'profile': Profile.objects.get(user=request.user), 'start_currency': start_currency, 'result_currency': result_currency, 'conversion': formatted_conversion}
+    context = {'profile': Profile.objects.get(user=request.user), 'start_currency': start_currency, 'result_currency': result_currency, 'conversion': formatted_conversion, 'amount': amount}
     return render(request, 'partials/currency_conversion.html', context)
