@@ -17,11 +17,8 @@ class TripAdmin(admin.ModelAdmin):
 class DestinationAdmin(admin.ModelAdmin):
     list_display= ('trip', 'country', 'city', 'start_date', 'end_date')
 
-class TrainRouteAdmin(admin.ModelAdmin):
-    list_display= ('start_city', 'end_city', 'duration')
-
-class FerryRouteAdmin(admin.ModelAdmin):
-    list_display= ('start_city', 'end_city', 'duration')
+class TravelRouteAdmin(admin.ModelAdmin):
+    list_display= ('start_city', 'end_city', 'duration', 'type')
   
 # Register models for editing in admin site
 admin.site.register(Country, CountryAdmin)
@@ -29,5 +26,4 @@ admin.site.register(City, CityAdmin)
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Trip, TripAdmin)
 admin.site.register(Destination, DestinationAdmin)
-admin.site.register(TrainRoute, TrainRouteAdmin)
-admin.site.register(FerryRoute, FerryRouteAdmin)
+admin.site.register(TravelRoute, TravelRouteAdmin)

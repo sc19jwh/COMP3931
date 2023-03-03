@@ -115,10 +115,25 @@ def mytrips(request, username):
 
 def currency(request):
     countries = Country.objects.all()
-    context = {'title': 'Currency', 'countries': countries, 'profile': Profile.objects.get(user=request.user)}
+    interrail_countries = Country.objects.filter(is_interrail=True)
+    context = {'title': 'Currency', 'countries': countries, 'interrail_countries': interrail_countries, 'profile': Profile.objects.get(user=request.user)}
     return render(request, 'main/currency/manual.html', context)
 
 def configtrip(request, trip_id, username):
+
+    start_city = City.objects.get(name="Oslo")
+    end_city = City.objects.get(name="Hamburg")
+    direct_route = TravelRoute.objects.filter(start_city=start_city, end_city=end_city).first()
+    if direct_route:
+        print(direct_route.start_city.name + " - " + direct_route.end_city.name)
+    else:
+        for route in TravelRoute.objects.filter(start_city=start_city):
+            connection = TravelRoute.objects.filter(start_city=route.end_city, end_city=end_city).first()
+            if connection:
+                duration = route.duration + connection.duration
+                print(route.start_city.name + " - " + route.end_city.name + " ({} mins)".format(route.duration))
+                print(connection.start_city.name + " - " + connection.end_city.name + " ({} mins)".format(connection.duration))
+
     if not request.user.is_authenticated:
         return redirect('signin')
     if User.objects.get(username=username) != request.user:
@@ -139,6 +154,9 @@ def configtrip(request, trip_id, username):
             destination.delete()
     countries = Country.objects.all()
     trip = get_object_or_404(Trip, id=trip_id)
+    # destination_photos = []
+    # for destination in trip.destination_set.all():
+    #     destination_photos.append(search_unsplash(destination.city.name))
     # Check if the trip belongs to the current user
     context = {'title': 'My Trips', 'trip': trip,'countries': countries, 'profile': Profile.objects.get(user=request.user)}
     return render(request, 'main/trips/configtrip.html', context)

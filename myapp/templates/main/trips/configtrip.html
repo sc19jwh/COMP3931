@@ -58,11 +58,20 @@
     </div>
     <!-- Vertical line to connect to next destination -->
     {% if not forloop.last %}
-        <div class="h-14 border-l border-gray-400"></div>
+        <div class="h-7 border-l border-gray-400"></div>
+        <div class="my-2">
+            <p class="text-sm font-light text-gray-500 text-center font-serif">
+                Travel not configured yet. <a href="" class="font-medium text-custom-50 hover:underline hover:text-custom-100">Configure here.</a>
+            </p>
+            <p class="text-sm underline font-medium text-gray-500 text-center font-serif">
+                Recommendation:
+            </p>
+        </div>
+        <div class="h-7 border-l border-gray-400"></div>
     {% endif %}
 {% endfor %}
 
-<button _="on click toggle the *display of the next <form/> on click remove me" class="text-center mt-6 w-1/5 px-5 py-2 font-serif text-white bg-custom-50 hover:bg-custom-100 font-medium rounded-lg text-sm">Add a destination</button>
+<button _="on click toggle the *display of the next <form/> on click remove me" class="text-center mt-4 w-1/5 px-5 py-2 font-serif text-white bg-custom-50 hover:bg-custom-100 font-medium rounded-lg text-sm">Add a destination</button>
 
 <form style="display: none;" class="text-center mt-6 w-1/5" hx-post="{{trip.id}}" hx-target="body">
     <!-- Invisible field identify which form -->
