@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<body class="bg-gray-50">
+    
+    <nav class="fixed w-full bg-white shadow">
+        <div class="container flex items-center justify-between py-3 px-10 mx-auto font-serif text-gray-600">
+            <div class="flex-initial">
+                <a href="/" class="flex items-center mb-2">
+                    <img class="h-8" src="{% static 'images/logo.png' %}">
+                </a>
+            </div>
+            <div class="flex-1 text-center">
+                <a href="#" class="text-black {% if title == 'Home' %} border-b-2 border-custom-50 {% else %} border-b-2 border-transparent hover:border-custom-50 hover:text-gray-800{% endif %} mx-1.5 sm:mx-6">Home</a>
+                <a href="/{{ user.username }}/mytrips" class="text-black {% if title == 'My Trips' %} border-b-2 border-custom-50 {% else %} border-b-2 border-transparent hover:border-custom-50 hover:text-gray-800{% endif %} mx-1.5 sm:mx-6">My Trips</a>
+                <a href="/currency" class="text-black {% if title == 'Currency' %} border-b-2 border-custom-50 {% else %} border-b-2 border-transparent hover:border-custom-50 hover:text-gray-800{% endif %} mx-1.5 sm:mx-6">Currency</a>
+            </div>
+            <div class="flex-initial">
+                {% if profile.image %}
+                    <img class="rounded-full w-6 h-6 object-cover hover:cursor-pointer" src="data:image/jpeg;base64,{{ profile.image }}" alt="Profile Image"
+                    hx-get="/user/profile" hx-target="body" hx-push-url="true">
+                {% else %}
+                    <!-- ATTRIBUTION: No user image obtained from icon-libary.com - https://icon-library.com/images/no-user-image-icon/no-user-image-icon-27.jpg -->
+                    <img class="rounded-full w-6 h-6 object-cover hover:cursor-pointer" src="{% static 'images/noprofilepic.jpg' %}" alt="Blank Profile Image"
+                    hx-get="/user/profile" hx-target="body" hx-push-url="true">
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+    
+    <div class="bg-cover flex flex-col items-center justify-center py-28 px-10 min-h-screen">
+        {% block mainbody %}{% endblock mainbody %}
+    </div>
+    
+
+    <footer class="bg-gray-100 flex items-center justify-between h-16 py-5 px-10 text-gray-600 font-serif">
+        <div class="flex">
+            <p class="mr-4">&copy; 2023 RailWizard</p>
+        </div>
+    </footer>      
+</body>
+
+{% endblock %}S

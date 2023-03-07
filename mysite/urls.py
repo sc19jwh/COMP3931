@@ -3,9 +3,11 @@ from django.urls import path, include
 
 urlpatterns = [
     # Include all of the main app urls under base url /
-    path('', include('myapp.urls_main')),
-    # Include all of the partials paths under partials/...
-    path('partials/', include('myapp.urls_partials')),
+    path('', include('apps.trips.urls')),
+    # Include all user authentication urls
+    path('user/', include('apps.authentication.urls')),
+    # Include all currency urls
+    path('currency/', include('apps.currencies.urls')),
     # Include admin page
     path('admin/', admin.site.urls),
 ]
