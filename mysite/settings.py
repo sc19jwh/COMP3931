@@ -22,7 +22,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'apps.myapp.apps.MyappConfig',
+    'apps.trips.apps.TripsConfig',
     'apps.authentication.apps.AuthenticationConfig',
     'apps.currencies.apps.CurrenciesConfig',
     'django.contrib.admin',

@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from apps.myapp.models import Country
+from apps.trips.models import Country
 from apps.authentication.models import Profile
 from .utils.currency import getExchangeRates
 

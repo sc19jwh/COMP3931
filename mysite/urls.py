@@ -3,7 +3,7 @@ from django.urls import path, include
 
 urlpatterns = [
     # Include all of the main app urls under base url /
-    path('', include('apps.myapp.urls')),
+    path('', include('apps.trips.urls')),
     # Include all user authentication urls
     path('user/', include('apps.authentication.urls')),
     # Include all currency urls

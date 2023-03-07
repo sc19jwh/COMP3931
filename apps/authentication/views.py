@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 # Other imports
 import base64
 # Folder imports
-from apps.myapp.models import Country
+from apps.trips.models import Country
 from .models import Profile
 from .forms import CreateUserForm, AuthenticationForm
 
