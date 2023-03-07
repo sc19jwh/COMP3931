@@ -91,4 +91,4 @@ def set_country_flag(request):
         id = request.GET.get('country2')
     country = Country.objects.get(id=id)
     context = {'countryid': country.alpha2code}
-    return render(request, 'set_country_flag.html', context)
+    return render(request, 'partials/set_country_flag.html', context)
