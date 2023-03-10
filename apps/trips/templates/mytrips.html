@@ -37,13 +37,6 @@
 </div>
 {% endfor %}
 
-<button _="on click toggle the *display of the next <form/> on click remove me" class="text-center w-1/5 px-5 py-2 font-serif text-white bg-custom-50 hover:bg-custom-100 font-medium rounded-lg text-sm">Create a new trip</button>
-
-<form style="display: none;" class="text-center w-1/5" hx-post="" hx-target="body">
-    <!-- Invisible field identify which form -->
-    <input type="hidden" name="add_trip_form" value="1">
-    <input type="text" name="title" class="text-center font-serif bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block w-full p-2 mb-4" placeholder="Trip Name">
-    <button class="px-5 py-2 font-serif w-full text-white bg-custom-50 hover:bg-custom-100 font-medium rounded-lg text-sm">Create trip</button>
-</form>
+<button hx-get="{% url 'add_trip' %}" hx-target="body" hx-swap="beforeend" class="text-center w-1/5 px-5 py-2 font-serif text-white bg-custom-50 hover:bg-custom-100 font-medium rounded-lg text-sm">Create a new trip</button>
 
 {% endblock %}

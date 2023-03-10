@@ -6,11 +6,11 @@
     {{trip.title}}
 </h1>
 
-{% for destination in trip.destination_set.all %}
-    <div class="items-center p-4 bg-white rounded-lg shadow w-2/3 font-serif">
+{% for destination in destinations %}
+    <div class="items-center p-4 bg-white rounded-lg shadow w-3/4 font-serif">
         <div class="flex">
             <div class="w-1/6">
-                <img src="https://flagcdn.com/h240/{{destination.country.alpha2code}}.png" class="my-2 w-12 h-8 object-cover">
+                <img src="{{destination.city.photo_url}}" class="my-2 h-2/3 object-cover object-center">
             </div>
             <div class="w-2/6 flex flex-row items-center">
                 <img src="https://flagcdn.com/h240/{{destination.country.alpha2code}}.png" class="my-2 w-3 h-2 object-cover">
@@ -59,37 +59,20 @@
     <!-- Vertical line to connect to next destination -->
     {% if not forloop.last %}
         <div class="h-7 border-l border-gray-400"></div>
-        <div class="my-2">
-            <p class="text-sm font-light text-gray-500 text-center font-serif">
-                Travel not configured yet. <a href="" class="font-medium text-custom-50 hover:underline hover:text-custom-100">Configure here.</a>
-            </p>
-            <p class="text-sm underline font-medium text-gray-500 text-center font-serif">
-                Recommendation:
-            </p>
-        </div>
+        {% with next_id=forloop.counter|add:1 %}
+            {% with next_destination=destinations|slice:":"|slice:next_id|last %}
+                <div class="my-2 text-sm font-light text-gray-500 text-center font-serif">
+                    <button hx-indicator="#spinner" hx-get="{% url 'add_travel' %}?start={{destination.id}}&end={{next_destination.id}}" hx-target="body" hx-swap="beforeend" class="flex flex-row items-center font-medium text-custom-50 hover:underline hover:text-custom-100">
+                        Configure
+                        <img style="width: 10px; height: 10px; padding-left: 2px;;" id="spinner" class="htmx-indicator" src="{% static 'images/loading.gif' %}"/>
+                    </button>
+                </div>
+            {% endwith %}
+        {% endwith %}
         <div class="h-7 border-l border-gray-400"></div>
     {% endif %}
 {% endfor %}
 
-<button _="on click toggle the *display of the next <form/> on click remove me" class="text-center mt-4 w-1/5 px-5 py-2 font-serif text-white bg-custom-50 hover:bg-custom-100 font-medium rounded-lg text-sm">Add a destination</button>
-
-<form style="display: none;" class="text-center mt-6 w-1/5" hx-post="{{trip.id}}" hx-target="body">
-    <!-- Invisible field identify which form -->
-    <input type="hidden" name="add_destination_form" value="1">
-    <select name="country" hx-get="{% url 'cities' %}" hx-trigger="change" hx-target="#cities" class="w-full text-center font-serif bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-4">
-        <option disabled selected>--- Select a country ---</option>
-        {% for country in countries%}
-            <option value="{{country.pk}}">{{country.name}}</option>
-        {% endfor %}
-    </select>
-    <div id="cities">
-        <select disabled name="city" class="w-full text-center font-serif bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-4">
-            <option>--- Select a city ---</option>
-        </select>
-    </div>
-    <input type="date" name="start_date" min="2023-01-01" placeholder="Start date" class="w-full text-center font-serif bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-4" />
-    <input type="date" name="end_date" min="2023-01-01" placeholder="End date" class="w-full text-center font-serif bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-4" />
-    <button class="px-5 py-2 font-serif w-full text-white bg-custom-50 hover:bg-custom-100 font-medium rounded-lg text-sm">Add another destination</button>
-</form>
+<button hx-get="{% url 'add_destination' %}" hx-target="body" hx-swap="beforeend" class="text-center mt-4 w-1/5 px-5 py-2 font-serif text-white bg-custom-50 hover:bg-custom-100 font-medium rounded-lg text-sm">Add a destination</button>
 
 {% endblock %}
