@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
-{% block content %}
-  
+{% block content %} 
+
 <body class="bg-gray-50">
     <div class="flex justify-center">
         {% if user.is_authenticated %}
@@ -23,10 +23,6 @@
             </a>
         {% endif %}
     </div>
-    {% for city in cities%}
-        <h2>{{city.name}}</h2>
-        <img class="h-12 w-auto" src="{{city.photo_url}}">
-    {% endfor %}
     <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
     <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
     <button _="on click go to the top of the body smoothly">

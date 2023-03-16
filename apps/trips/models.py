@@ -15,9 +15,10 @@ class Country(models.Model):
 class City(models.Model):
     name = models.CharField(max_length=50)
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
-    photo_url = models.CharField(max_length=150, blank=True, null=True)
+    photo_url = models.CharField(max_length=250, blank=True, null=True)
     latitude = models.DecimalField(max_digits=20, decimal_places=17, blank=True, null=True)
     longitude = models.DecimalField(max_digits=20, decimal_places=17, blank=True, null=True)
+    skyscanner_id = models.IntegerField(blank=True,null=True)
 
     def __str__(self):
         return self.name

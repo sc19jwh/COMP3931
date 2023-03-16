@@ -6,7 +6,7 @@ class CountryAdmin(admin.ModelAdmin):
     list_display= ('name', 'alpha2code', 'currency', 'is_interrail')
 
 class CityAdmin(admin.ModelAdmin):
-    list_display= ('name', 'country', 'photo_url', 'latitude', 'longitude')
+    list_display= ('name', 'country', 'skyscanner_id', 'latitude', 'longitude', 'photo_url')
 
 class TripAdmin(admin.ModelAdmin):
     list_display= ('user', 'title')
