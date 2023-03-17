@@ -97,13 +97,16 @@ def process_response(response, direct):
             carrier_id = legs[leg_id]["operatingCarrierIds"][0]
             # Find name of carrier from carrier id
             carrier = carriers[carrier_id]["name"]
+            # Find carrier logo
+            carrier_logo = carriers[carrier_id]["imageUrl"]
             # Create flight object and append to flights dict
             flight = {"link": link,
                     "price": cheapest_price, 
                     "departure_time": departure_time, 
                     "arrival_time": arrival_time,
                     "duration": duration, 
-                    "airline": carrier}
+                    "airline": carrier,
+                    "airline_logo": carrier_logo}
             direct_flights.append(flight)
         # Find connecting flights if direct only filter is not on
         elif legs[leg_id]["stopCount"] > 0 and direct == False:

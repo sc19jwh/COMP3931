@@ -9,3 +9,33 @@ class Airport(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.iata_code}) - {self.city.name}"
+    
+class Flight(models.Model):
+    direction = models.CharField(
+        max_length=10,
+        choices=[
+            ('outbound', 'Outbound'),
+            ('inbound', 'Inbound')
+        ]
+    )
+    destination = models.ForeignKey(trips_models.Destination, on_delete=models.CASCADE)
+    departure_airport = models.ForeignKey("Airport", on_delete=models.CASCADE, related_name='departure_airport')
+    arrival_airport = models.ForeignKey("Airport", on_delete=models.CASCADE, related_name='arrival_airport')
+    departure_datetime = models.DateTimeField()
+    arrival_datetime = models.DateTimeField()
+    duration = models.IntegerField()
+
+    def __str__(self):
+        return f"{self.destination.trip.user.username} ({self.destination.trip.title}, {self.destination.city.name}) - {self.direction}"
+
+class SubFlight(models.Model):
+    master_flight = models.ForeignKey("Flight", on_delete=models.CASCADE)
+    sub_departure_airport = models.ForeignKey("Airport", on_delete=models.CASCADE, related_name='sub_departure_airport')
+    sub_arrival_airport = models.ForeignKey("Airport", on_delete=models.CASCADE, related_name='sub_arrival_airport')
+    sub_departure_datetime = models.DateTimeField()
+    sub_arrival_datetime = models.DateTimeField()
+    sub_duration = models.IntegerField()
+    airline = models.CharField(max_length=50)
+
+    def __str__(self):
+        return f"{self.master_flight} ({self.sub_departure_airport.city.name} - {self.sub_arrival_airport.city.name})"
