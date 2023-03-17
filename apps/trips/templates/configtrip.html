@@ -6,7 +6,7 @@
     {{trip.title}}
 </h1>
 
-<button hx-get="{% url 'add_flight' %}?flight_direction=outbound" hx-target="body" hx-swap="beforeend" class="mb-4 flex flex-row items-center font-medium text-custom-50 hover:underline hover:text-custom-100">
+<button hx-get="{% url 'add_flight' %}?flight_direction=outbound&trip_id={{trip.id}}" hx-target="body" hx-swap="beforeend" class="mb-4 flex flex-row items-center font-medium text-custom-50 hover:underline hover:text-custom-100">
     Configure outbound flight
 </button>
 {% for destination in destinations %}
@@ -78,7 +78,7 @@
         <div class="h-7 border-l border-gray-400"></div>
     {% endif %}
 {% endfor %}
-<button hx-get="{% url 'add_flight' %}" hx-target="body" hx-swap="beforeend" class="mt-4 flex flex-row items-center font-medium text-custom-50 hover:underline hover:text-custom-100">
+<button hx-get="{% url 'add_flight' %}?flight_direction=inbound&trip_id={{trip.id}}" hx-target="body" hx-swap="beforeend" class="mt-4 flex flex-row items-center font-medium text-custom-50 hover:underline hover:text-custom-100">
     Configure inbound flight
 </button>
 

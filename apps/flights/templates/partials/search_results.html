@@ -20,7 +20,7 @@
                         <img class="h-10 w-10 rounded-full" src="{{flight.airline_logo}}"></p>
                         <p>{{flight.price}}</p>
                         <p>{{flight.departure_time}} - {{flight.arrival_time}} ({{flight.duration}} minutes)</p>
-                        <button class="" href="{{flight.link}}" target="_blank">Book now (new tab)</a>
+                        <a class="" href="{{flight.link}}" target="_blank">Book now (new tab)</a>
                     </div>
                 {% endfor %}
                 {% for flight in connecting_flights %}
@@ -28,10 +28,9 @@
                         <img class="h-10 w-10 rounded-full" src="{{flight.airline_logo}}"></p>
                         <p>{{flight.price}}</p>
                         <p>{{flight.departure_time}} - {{flight.arrival_time}} ({{flight.duration}} minutes)</p>
-                        <button class="" href="{{flight.link}}" target="_blank">Book now (new tab)</a>
+                        <a class="" href="{{flight.link}}" target="_blank">Book now (new tab)</a>
                     </div>
                 {% endfor %}
-                <button _="on click remove #container" hx-post="{% url 'search_flight' %}" hx-target="body" hx-swap="beforeend">See more options</button>
                 </div>
             </div>
         </div>
