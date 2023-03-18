@@ -10,8 +10,10 @@ from django.contrib.auth.decorators import login_required
 import base64
 import folium
 import ast
+from datetime import datetime
 # Folder imports
 from .models import *
+from apps.flights.models import *
 from apps.authentication.models import Profile
 from .utils.geofuncs import lat_long_distance, dijkstra, least_transfers
 
@@ -67,10 +69,40 @@ def configtrip(request, trip_id, username):
         elif 'delete_destination_form' in request.POST:
             destination = get_object_or_404(Destination, id=request.POST.get('delete_destination_form'))
             destination.delete()
+        # If POST adding flights
+        elif 'enter_flight_form' in request.POST:
+            flight_direction = request.POST.get('enter_flight_form')
+            departure_airport = request.POST.get('departure_airport')
+            destination_airport = request.POST.get('destination_airport') 
+            departure_datetime = datetime.strptime(request.POST.get('departure_datetime'), '%Y-%m-%dT%H:%M')
+            destination_datetime = datetime.strptime(request.POST.get('destination_datetime'), '%Y-%m-%dT%H:%M')
+            print(departure_datetime)
+            master_flight = Flight.objects.create(
+                direction = flight_direction,
+                trip = get_object_or_404(Trip, id=trip_id),
+                departure_airport = get_object_or_404(Airport, id=departure_airport),
+                arrival_airport = get_object_or_404(Airport, id=destination_airport),
+                departure_datetime = departure_datetime,
+                arrival_datetime = destination_datetime,
+                duration = int((destination_datetime - departure_datetime).total_seconds() / 60)
+            )
+            master_flight.save()
+            sub_flight = SubFlight.objects.create(
+                master_flight = master_flight,
+                sub_departure_airport = master_flight.departure_airport,
+                sub_arrival_airport = master_flight.arrival_airport,
+                sub_departure_datetime = master_flight.departure_datetime,
+                sub_arrival_datetime = master_flight.arrival_datetime,
+                sub_duration = master_flight.duration,
+            )
+            sub_flight.save()
     countries = Country.objects.all()
     trip = get_object_or_404(Trip, id=trip_id)
+    outbound_flight = Flight.objects.filter(trip=trip, direction="outbound").first()
+    inbound_flight = Flight.objects.filter(trip=trip, direction="inbound").first()
     destinations = trip.destination_set.order_by('start_date', 'end_date')
-    context = {'title': 'My Trips', 'trip': trip, 'destinations': destinations, 'countries': countries, 'profile': Profile.objects.get(user=request.user)}
+    context = {'title': 'My Trips', 'trip': trip, 'destinations': destinations, 'countries': countries, 'profile': Profile.objects.get(user=request.user), 'outbound_flight': outbound_flight,
+               'inbound_flight': inbound_flight}
     return render(request, 'configtrip.html', context)
 
 def find_cities(request):

@@ -21,7 +21,7 @@
                             Search for flights
                         </button>
                     </div>
-                    <div _="on click remove #container" hx-get="{% url 'enter_flight' %}?flight_direction={{flight_direction}}" hx-target="body" hx-swap="beforeend" class="h-max flex flex-col items-center justify-center hover:scale-105 hover:cursor-pointer">
+                    <div _="on click remove #container" hx-get="{% url 'enter_flight' %}?trip_id={{trip_id}}&flight_direction={{flight_direction}}" hx-target="body" hx-swap="beforeend" class="h-max flex flex-col items-center justify-center hover:scale-105 hover:cursor-pointer">
                         <img class="w-2/3 h-auto" src="{% static 'images/booked.png' %}">
                         <button id="search-button" class="mt-4 flex flex-row items-center font-medium text-custom-50 hover:underline hover:text-custom-100">
                             Enter your pre-booked flight
