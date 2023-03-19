@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %} 
+
+<body class="bg-gray-50">
+    <nav class="bg-white shadow">
+        <div class="px-2 sm:px-10 flex justify-between items-center h-16">
+                <div class="flex items-center justify-center">
+                    <!-- Hamburger button for mobile devices -->
+                    <button _="on click toggle the *display of #mobile_menu" type="button" class="sm:hidden mr-2 p-2 text-gray-500 hover:text-gray-800">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#1F2937" class="bi bi-list" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                        </svg>
+                    </button>
+                    <!-- Logo -->
+                    <img class="mr-7 h-7 w-auto hover:-rotate-12 hover:cursor-pointer" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500">
+                    <!-- Main NavBar -->
+                    <button class="hidden sm:flex text-sm font-semibold mr-4 text-gray-800 border-b-2 border-custom-50 px-3 py-5">Home</button>
+                    <button class="hidden sm:flex text-sm font-semibold mr-4 text-gray-500 hover:text-gray-800 hover:border-b-2 hover:border-custom-50 px-3 py-5">Browse</button>
+                    <button class="hidden sm:flex text-sm font-semibold mr-4 text-gray-500 hover:text-gray-800 hover:border-b-2 hover:border-custom-50 px-3 py-5">Trips</button>
+                    <button class="hidden sm:flex text-sm font-semibold text-gray-500 hover:text-gray-800 hover:border-b-2 hover:border-custom-50 px-3 py-5">Currencies</button>
+                </div>
+            <div class="relative">
+                <div class="flex flex-row">
+                    <!-- Settings icon -->
+                    <div class="flex mr-3 flex-row items-center hover:cursor-pointer rounded-full hover:bg-gray-100 h-7 w-7 p-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="#333333" class="bi bi-gear" viewBox="0 0 16 16">
+                            <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
+                            <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z"/>
+                        </svg>
+                    </div>
+                    <!-- Notifications icon -->
+                    <div class="flex mr-3 flex-row items-center hover:cursor-pointer rounded-full hover:bg-gray-100 h-7 w-7 p-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="#333333" class="bi bi-bell" viewBox="0 0 16 16">
+                            <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"/>
+                        </svg>
+                    </div>
+                    <!-- User photo -->
+                    <div class="flex flex-row items-center hover:cursor-pointer" _="on click toggle the *display of #dropdown">
+                        <img class="h-7 w-7 rounded-full" src="data:image/jpeg;base64,{{ profile.image }}" alt="">
+                        <!-- Drop down arrow -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="#333333" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                            <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                        </svg>
+                    </div>
+                </div>
+                <div id="dropdown" _="on mouseleave toggle the *display of me" style="display: none;" class="absolute right-0 mt-3 w-40 origin-top-right bg-white shadow">
+                    <button hx-get="{% url 'profile' %}" hx-target="body" hx-push-url="true" class="text-start w-full flex flex-row items-center px-4 py-2 text-sm text-gray-800 hover:bg-gray-100" role="menuitem" tabindex="-1" id="user-menu-item-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#333333" class="bi bi-person-circle" viewBox="0 0 16 16">
+                            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                            <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+                        </svg>
+                        <span class="ml-2">Your Profile</span>
+                    </button>
+                    <button class="text-start w-full flex flex-row items-center px-4 py-2 text-sm text-gray-800 hover:bg-gray-100" role="menuitem" tabindex="-1" id="user-menu-item-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#333333" class="bi bi-box-arrow-left" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0v2z"/>
+                            <path fill-rule="evenodd" d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"/>
+                        </svg>
+                        <span class="ml-2">Sign out</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Dropdown menu for small devices -->
+        <div class="sm:hidden font-semibold flex flex-col" id="mobile_menu" style="display: none;">
+            <button class="mb-1 text-custom-50 px-5 py-2 text-left">Home</button>
+            <button class="mb-1 text-gray-500 hover:text-custom-50 px-5 py-2 text-left">Browse</button>
+            <button class="mb-1 text-gray-500 hover:text-custom-50 px-5 py-2 text-left">Trips</button>
+            <button class="mb-1 text-gray-500 hover:text-custom-50 px-5 py-2 text-left">Currency</button>
+        </div>
+    </nav>
+</body>
+
+{% endblock %}

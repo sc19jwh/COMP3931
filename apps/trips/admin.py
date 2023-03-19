@@ -6,10 +6,10 @@ class CountryAdmin(admin.ModelAdmin):
     list_display= ('name', 'alpha2code', 'currency', 'is_interrail')
 
 class CityAdmin(admin.ModelAdmin):
-    list_display= ('name', 'country')
+    list_display= ('name', 'country', 'skyscanner_id', 'latitude', 'longitude', 'photo_url')
 
 class TripAdmin(admin.ModelAdmin):
-    list_display= ('user', 'title')
+    list_display= ('user', 'title', 'journey_times', 'budget', 'climate', 'food_culture', 'tourist_attractions', 'nightlife_level')
 
 class DestinationAdmin(admin.ModelAdmin):
     list_display= ('trip', 'country', 'city', 'start_date', 'end_date')
@@ -23,3 +23,5 @@ admin.site.register(City, CityAdmin)
 admin.site.register(Trip, TripAdmin)
 admin.site.register(Destination, DestinationAdmin)
 admin.site.register(TravelRoute, TravelRouteAdmin)
+admin.site.register(TransportLeg)
+admin.site.register(DestinationTransport)
