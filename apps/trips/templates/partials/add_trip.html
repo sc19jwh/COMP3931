@@ -36,7 +36,7 @@
                             <h1 class="p-2 mb-4 font-semibold">What are your thoughts on long journeys?</h1>
                             <div class="flex flex-row w-full lg:w-3/4 justify-between">
                                 <img class="h-16 w-16 mr-1 lg:mr-3" src="{% static 'images/daytrain.png' %}">
-                                <input id="journeytime" class="w-full" type="range" min="1" max="100" step="0.1" value="50"
+                                <input id="journeytime" name="journeytime" class="w-full" type="range" min="1" max="100" step="0.1" value="50"
                                 _="on change
                                 get the (value of the me) as a Float
                                 if it is less than 20
@@ -70,7 +70,7 @@
                             <h1 class="p-2 mb-4 font-semibold">How high is your daily budget?</h1>
                             <div class="flex flex-row mb-4 w-full lg:w-3/4 justify-between">
                                 <img class="h-16 w-16 mr-1 lg:mr-3" src="{% static 'images/lowbudget.png' %}">
-                                <input id="budget" class="w-full" type="range" min="1" max="100" step="0.1" value="50"
+                                <input id="budget" name="budget" class="w-full" type="range" min="1" max="100" step="0.1" value="50"
                                 _="on change
                                 get the (value of the me) as a Float
                                 if it is less than 20
@@ -104,41 +104,7 @@
                             <h1 class="p-2 mb-4 font-semibold">How important is nightlife?</h1>
                             <div class="flex flex-row mb-4 w-full lg:w-3/4 justify-between">
                                 <img class="h-16 w-16 mr-1 lg:mr-3" src="{% static 'images/earlynight.png' %}">
-                                <input id="nightlife" class="w-full" type="range" min="1" max="100" step="0.1" value="50"
-                                _="on change
-                                get the (value of the me) as a Float
-                                if it is less than 20
-                                    put 'I hate nightlife' into #nightlife-detail
-                                else if it is greater than 20 and it is less than 40
-                                    put 'I usually prefer to go to bed early' into #nightlife-detail
-                                else if it is greater than 40 and it is less than 60
-                                    put 'I prefer a mixture of nightlife and relaxation' into #nightlife-detail
-                                else if it is greater than 60 and it is less than 80
-                                    put 'I would like to sleep well but love a night out' into #nightlife-detail
-                                else
-                                    put 'Nightlife is my number one priority' into #nightlife-detail
-                                ">
-                                <img class="h-16 w-16 ml-1 lg:ml-3" src="{% static 'images/nightlife.png' %}">
-                            </div>
-                            <h1 id="nightlife-detail" class="mb-4 text-sm">
-                                I prefer a mixture of nightlife and relaxation
-                            </h1>
-                            <div class="w-full lg:w-2/3 grid grid-cols-2">
-                                <button type="button" class="mr-1 lg:mr-3 disabled:opacity-25 text-center enabled:hover:cursor-pointer px-5 py-2 text-white bg-custom-50 enabled:hover:bg-custom-100 font-medium rounded-lg text-sm" 
-                                _="on click toggle the *display of #step-4 on click toggle the *display of #step-3">
-                                    Previous
-                                </button>
-                                <button type="button" class="ml-1 lg:ml-3 disabled:opacity-25 text-center enabled:hover:cursor-pointer px-5 py-2 text-white bg-custom-50 enabled:hover:bg-custom-100 font-medium rounded-lg text-sm" 
-                                _="on click toggle the *display of #step-5 on click toggle the *display of #step-4">
-                                    Next
-                                </button>
-                            </div>
-                        </div>
-                        <div id="step-4" class="flex flex-col items-center justify-center" style="display: none;">
-                            <h1 class="p-2 mb-4 font-semibold">How important is nightlife?</h1>
-                            <div class="flex flex-row mb-4 w-full lg:w-3/4 justify-between">
-                                <img class="h-16 w-16 mr-1 lg:mr-3" src="{% static 'images/earlynight.png' %}">
-                                <input id="nightlife" class="w-full" type="range" min="1" max="100" step="0.1" value="50"
+                                <input id="nightlife" name="nightlife" class="w-full" type="range" min="1" max="100" step="0.1" value="50"
                                 _="on change
                                 get the (value of the me) as a Float
                                 if it is less than 20
@@ -169,27 +135,27 @@
                             </div>
                         </div>
                         <div id="step-5" class="flex flex-col items-center justify-center" style="display: none;">
-                            <h1 class="p-2 mb-4 font-semibold">Another question?</h1>
+                            <h1 class="p-2 mb-4 font-semibold">Do you prefer hot or cold weather?</h1>
                             <div class="flex flex-row mb-4 w-full lg:w-3/4 justify-between">
-                                <img class="h-16 w-16 mr-1 lg:mr-3" src="{% static 'images/earlynight.png' %}">
-                                <input id="nightlife" class="w-full" type="range" min="1" max="100" step="0.1" value="50"
+                                <img class="h-16 w-16 mr-1 lg:mr-3" src="{% static 'images/skiing.png' %}">
+                                <input id="climate" name="climate" class="w-full" type="range" min="1" max="100" step="0.1" value="50"
                                 _="on change
                                 get the (value of the me) as a Float
                                 if it is less than 20
-                                    put 'I hate nightlife' into #nightlife-detail
+                                    put 'I need exclusively cold weather' into #climate-detail
                                 else if it is greater than 20 and it is less than 40
-                                    put 'I usually prefer to go to bed early' into #nightlife-detail
+                                    put 'I would rather have only cold weather' into #climate-detail
                                 else if it is greater than 40 and it is less than 60
-                                    put 'I prefer a mixture of nightlife and relaxation' into #nightlife-detail
+                                    put 'I like a mixture of hot and cold weather' into #climate-detail
                                 else if it is greater than 60 and it is less than 80
-                                    put 'I would like to sleep well but love a night out' into #nightlife-detail
+                                    put 'I would rather have only hot weather' into #climate-detail
                                 else
-                                    put 'Nightlife is my number one priority' into #nightlife-detail
+                                    put 'I need exclusively hot weather' into #climate-detail
                                 ">
-                                <img class="h-16 w-16 ml-1 lg:ml-3" src="{% static 'images/nightlife.png' %}">
+                                <img class="h-16 w-16 ml-1 lg:ml-3" src="{% static 'images/sun.png' %}">
                             </div>
-                            <h1 id="nightlife-detail" class="mb-4 text-sm">
-                                I prefer a mixture of nightlife and relaxation
+                            <h1 id="climate-detail" class="mb-4 text-sm">
+                                I like a mixture of hot and cold weather
                             </h1>
                             <div class="w-full lg:w-2/3 grid grid-cols-2">
                                 <button type="button" class="mr-1 lg:mr-3 disabled:opacity-25 text-center enabled:hover:cursor-pointer px-5 py-2 text-white bg-custom-50 enabled:hover:bg-custom-100 font-medium rounded-lg text-sm" 
@@ -197,12 +163,78 @@
                                     Previous
                                 </button>
                                 <button type="button" class="ml-1 lg:ml-3 disabled:opacity-25 text-center enabled:hover:cursor-pointer px-5 py-2 text-white bg-custom-50 enabled:hover:bg-custom-100 font-medium rounded-lg text-sm" 
-                                _="on click toggle the *display of #step-6 on click toggle the *display of #step-5">
+                                _="on click toggle the *display of #step-5 on click toggle the *display of #step-6">
                                     Next
                                 </button>
                             </div>
                         </div>
-                        <!-- <button class="px-5 py-2 w-3/4 lg:w-1/3 text-white bg-custom-50 hover:bg-custom-100 font-medium rounded-lg text-sm">Create trip</button> -->
+                        <div id="step-6" class="flex flex-col items-center justify-center" style="display: none;">
+                            <h1 class="p-2 mb-4 font-semibold">Do you want lots of tourist attractions?</h1>
+                            <div class="flex flex-row mb-4 w-full lg:w-3/4 justify-between">
+                                <img class="h-16 w-16 mr-1 lg:mr-3" src="{% static 'images/beach_bar.png' %}">
+                                <input id="tourism" name="tourism" class="w-full" type="range" min="1" max="100" step="0.1" value="50"
+                                _="on change
+                                get the (value of the me) as a Float
+                                if it is less than 20
+                                    put 'I want to relax only' into #tourism-detail
+                                else if it is greater than 20 and it is less than 40
+                                    put 'I want to relax more than visit tourist attractions' into #tourism-detail
+                                else if it is greater than 40 and it is less than 60
+                                    put 'I would like a mixture of relaxation and tourist attractions' into #tourism-detail
+                                else if it is greater than 60 and it is less than 80
+                                    put 'I would like to see as many tourist attractions as possible' into #tourism-detail
+                                else
+                                    put 'I want to see all there is to see, no time to relax' into #tourism-detail
+                                ">
+                                <img class="h-16 w-16 ml-1 lg:ml-3" src="{% static 'images/tourist_attraction.png' %}">
+                            </div>
+                            <h1 id="tourism-detail" class="mb-4 text-sm">
+                                I would like a mixture of relaxation and tourist attractions
+                            </h1>
+                            <div class="w-full lg:w-2/3 grid grid-cols-2">
+                                <button type="button" class="mr-1 lg:mr-3 disabled:opacity-25 text-center enabled:hover:cursor-pointer px-5 py-2 text-white bg-custom-50 enabled:hover:bg-custom-100 font-medium rounded-lg text-sm" 
+                                _="on click toggle the *display of #step-6 on click toggle the *display of #step-5">
+                                    Previous
+                                </button>
+                                <button type="button" class="ml-1 lg:ml-3 disabled:opacity-25 text-center enabled:hover:cursor-pointer px-5 py-2 text-white bg-custom-50 enabled:hover:bg-custom-100 font-medium rounded-lg text-sm" 
+                                _="on click toggle the *display of #step-7 on click toggle the *display of #step-6">
+                                    Next
+                                </button>
+                            </div>
+                        </div>
+                        <div id="step-7" class="flex flex-col items-center justify-center" style="display: none;">
+                            <h1 class="p-2 mb-4 font-semibold">How important is food culture?</h1>
+                            <div class="flex flex-row mb-4 w-full lg:w-3/4 justify-between">
+                                <img class="h-16 w-16 mr-1 lg:mr-3" src="{% static 'images/fast_food.png' %}">
+                                <input id="food" name="food" class="w-full" type="range" min="1" max="100" step="0.1" value="50"
+                                _="on change
+                                get the (value of the me) as a Float
+                                if it is less than 20
+                                    put 'I do not want to try local cuisine' into #food-detail
+                                else if it is greater than 20 and it is less than 40
+                                    put 'I will not seek new foods to try' into #food-detail
+                                else if it is greater than 40 and it is less than 60
+                                    put 'I have no preference towards food culture' into #food-detail
+                                else if it is greater than 60 and it is less than 80
+                                    put 'I would prefer to try new foods instead of fast food' into #food-detail
+                                else
+                                    put 'I want to visit the best food cities in the world' into #food-detail
+                                ">
+                                <img class="h-16 w-16 ml-1 lg:ml-3" src="{% static 'images/nice_food.png' %}">
+                            </div>
+                            <h1 id="food-detail" class="mb-4 text-sm">
+                                I have no preference towards food culture
+                            </h1>
+                            <div class="w-full lg:w-2/3 grid grid-cols-2">
+                                <button type="button" class="mr-1 lg:mr-3 disabled:opacity-25 text-center enabled:hover:cursor-pointer px-5 py-2 text-white bg-custom-50 enabled:hover:bg-custom-100 font-medium rounded-lg text-sm" 
+                                _="on click toggle the *display of #step-7 on click toggle the *display of #step-6">
+                                    Previous
+                                </button>
+                                <button class="ml-1 lg:ml-3 disabled:opacity-25 text-center enabled:hover:cursor-pointer px-5 py-2 text-white bg-custom-50 enabled:hover:bg-custom-100 font-medium rounded-lg text-sm">
+                                    Create trip
+                                </button>
+                            </div>
+                        </div>
                     </form>
                 </div>         
             </div>

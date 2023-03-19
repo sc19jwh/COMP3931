@@ -11,6 +11,7 @@ import base64
 import folium
 import ast
 from datetime import datetime
+import decimal
 # Folder imports
 from .models import *
 from apps.flights.models import *
@@ -36,9 +37,16 @@ def mytrips(request, username):
     if request.method == 'POST':
         # If POST adding trip
         if 'add_trip_form' in request.POST:
+            print(decimal.Decimal(request.POST.get('journeytime')), decimal.Decimal(request.POST.get('budget')), decimal.Decimal(request.POST.get('climate')), decimal.Decimal(request.POST.get('food')), decimal.Decimal(request.POST.get('tourism')), decimal.Decimal(request.POST.get('nightlife')))
             trip = Trip.objects.create(
-                user = request.user,
-                title = request.POST.get('title')
+                user=request.user,
+                title=request.POST.get('triptitle'),
+                journey_times=decimal.Decimal(request.POST.get('journeytime')),
+                budget=decimal.Decimal(request.POST.get('budget')),
+                climate=decimal.Decimal(request.POST.get('climate')),
+                food_culture=decimal.Decimal(request.POST.get('food')),
+                tourist_attractions=decimal.Decimal(request.POST.get('tourism')),
+                nightlife_level=decimal.Decimal(request.POST.get('nightlife'))
             )
         # If POST deleting trip
         elif 'delete_trip_form' in request.POST:

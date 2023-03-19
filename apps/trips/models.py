@@ -26,11 +26,12 @@ class City(models.Model):
 class Trip(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=50, blank=True, null=True)
-    # journey_times = models.DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
-    # budget = models.DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
-    # climate = models.DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
-    # tourist_attractions = models.DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
-    # cultural_activities = models.DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
+    journey_times = models.DecimalField(max_digits=4, decimal_places=1, blank=True, null=True)
+    budget = models.DecimalField(max_digits=4, decimal_places=1, blank=True, null=True)
+    climate = models.DecimalField(max_digits=4, decimal_places=1, blank=True, null=True)
+    food_culture = models.DecimalField(max_digits=4, decimal_places=1, blank=True, null=True)
+    tourist_attractions = models.DecimalField(max_digits=4, decimal_places=1, blank=True, null=True)
+    nightlife_level = models.DecimalField(max_digits=4, decimal_places=1, blank=True, null=True)
 
     def get_start_and_end_dates(self):
         start_date = self.destination_set.all().aggregate(Min('start_date'))['start_date__min']
