@@ -76,7 +76,6 @@ def configtrip(request, trip_id, username):
             destination_airport = request.POST.get('destination_airport') 
             departure_datetime = datetime.strptime(request.POST.get('departure_datetime'), '%Y-%m-%dT%H:%M')
             destination_datetime = datetime.strptime(request.POST.get('destination_datetime'), '%Y-%m-%dT%H:%M')
-            print(departure_datetime)
             master_flight = Flight.objects.create(
                 direction = flight_direction,
                 trip = get_object_or_404(Trip, id=trip_id),
@@ -96,6 +95,31 @@ def configtrip(request, trip_id, username):
                 sub_duration = master_flight.duration,
             )
             sub_flight.save()
+        elif 'save_searched_flight' in request.POST:
+            flight_details_dict = eval(dict(request.POST)['save_searched_flight'][0])
+            flight_direction = request.GET.get('flight_direction')
+            departure_airport = get_object_or_404(Airport, id = request.GET.get('departure_airport'))
+            destination_airport = get_object_or_404(Airport, id = request.GET.get('destination_airport'))
+            departure_datetime = datetime.strptime(flight_details_dict['departure_time'], '%Y-%m-%d %H:%M:%S')
+            destination_datetime = datetime.strptime(flight_details_dict['arrival_time'], '%Y-%m-%d %H:%M:%S')
+            master_flight = Flight.objects.create(
+                direction = flight_direction,
+                trip = get_object_or_404(Trip, id=trip_id),
+                departure_airport = departure_airport,
+                arrival_airport = destination_airport,
+                departure_datetime = departure_datetime,
+                arrival_datetime = destination_datetime,
+                duration = int((destination_datetime - departure_datetime).total_seconds() / 60)
+            )
+            master_flight.save()
+            sub_flight = SubFlight.objects.create(
+                master_flight = master_flight,
+                sub_departure_airport = master_flight.departure_airport,
+                sub_arrival_airport = master_flight.arrival_airport,
+                sub_departure_datetime = master_flight.departure_datetime,
+                sub_arrival_datetime = master_flight.arrival_datetime,
+                sub_duration = master_flight.duration,
+            )
     countries = Country.objects.all()
     trip = get_object_or_404(Trip, id=trip_id)
     outbound_flight = Flight.objects.filter(trip=trip, direction="outbound").first()

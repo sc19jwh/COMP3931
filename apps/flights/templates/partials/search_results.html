@@ -17,18 +17,14 @@
                 <div class="flex flex-col items-center justify-center">
                 {% for flight in direct_flights %}
                     <div class="flex mb-4 items-center p-4 bg-gray-50 rounded-lg shadow w-3/4 font-serif">
-                        <img class="h-10 w-10 rounded-full" src="{{flight.airline_logo}}"></p>
-                        <p>{{flight.price}}</p>
-                        <p>{{flight.departure_time}} - {{flight.arrival_time}} ({{flight.duration}} minutes)</p>
+                        <p>£{{flight.price}}</p>
+                        <p>{{flight.departure_time}} ({{flight.duration}} minutes)</p>
                         <a class="" href="{{flight.link}}" target="_blank">Book now (new tab)</a>
-                    </div>
-                {% endfor %}
-                {% for flight in connecting_flights %}
-                    <div class="flex mb-4 items-center p-4 bg-gray-50 rounded-lg shadow w-3/4 font-serif">
-                        <img class="h-10 w-10 rounded-full" src="{{flight.airline_logo}}"></p>
-                        <p>{{flight.price}}</p>
-                        <p>{{flight.departure_time}} - {{flight.arrival_time}} ({{flight.duration}} minutes)</p>
-                        <a class="" href="{{flight.link}}" target="_blank">Book now (new tab)</a>
+                        <form>
+                            {% csrf_token %}
+                            <input type="hidden" name="save_searched_flight" value="{{ flight }}">
+                            <button hx-post="?flight_direction={{flight_direction}}&departure_airport={{departure_airport.id}}&destination_airport={{destination_airport.id}}" hx-target="body">Save for this trip</button>
+                        </form>
                     </div>
                 {% endfor %}
                 </div>

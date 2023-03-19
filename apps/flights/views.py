@@ -36,13 +36,14 @@ def search_results(request):
     if flight_direction == "outbound":
         # If outbound flight, find the earliest destination's start date and find a flight to that destination on that date
         earliest_destination = trip.destination_set.order_by('start_date').first()
+        departure_airport = get_object_or_404(Airport, iata_code="LHR")
         destination_airport = earliest_destination.city.airport_set.first()
-        print("GBP", "LHR", destination_airport.iata_code, earliest_destination.start_date.year, earliest_destination.start_date.month, earliest_destination.start_date.day, False)
-        session_token, direct_flights, connecting_flights = quick_flight_search("GBP", "LHR", destination_airport.iata_code, earliest_destination.start_date.year, earliest_destination.start_date.month, earliest_destination.start_date.day, False)
+        session_token, direct_flights, connecting_flights = quick_flight_search("GBP", departure_airport.iata_code, destination_airport.iata_code, earliest_destination.start_date.year, earliest_destination.start_date.month, earliest_destination.start_date.day, False)
     else:
         # If inbound flight, find the last destination's end date and find a flight from that destination on that date
         last_destination = trip.destination_set.order_by('end_date').last()
         departure_airport = last_destination.city.airport_set.last()
-        session_token, direct_flights, connecting_flights = quick_flight_search("GBP", departure_airport.iata_code, "LHR", last_destination.end_date.year, last_destination.end_date.month, last_destination.end_date.day, False)
-    context = {'direct_flights': direct_flights, 'connecting_flights': connecting_flights}
+        destination_airport = get_object_or_404(Airport, iata_code="LHR")
+        session_token, direct_flights, connecting_flights = quick_flight_search("GBP", departure_airport.iata_code, destination_airport.iata_code, last_destination.end_date.year, last_destination.end_date.month, last_destination.end_date.day, False)
+    context = {'direct_flights': direct_flights, 'connecting_flights': connecting_flights, 'flight_direction': flight_direction, 'departure_airport': departure_airport, 'destination_airport': destination_airport}
     return render(request, 'partials/search_results.html', context)
