@@ -66,3 +66,17 @@ def full_map(request):
         folium.PolyLine(locations=[[route.start_city.latitude, route.start_city.longitude], [route.end_city.latitude, route.end_city.longitude]], color='blue', dash_array=[5, 5]).add_to(map)
     # Return the HTML as a HttpResponse
     return HttpResponse(map._repr_html_())
+
+def get_hotels_map(request):
+    # Get the id of the city that the hotel search is in
+    city = get_object_or_404(City, id=request.GET.get('city_id'))
+    # Create a map, with latitude and longitude centered around the two locations
+    map = folium.Map(location=[city.latitude, city.longitude], zoom_start=12)
+    if request.method == 'POST':
+        # Get hotels from POST include
+        hotels = eval(request.POST.get('hotels'))
+        # Plot each hotel
+        for hotel in hotels:
+            folium.Marker(location=[hotel["position"]["latitude"], hotel["position"]["longitude"]], popup=hotel["name"], icon=folium.Icon(color='orange', icon='location-pin', prefix='fa'), tooltip=hotel["name"]).add_to(map)
+    # Return the HTML as a HttpResponse
+    return HttpResponse(map._repr_html_())
