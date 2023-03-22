@@ -11,5 +11,7 @@ def search_hotel(request):
     destination = get_object_or_404(Destination, id = destination_id)
     if destination.start_date > date.today():
         session_token, hotels = quick_hotel_search("GBP", str(destination.city.skyscanner_id), destination.start_date.year, destination.start_date.month, destination.start_date.day, destination.end_date.year, destination.end_date.month, destination.end_date.day)
-    context = {'hotels': hotels}
+    # for hotel in hotels:
+    #     print(hotel['position']['latitude'], hotel['position']['longitude'])
+    context = {'hotels': hotels, 'destination': destination}
     return render(request, 'partials/search_hotel.html', context)

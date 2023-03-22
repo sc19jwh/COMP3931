@@ -56,17 +56,27 @@
         </div>
         <div class="flex items-center justify-center">
             <button class="text-xs font-medium text-custom-50 hover:underline hover:text-custom-100" _="on click toggle the *display of the next <div/> on click toggle the *display of the next <button/> on click toggle the *display of me">
-                See More
+                See Hotel Information
             </button>
             <button style="display: none;" class="text-xs font-medium text-custom-50 hover:underline hover:text-custom-100" _="on click toggle the *display of the next <div/> on click toggle the *display of the previous <button/> on click toggle the *display of me">
-                See Less
+                Hide Hotel Information
             </button>
         </div>
         <div id="hi" style="display: none;" class="flex items-center justify-center mt-4">
-            <button hx-indicator="#spinner" hx-get="{% url 'search_hotel' %}?destination_id={{destination.id}}" hx-target="body" hx-swap="beforeend" class="flex flex-row items-center font-medium text-custom-50 hover:underline hover:text-custom-100">
-                Search for hotels
-                <img style="width: 10px; height: 10px; padding-left: 2px;;" id="spinner" class="htmx-indicator" src="{% static 'images/loading.gif' %}"/>
-            </button>
+            {% with hotel=destination.hotel_set.first %}
+                {% if hotel %}
+                    <p>Hotel name: {{ hotel.name }}</p>
+                    <p><a href="{{ hotel.hotel_url }}">Website</a></p>
+                    {% for image in hotel.get_images %}
+                        <img src="{{ image }}" class="w-10 h-auto">
+                    {% endfor %}
+                {% else %}
+                    <button hx-indicator="#spinner" hx-get="{% url 'search_hotel' %}?destination_id={{destination.id}}" hx-target="body" hx-swap="beforeend" class="flex flex-row items-center font-medium text-custom-50 hover:underline hover:text-custom-100">
+                        Search for hotels
+                        <img style="width: 10px; height: 10px; padding-left: 2px;;" id="spinner" class="htmx-indicator" src="{% static 'images/loading.gif' %}"/>
+                    </button>
+                {% endif %}
+            {% endwith %}
         </div>
     </div>
     <!-- Vertical line to connect to next destination -->

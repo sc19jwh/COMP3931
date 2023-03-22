@@ -750,16 +750,16 @@ video {
   height: 0.5rem;
 }
 
+.h-auto {
+  height: auto;
+}
+
 .h-4 {
   height: 1rem;
 }
 
 .h-1\/2 {
   height: 50%;
-}
-
-.h-auto {
-  height: auto;
 }
 
 .h-max {
@@ -833,6 +833,10 @@ video {
 
 .w-1\/5 {
   width: 20%;
+}
+
+.w-10 {
+  width: 2.5rem;
 }
 
 .w-2\/3 {

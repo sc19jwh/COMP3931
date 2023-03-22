@@ -20,6 +20,11 @@
                             <img class="h-10 w-auto" src="{{hotel.image}}">
                             <p>{{hotel.name}}</p>
                             <a href="{{hotel.url}}" target="_blank">Book now (new tab)</a>
+                            <form>
+                                {% csrf_token %}
+                                <input type="hidden" name="save_searched_hotel" value="{{ hotel }}">
+                                <button hx-post="?destination_id={{destination.id}}" hx-target="body">Save for this trip</button>
+                            </form>
                         </div>
                     {% endfor %}
                 </div>                      

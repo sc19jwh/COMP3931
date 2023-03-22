@@ -16,6 +16,7 @@ import decimal
 from .models import *
 from apps.flights.models import *
 from apps.authentication.models import Profile
+from apps.hotels.models import Hotel
 from .utils.geofuncs import lat_long_distance, dijkstra, least_transfers
 
 def home(request):
@@ -128,6 +129,20 @@ def configtrip(request, trip_id, username):
                 sub_arrival_datetime = master_flight.arrival_datetime,
                 sub_duration = master_flight.duration,
             )
+        elif 'save_searched_hotel' in request.POST:
+            destination = get_object_or_404(Destination, id = request.GET.get('destination_id'))
+            hotel_details_dict = eval(dict(request.POST)['save_searched_hotel'][0])
+            hotel = Hotel.objects.create(
+                destination = destination,
+                name = hotel_details_dict['name'],
+                hotel_url = hotel_details_dict['url'].split('?', 1)[0],
+                latitude = hotel_details_dict['position']['latitude'],
+                longitude = hotel_details_dict['position']['longitude'],
+                star_rating = hotel_details_dict['numberOfStars'],
+                custom_rating = hotel_details_dict['reviews']['reviewSummaryScore']
+            )
+            hotel.set_images(hotel_details_dict['images'])
+            hotel.save()
     countries = Country.objects.all()
     trip = get_object_or_404(Trip, id=trip_id)
     outbound_flight = Flight.objects.filter(trip=trip, direction="outbound").first()
