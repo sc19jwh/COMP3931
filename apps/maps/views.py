@@ -77,6 +77,6 @@ def get_hotels_map(request):
         hotels = eval(request.POST.get('hotels'))
         # Plot each hotel
         for hotel in hotels:
-            folium.Marker(location=[hotel["position"]["latitude"], hotel["position"]["longitude"]], popup=hotel["name"], icon=folium.Icon(color='orange', icon='location-pin', prefix='fa'), tooltip=hotel["name"]).add_to(map)
+            folium.Marker(location=[hotel["position"]["latitude"], hotel["position"]["longitude"]], popup=hotel["name"], icon=folium.Icon(color='orange', icon='hotel', prefix='fa'), tooltip=hotel["name"]).add_to(map)
     # Return the HTML as a HttpResponse
     return HttpResponse(map._repr_html_())

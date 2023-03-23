@@ -28,6 +28,7 @@ module.exports = {
           },
           animation: {
             fadeIn: 'fadeIn 0.2s',
+            fadeInMedium: 'fadeIn 0.5s',
             zoomIn: 'zoomIn 0.2s',
           }
         }

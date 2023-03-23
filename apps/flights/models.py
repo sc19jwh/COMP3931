@@ -3,13 +3,22 @@ from apps.trips import models as trips_models
 
 class Airport(models.Model):
     name = models.CharField(max_length=100)
-    city = models.ForeignKey(trips_models.City, on_delete=models.CASCADE)
+    country = models.ForeignKey(trips_models.Country, on_delete=models.CASCADE, null=True)
     iata_code = models.CharField(max_length=3)
-    distance = models.DecimalField(max_digits=20, decimal_places=17)
+    latitude = models.DecimalField(max_digits=20, decimal_places=17, blank=True, null=True)
+    longitude = models.DecimalField(max_digits=20, decimal_places=17, blank=True, null=True)
 
     def __str__(self):
-        return f"{self.name} ({self.iata_code}) - {self.city.name}"
+        return f"{self.name} ({self.iata_code})"
     
+class InterrailAirport(models.Model):
+    city = models.ForeignKey(trips_models.City, on_delete=models.CASCADE, null=True)
+    airport = models.ForeignKey(Airport, on_delete=models.CASCADE, null=True)
+    distance = models.DecimalField(max_digits=20, decimal_places=17, blank=True, null=True)
+    
+    def __str__(self):
+        return f"{self.airport.name} - {self.city.name}"
+
 class Flight(models.Model):
     direction = models.CharField(
         max_length=10,
@@ -37,4 +46,4 @@ class SubFlight(models.Model):
     sub_duration = models.IntegerField()
 
     def __str__(self):
-        return f"{self.master_flight} ({self.sub_departure_airport.city.name} - {self.sub_arrival_airport.city.name})"
+        return f"{self.master_flight} ({self.sub_departure_airport.name} - {self.sub_arrival_airport.name})"

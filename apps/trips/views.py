@@ -22,13 +22,8 @@ from .utils.geofuncs import lat_long_distance, dijkstra, least_transfers
 def home(request):
     countries = Country.objects.filter(is_interrail=True)
     cities = City.objects.all()
-    # for city in cities:
-    #     data = skyscanner_id_finder(city.name)
-    #     for record in data:
-    #         if record["city"] == city.name and record["country"] == city.country.name:
-    #             city.skyscanner_id = record["entityId"]
-    #             city.save()
-    context = {'title': 'Home', 'countries': countries, 'cities': cities, 'profile': Profile.objects.get(user=request.user)}
+    airports = Airport.objects.all()
+    context = {'title': 'Home', 'countries': countries, 'cities': cities, 'profile': Profile.objects.get(user=request.user), 'airports': airports}
     return render(request, 'index.html', context)
 
 @login_required

@@ -15,7 +15,7 @@
                     </svg>
                 </div>
                 <div class="px-10 pb-10 pt-1 justify-center grid grid-cols-1 md:grid-cols-2 gap-10">
-                    <div _="on click remove #container" hx-get="{% url 'search_results' %}?trip_id={{trip_id}}&flight_direction={{flight_direction}}" hx-target="body" hx-swap="beforeend" class="flex flex-col items-center justify-center hover:scale-105 hover:cursor-pointer">
+                    <div _="on click remove #container" hx-get="{% url 'search_flight' %}?trip_id={{trip_id}}&flight_direction={{flight_direction}}" hx-target="body" hx-swap="beforeend" class="flex flex-col items-center justify-center hover:scale-105 hover:cursor-pointer">
                         <img class="w-2/3 h-auto" src="{% static 'images/search.png' %}">
                         <button id="search-button" class="mt-4 flex flex-row items-center font-medium text-custom-50 hover:underline hover:text-custom-100">
                             Search for flights
