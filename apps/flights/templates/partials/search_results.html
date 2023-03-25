@@ -19,6 +19,7 @@
                     <div class="flex mb-4 items-center p-4 bg-gray-50 rounded-lg shadow w-3/4 font-serif">
                         <p>£{{flight.price}}</p>
                         <p>{{flight.departure_time}} ({{flight.duration}} minutes)</p>
+                        <p>Stops: 0</p>
                         <a class="" href="{{flight.link}}" target="_blank">Book now (new tab)</a>
                         <form>
                             {% csrf_token %}
@@ -26,6 +27,19 @@
                             <button hx-post="?flight_direction={{flight_direction}}&departure_airport={{departure_airport.id}}&destination_airport={{destination_airport.id}}" hx-target="body">Save for this trip</button>
                         </form>
                     </div>
+                {% endfor %}
+                {% for flight in connecting_flights %}
+                <div class="flex mb-4 items-center p-4 bg-gray-50 rounded-lg shadow w-3/4 font-serif">
+                    <p>£{{flight.price}}</p>
+                    <p>{{flight.departure_time}} ({{flight.duration}} minutes)</p>
+                    <p>Stops: {{ flight.sub_flights|length|add:'-1' }}</p>
+                    <a class="" href="{{flight.link}}" target="_blank">Book now (new tab)</a>
+                    <form>
+                        {% csrf_token %}
+                        <input type="hidden" name="save_searched_flight" value="{{ flight }}">
+                        <button hx-post="?flight_direction={{flight_direction}}&departure_airport={{departure_airport.id}}&destination_airport={{destination_airport.id}}" hx-target="body">Save for this trip</button>
+                    </form>
+                </div>
                 {% endfor %}
                 </div>
             </div>

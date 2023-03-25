@@ -11,9 +11,17 @@
         {{outbound_flight.departure_airport.iata_code}} -> {{outbound_flight.arrival_airport.iata_code}} ({{outbound_flight.duration}} minutes)
     </p>
 {% else %}
-    <button hx-get="{% url 'add_flight' %}?flight_direction=outbound&trip_id={{trip.id}}" hx-target="body" hx-swap="beforeend" class="mb-4 flex flex-row items-center font-medium text-custom-50 hover:underline hover:text-custom-100">
-        Configure outbound flight
-    </button>
+    {% if trip.destination_set.all|length >= 1 %}
+        {% if current_date < first_destination.start_date %}
+            <button hx-get="{% url 'add_flight' %}?flight_direction=outbound&trip_id={{trip.id}}" hx-target="body" hx-swap="beforeend" class="mb-4 flex flex-row items-center font-medium text-custom-50 hover:underline hover:text-custom-100">
+                Configure outbound flight
+            </button>
+        {% else %}
+            <button disabled class="mb-4 flex flex-row items-center font-medium text-custom-50 disabled:text-opacity-40">
+                Configure flight not available
+            </button>
+        {% endif %}
+    {% endif %}
 {% endif %}
 
 {% for destination in destinations %}
@@ -101,9 +109,17 @@
         {{inbound_flight.departure_airport.iata_code}} -> {{inbound_flight.arrival_airport.iata_code}} ({{inbound_flight.duration}} minutes)
     </p>
 {% else %}
-    <button hx-get="{% url 'add_flight' %}?flight_direction=inbound&trip_id={{trip.id}}" hx-target="body" hx-swap="beforeend" class="mt-4 flex flex-row items-center font-medium text-custom-50 hover:underline hover:text-custom-100">
-        Configure inbound flight
-    </button>
+    {% if trip.destination_set.all|length >= 1 %}
+        {% if current_date < last_destination.end_date %}
+            <button hx-get="{% url 'add_flight' %}?flight_direction=inbound&trip_id={{trip.id}}" hx-target="body" hx-swap="beforeend" class="mt-4 flex flex-row items-center font-medium text-custom-50 hover:underline hover:text-custom-100">
+                Configure inbound flight
+            </button>
+        {% else %}
+            <button disabled class="mt-4 flex flex-row items-center font-medium text-custom-50 disabled:text-opacity-40">
+                Configure flight not available
+            </button>
+        {% endif %}
+    {% endif %}
 {% endif %}
 <button hx-get="{% url 'add_destination' %}" hx-target="body" hx-swap="beforeend" class="text-center mt-4 w-1/5 px-5 py-2 font-serif text-white bg-custom-50 hover:bg-custom-100 font-medium rounded-lg text-sm">Add a destination</button>
 

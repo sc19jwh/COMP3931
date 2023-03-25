@@ -15,43 +15,24 @@
                     </svg>
                 </div>
                 <div class="px-10 pb-10 pt-1 justify-center">
-                    {% if flight_direction == "outbound" %}
-                        <form hx-post="" hx-target="body">
-                            <input type="hidden" name="enter_flight_form" value="{{flight_direction}}">
-                            <select name="departure_airport" class="w-full text-center font-serif bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-4">
-                                <option disabled selected>--- Select an airport ---</option>
-                                {% for airport in airports%}
-                                    <option value="{{airport.pk}}">{{airport.name}}</option>
-                                {% endfor %}
-                            </select>
-                            <select name="destination_airport" class="w-full text-center font-serif bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-4">
-                                {% for airport in chosen_airports %}
-                                    <option value="{{airport.pk}}">{{airport.name}}</option>
-                                {% endfor %}
-                            </select>
-                            <input type="datetime-local" name="departure_datetime" class="w-full text-center font-serif bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-4" />
-                            <input id="testinput" type="datetime-local" name="destination_datetime" class="w-full text-center font-serif bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-4" />
-                            <button class="px-5 py-2 font-serif w-full text-white bg-custom-50 hover:bg-custom-100 font-medium rounded-lg text-sm">Save Flight</button>
-                        </form>
-                    {% else %}
-                        <form hx-post="" hx-target="body">
-                            <input type="hidden" name="enter_flight_form" value="{{flight_direction}}">
-                            <select name="departure_airport" class="w-full text-center font-serif bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-4">
-                                {% for airport in chosen_airports %}
-                                    <option value="{{airport.pk}}">{{airport.name}}</option>
-                                {% endfor %}
-                            </select>
-                            <select name="destination_airport" class="w-full text-center font-serif bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-4">
-                                <option disabled selected>--- Select an airport ---</option>
-                                {% for airport in airports%}
-                                    <option value="{{airport.pk}}">{{airport.name}}</option>
-                                {% endfor %}
-                            </select>
-                            <input type="datetime-local" name="departure_datetime" class="w-full text-center font-serif bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-4" />
-                            <input id="testinput" type="datetime-local" name="destination_datetime" class="w-full text-center font-serif bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-4" />
-                            <button class="px-5 py-2 font-serif w-full text-white bg-custom-50 hover:bg-custom-100 font-medium rounded-lg text-sm">Save Flight</button>
-                        </form>
-                    {% endif %}
+                    <form hx-post="" hx-target="body">
+                        <input type="hidden" name="enter_flight_form" value="{{flight_direction}}">
+                        <select name="departure_airport" class="w-full text-center font-serif bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-4">
+                            <option disabled selected>--- Select an airport ---</option>
+                            {% for airport in departure_airports%}
+                                <option value="{{airport.pk}}">{{airport.name}}</option>
+                            {% endfor %}
+                        </select>
+                        <select name="destination_airport" class="w-full text-center font-serif bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-4">
+                            <option disabled selected>--- Select an airport ---</option>
+                            {% for airport in arrival_airports %}
+                                <option value="{{airport.pk}}">{{airport.name}}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="datetime-local" name="departure_datetime" class="w-full text-center font-serif bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-4" />
+                        <input id="testinput" type="datetime-local" name="destination_datetime" class="w-full text-center font-serif bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-4" />
+                        <button class="px-5 py-2 font-serif w-full text-white bg-custom-50 hover:bg-custom-100 font-medium rounded-lg text-sm">Save Flight</button>
+                    </form>
                 </div>          
             </div>
         </div>

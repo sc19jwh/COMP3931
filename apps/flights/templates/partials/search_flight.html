@@ -14,7 +14,7 @@
                         <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
                     </svg>
                 </div>
-                <div class="px-10 pb-10 pt-1 justify-center">
+                <div class="px-10 pb-10 pt-1 justify-center items-center text-center">
                     <select name="departure_airport" class="w-full text-center font-serif bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-4">
                         <option disabled selected>--- Select an airport ---</option>
                         {% for airport in departure_airports%}
@@ -27,7 +27,10 @@
                             <option value="{{airport.pk}}">{{airport.name}}</option>
                         {% endfor %}
                     </select>
-                    <button hx-get="{% url 'search_results' %}?trip_id={{trip_id}}&flight_direction={{flight_direction}}" hx-target="body" hx-swap="beforeend" hx-include="[name='departure_airport'], [name='arrival_airport']" _="on click remove #container" class="px-5 py-2 font-serif w-2/3 text-white bg-custom-50 hover:bg-custom-100 font-medium rounded-lg text-sm">Search flights</button>
+                    <input type="checkbox" id="direct_flights" name="direct_flights" class="p-2 mb-4">
+                    <label for="direct_flights" class="p-2 mb-4">Direct Flights Only</label>
+                    <br>
+                    <button hx-get="{% url 'search_results' %}?trip_id={{trip_id}}&flight_direction={{flight_direction}}" hx-target="body" hx-swap="beforeend" hx-include="[name='departure_airport'], [name='arrival_airport'], [name='direct_flights']" _="on click remove #container" class="px-5 py-2 font-serif w-2/3 text-white bg-custom-50 hover:bg-custom-100 font-medium rounded-lg text-sm">Search flights</button>
                 </div>         
             </div>
         </div>

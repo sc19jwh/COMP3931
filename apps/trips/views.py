@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 import base64
 import folium
 import ast
-from datetime import datetime
+from datetime import datetime, date, timedelta
 import decimal
 # Folder imports
 from .models import *
@@ -33,7 +33,6 @@ def mytrips(request, username):
     if request.method == 'POST':
         # If POST adding trip
         if 'add_trip_form' in request.POST:
-            print(decimal.Decimal(request.POST.get('journeytime')), decimal.Decimal(request.POST.get('budget')), decimal.Decimal(request.POST.get('climate')), decimal.Decimal(request.POST.get('food')), decimal.Decimal(request.POST.get('tourism')), decimal.Decimal(request.POST.get('nightlife')))
             trip = Trip.objects.create(
                 user=request.user,
                 title=request.POST.get('triptitle'),
@@ -144,7 +143,8 @@ def configtrip(request, trip_id, username):
     inbound_flight = Flight.objects.filter(trip=trip, direction="inbound").first()
     destinations = trip.destination_set.order_by('start_date', 'end_date')
     context = {'title': 'My Trips', 'trip': trip, 'destinations': destinations, 'countries': countries, 'profile': Profile.objects.get(user=request.user), 'outbound_flight': outbound_flight,
-               'inbound_flight': inbound_flight}
+               'inbound_flight': inbound_flight, 'current_date': date.today(), 'first_destination': trip.destination_set.order_by('start_date').first(),
+               'last_destination': trip.destination_set.order_by('start_date').last()}
     return render(request, 'configtrip.html', context)
 
 def find_cities(request):
@@ -155,6 +155,10 @@ def find_cities(request):
 
 def dependent_dates(request):
     start_date = request.GET.get('start_date')
+    if start_date:
+        print("there is one")
+    else:
+        print("there is not")
     context = {'start_date': start_date}
     return render(request, 'partials/dependent_dates.html', context)
 
@@ -164,7 +168,7 @@ def add_trip(request):
 
 def add_destination(request):
     countries = Country.objects.filter(is_interrail=True)
-    context = {'countries': countries}
+    context = {'countries': countries, 'tomorrow': str(date.today() + timedelta(days=1))}
     return render(request, 'partials/add_destination.html', context)
 
 def add_travel(request):
