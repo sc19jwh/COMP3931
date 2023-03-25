@@ -51,11 +51,11 @@
                 </div>
             </div>
             <div class="w-1/6 flex justify-end items-center">
-                <form class="text-center mt-6 w-1/5" hx-post="{{trip.id}}" hx-target="body">
+                <form class="text-center mt-6 w-1/5" hx-post="{{trip.id}}" hx-confirm="Are you sure you want to delete {{destination.city.name}} from your trip?" hx-target="body">
                     <!-- Invisible field to store trip id and identify which form -->
                     <input type="hidden" name="delete_destination_form" value="{{destination.id}}">
                     <button>
-                        <svg hx-post="{{trip.id}}" class="hover:cursor-pointer" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#5F9595" class="bi bi-trash3-fill" viewBox="0 0 16 16">
+                        <svg class="hover:cursor-pointer" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#5F9595" class="bi bi-trash3-fill" viewBox="0 0 16 16">
                             <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"/>
                         </svg>
                     </button>
@@ -90,16 +90,24 @@
     <!-- Vertical line to connect to next destination -->
     {% if not forloop.last %}
         <div class="h-7 border-l border-gray-400"></div>
-        {% with next_id=forloop.counter|add:1 %}
-            {% with next_destination=destinations|slice:":"|slice:next_id|last %}
-                <div class="my-2 text-sm font-light text-gray-500 text-center font-serif">
-                    <button hx-indicator="#spinner" hx-get="{% url 'add_travel' %}?start={{destination.id}}&end={{next_destination.id}}" hx-target="body" hx-swap="beforeend" class="flex flex-row items-center font-medium text-custom-50 hover:underline hover:text-custom-100">
-                        Configure
-                        <img style="width: 10px; height: 10px; padding-left: 2px;;" id="spinner" class="htmx-indicator" src="{% static 'images/loading.gif' %}"/>
-                    </button>
-                </div>
+        {% if destination.departure_destination.all %}
+            <div class="my-2 text-sm font-light text-gray-500 text-center font-serif">
+                <button disabled class="flex flex-row items-center font-medium text-custom-50 hover:underline hover:text-custom-100">
+                    Travel Already Configured
+                </button>
+            </div>
+        {% else %}
+            {% with next_id=forloop.counter|add:1 %}
+                {% with next_destination=destinations|slice:":"|slice:next_id|last %}
+                    <div class="my-2 text-sm font-light text-gray-500 text-center font-serif">
+                        <button hx-indicator="#spinner" hx-get="{% url 'add_travel' %}?start={{destination.id}}&end={{next_destination.id}}" hx-target="body" hx-swap="beforeend" class="flex flex-row items-center font-medium text-custom-50 hover:underline hover:text-custom-100">
+                            Configure
+                            <img style="width: 10px; height: 10px; padding-left: 2px;;" id="spinner" class="htmx-indicator" src="{% static 'images/loading.gif' %}"/>
+                        </button>
+                    </div>
+                {% endwith %}
             {% endwith %}
-        {% endwith %}
+        {% endif %}
         <div class="h-7 border-l border-gray-400"></div>
     {% endif %}
 {% endfor %}
@@ -121,6 +129,6 @@
         {% endif %}
     {% endif %}
 {% endif %}
-<button hx-get="{% url 'add_destination' %}" hx-target="body" hx-swap="beforeend" class="text-center mt-4 w-1/5 px-5 py-2 font-serif text-white bg-custom-50 hover:bg-custom-100 font-medium rounded-lg text-sm">Add a destination</button>
+<button hx-get="{% url 'add_destination' %}?trip={{trip.id}}" hx-target="body" hx-swap="beforeend" class="text-center mt-4 w-1/5 px-5 py-2 font-serif text-white bg-custom-50 hover:bg-custom-100 font-medium rounded-lg text-sm">Add a destination</button>
 
 {% endblock %}

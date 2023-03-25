@@ -32,7 +32,7 @@
                         </div>
                         <div class="flex flex-row justify-center">
                             <div class="mr-2">
-                                <input hx-get="{% url 'dependent_dates' %}" min="{{tomorrow}}" hx-trigger="change" hx-target="#end_date_div" type="date" name="start_date" placeholder="Start date" class="w-full text-center font-serif bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-4" />
+                                <input hx-get="{% url 'dependent_dates' %}" min="{{min_date}}" hx-trigger="change" hx-target="#end_date_div" type="date" name="start_date" placeholder="Start date" class="w-full text-center font-serif bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-4" />
                             </div>
                             <div id="end_date_div" class="ml-2">
                                 <input disabled type="date" name="end_date" placeholder="End date" class="w-full text-center font-serif bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-4" />

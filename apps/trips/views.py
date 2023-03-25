@@ -56,6 +56,7 @@ def mytrips(request, username):
 
 @login_required
 def configtrip(request, trip_id, username):
+    trip = get_object_or_404(Trip, id=trip_id)
     if User.objects.get(username=username) != request.user:
         raise Http404
     if request.method == 'POST':
@@ -71,6 +72,12 @@ def configtrip(request, trip_id, username):
         # If POST deleting destination
         elif 'delete_destination_form' in request.POST:
             destination = get_object_or_404(Destination, id=request.POST.get('delete_destination_form'))
+            # If the first destination of trip is being deleted, delete any configured outbound flight
+            if destination.id == trip.destination_set.order_by('start_date').first().id:
+                Flight.objects.filter(trip_id=trip.id, direction='outbound').delete()
+            # If the last destination of trip is being deleted, delete any configured inbound flight
+            if destination.id == trip.destination_set.order_by('end_date').last().id:
+                Flight.objects.filter(trip_id=trip.id, direction='inbound').delete()
             destination.delete()
         # If POST adding flights
         elif 'enter_flight_form' in request.POST:
@@ -137,8 +144,27 @@ def configtrip(request, trip_id, username):
             )
             hotel.set_images(hotel_details_dict['images'])
             hotel.save()
+        elif 'add_travel_form' in request.POST:
+            route = request.POST['route_selection']
+            # Convert route to an array using ast (get params are always string, even though formatted [a,b,c])
+            route_array = ast.literal_eval(route)
+            # Create a master DestinationTransport object between the two destinations
+            destination_transport = DestinationTransport.objects.create(
+                departure_destination=get_object_or_404(Destination, id=request.POST['start_id']),
+                arrival_destination=get_object_or_404(Destination, id=request.POST['end_id'])
+            )
+            # Create sub TransportLegs for each journey between the two destinations
+            for i in range(len(route_array)-1):
+                start_city = get_object_or_404(City, name=route_array[i])
+                end_city = get_object_or_404(City, name=route_array[i+1])
+                route = get_object_or_404(TravelRoute, start_city=start_city, end_city=end_city)
+                transport_leg = TransportLeg.objects.create(
+                    trip_transport = destination_transport,
+                    route = route
+                )
+                # Attach sub journey to master journey
+                destination_transport.transport_legs.add(transport_leg)
     countries = Country.objects.all()
-    trip = get_object_or_404(Trip, id=trip_id)
     outbound_flight = Flight.objects.filter(trip=trip, direction="outbound").first()
     inbound_flight = Flight.objects.filter(trip=trip, direction="inbound").first()
     destinations = trip.destination_set.order_by('start_date', 'end_date')
@@ -154,12 +180,7 @@ def find_cities(request):
     return render(request, 'partials/find_cities.html', context)
 
 def dependent_dates(request):
-    start_date = request.GET.get('start_date')
-    if start_date:
-        print("there is one")
-    else:
-        print("there is not")
-    context = {'start_date': start_date}
+    context = {'start_date': request.GET.get('start_date')}
     return render(request, 'partials/dependent_dates.html', context)
 
 def add_trip(request):
@@ -167,8 +188,16 @@ def add_trip(request):
     return render(request, 'partials/add_trip.html', context)
 
 def add_destination(request):
+    trip = Trip.objects.get(id=request.GET.get('trip'))
+    # If there is more than 1 destination already configured, set min start date as end date of prior destination
+    if len(trip.destination_set.all()) > 0:
+        last_destination_date = trip.destination_set.order_by('start_date').last().end_date
+        min_date = str(last_destination_date)
+    # If this is the first destination, set min start date to tomorrow
+    else:
+        min_date = str(date.today() + timedelta(days=1))
     countries = Country.objects.filter(is_interrail=True)
-    context = {'countries': countries, 'tomorrow': str(date.today() + timedelta(days=1))}
+    context = {'countries': countries, 'min_date': min_date}
     return render(request, 'partials/add_destination.html', context)
 
 def add_travel(request):
@@ -189,24 +218,4 @@ def add_travel(request):
         context = {'start': request.GET.get('start'), 'end': request.GET.get('end'), 'start_dest': start_dest, 'end_dest': end_dest,
                 'shortest': shortest_array, 'least': least_array}
         return render(request, 'partials/add_travel.html', context)
-    elif request.method == "POST":
-        route = request.POST['route_selection']
-        # Convert route to an array using ast (get params are always string, even though formatted [a,b,c])
-        route_array = ast.literal_eval(route)
-        # Create a master DestinationTransport object between the two destinations
-        destination_transport = DestinationTransport.objects.create(
-            departure_destination=get_object_or_404(Destination, id=request.POST['start_id']),
-            arrival_destination=get_object_or_404(Destination, id=request.POST['end_id'])
-        )
-        # Create sub TransportLegs for each journey between the two destinations
-        for i in range(len(route_array)-1):
-            start_city = get_object_or_404(City, name=route_array[i])
-            end_city = get_object_or_404(City, name=route_array[i+1])
-            route = get_object_or_404(TravelRoute, start_city=start_city, end_city=end_city)
-            transport_leg = TransportLeg.objects.create(
-                trip_transport = destination_transport,
-                route = route
-            )
-            # Attach sub journey to master journey
-            destination_transport.transport_legs.add(transport_leg)
         return HttpResponse(status=200)
