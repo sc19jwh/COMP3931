@@ -33,17 +33,7 @@ class Flight(models.Model):
     departure_datetime = models.DateTimeField()
     arrival_datetime = models.DateTimeField()
     duration = models.IntegerField()
+    number_connections = models.IntegerField(default=0)
 
     def __str__(self):
         return f"({self.trip.user.username}) {self.trip.title}, {self.direction}"
-
-class SubFlight(models.Model):
-    master_flight = models.ForeignKey("Flight", on_delete=models.CASCADE)
-    sub_departure_airport = models.ForeignKey("Airport", on_delete=models.CASCADE, related_name='sub_departure_airport')
-    sub_arrival_airport = models.ForeignKey("Airport", on_delete=models.CASCADE, related_name='sub_arrival_airport')
-    sub_departure_datetime = models.DateTimeField()
-    sub_arrival_datetime = models.DateTimeField()
-    sub_duration = models.IntegerField()
-
-    def __str__(self):
-        return f"{self.master_flight} ({self.sub_departure_airport.name} - {self.sub_arrival_airport.name})"

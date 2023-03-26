@@ -30,7 +30,8 @@
                             {% endfor %}
                         </select>
                         <input type="datetime-local" name="departure_datetime" class="w-full text-center font-serif bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-4" />
-                        <input id="testinput" type="datetime-local" name="destination_datetime" class="w-full text-center font-serif bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-4" />
+                        <input type="datetime-local" name="destination_datetime" class="w-full text-center font-serif bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-4" />
+                        <input type="number" placeholder="Number of stops" id="quantity" name="stops" value="0" min="0" max="10" class="w-full text-center font-serif bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-4">
                         <button class="px-5 py-2 font-serif w-full text-white bg-custom-50 hover:bg-custom-100 font-medium rounded-lg text-sm">Save Flight</button>
                     </form>
                 </div>          

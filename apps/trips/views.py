@@ -93,20 +93,16 @@ def configtrip(request, trip_id, username):
                 arrival_airport = get_object_or_404(Airport, id=destination_airport),
                 departure_datetime = departure_datetime,
                 arrival_datetime = destination_datetime,
-                duration = int((destination_datetime - departure_datetime).total_seconds() / 60)
+                duration = int((destination_datetime - departure_datetime).total_seconds() / 60),
+                number_connections = int(request.POST.get('stops'))
             )
             master_flight.save()
-            sub_flight = SubFlight.objects.create(
-                master_flight = master_flight,
-                sub_departure_airport = master_flight.departure_airport,
-                sub_arrival_airport = master_flight.arrival_airport,
-                sub_departure_datetime = master_flight.departure_datetime,
-                sub_arrival_datetime = master_flight.arrival_datetime,
-                sub_duration = master_flight.duration,
-            )
-            sub_flight.save()
         elif 'save_searched_flight' in request.POST:
             flight_details_dict = eval(dict(request.POST)['save_searched_flight'][0])
+            if 'sub_flights' in flight_details_dict:
+                num_stops = len(flight_details_dict['sub_flights'])
+            else:
+                num_stops = 0
             flight_direction = request.GET.get('flight_direction')
             departure_airport = get_object_or_404(Airport, id = request.GET.get('departure_airport'))
             destination_airport = get_object_or_404(Airport, id = request.GET.get('destination_airport'))
@@ -119,16 +115,8 @@ def configtrip(request, trip_id, username):
                 arrival_airport = destination_airport,
                 departure_datetime = departure_datetime,
                 arrival_datetime = destination_datetime,
-                duration = int((destination_datetime - departure_datetime).total_seconds() / 60)
-            )
-            master_flight.save()
-            sub_flight = SubFlight.objects.create(
-                master_flight = master_flight,
-                sub_departure_airport = master_flight.departure_airport,
-                sub_arrival_airport = master_flight.arrival_airport,
-                sub_departure_datetime = master_flight.departure_datetime,
-                sub_arrival_datetime = master_flight.arrival_datetime,
-                sub_duration = master_flight.duration,
+                duration = int((destination_datetime - departure_datetime).total_seconds() / 60),
+                number_connections = num_stops - 1
             )
         elif 'save_searched_hotel' in request.POST:
             destination = get_object_or_404(Destination, id = request.GET.get('destination_id'))
