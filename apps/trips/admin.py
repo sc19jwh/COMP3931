@@ -12,7 +12,7 @@ class TripAdmin(admin.ModelAdmin):
     list_display= ('user', 'title', 'journey_times', 'budget', 'climate', 'food_culture', 'tourist_attractions', 'nightlife_level')
 
 class DestinationAdmin(admin.ModelAdmin):
-    list_display= ('trip', 'country', 'city', 'start_date', 'end_date')
+    list_display= ('trip', 'country', 'city')
 
 class TravelRouteAdmin(admin.ModelAdmin):
     list_display= ('start_city', 'end_city', 'duration', 'type')

@@ -26,6 +26,7 @@ class City(models.Model):
 class Trip(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=50, blank=True, null=True)
+    start_date = models.DateField(blank = True, null = True)
     journey_times = models.DecimalField(max_digits=4, decimal_places=1, blank=True, null=True)
     budget = models.DecimalField(max_digits=4, decimal_places=1, blank=True, null=True)
     climate = models.DecimalField(max_digits=4, decimal_places=1, blank=True, null=True)
@@ -33,17 +34,13 @@ class Trip(models.Model):
     tourist_attractions = models.DecimalField(max_digits=4, decimal_places=1, blank=True, null=True)
     nightlife_level = models.DecimalField(max_digits=4, decimal_places=1, blank=True, null=True)
 
-    def get_start_and_end_dates(self):
-        start_date = self.destination_set.all().aggregate(Min('start_date'))['start_date__min']
-        end_date = self.destination_set.all().aggregate(Max('end_date'))['end_date__max']
-        return start_date, end_date
-
 class Destination(models.Model):
     trip = models.ForeignKey("Trip", on_delete=models.CASCADE)
     country = models.ForeignKey("Country", on_delete=models.CASCADE)
     city = models.ForeignKey("City", on_delete=models.CASCADE)
-    start_date = models.DateField()
-    end_date = models.DateField()
+    start_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
+    nights = models.IntegerField(default=1)
 
     def __str__(self):
         return f"{self.trip.id} - {self.city.name}"

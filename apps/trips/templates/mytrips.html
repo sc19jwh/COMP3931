@@ -14,7 +14,7 @@
             <p class="text-lg font-medium">{{ trip.title }}</p>
             <div class="flex">
                 {% for destination in trip.destination_set.all %}
-                    <img src="https://flagcdn.com/h240/{{ destination.country.alpha2code }}.png" class="w-6 h-4 mr-1">
+                    <img src="https://flagcdn.com/h240/{{ destination.city.country.alpha2code }}.png" class="w-6 h-4 mr-1">
                 {% endfor %}
             </div>
         </div>

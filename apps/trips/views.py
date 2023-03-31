@@ -36,6 +36,7 @@ def mytrips(request, username):
             trip = Trip.objects.create(
                 user=request.user,
                 title=request.POST.get('triptitle'),
+                start_date=request.POST.get('start_date'),
                 journey_times=decimal.Decimal(request.POST.get('journeytime')),
                 budget=decimal.Decimal(request.POST.get('budget')),
                 climate=decimal.Decimal(request.POST.get('climate')),
@@ -86,7 +87,7 @@ def configtrip(request, trip_id, username):
             destination_airport = request.POST.get('destination_airport') 
             departure_datetime = datetime.strptime(request.POST.get('departure_datetime'), '%Y-%m-%dT%H:%M')
             destination_datetime = datetime.strptime(request.POST.get('destination_datetime'), '%Y-%m-%dT%H:%M')
-            master_flight = Flight.objects.create(
+            flight = Flight.objects.create(
                 direction = flight_direction,
                 trip = get_object_or_404(Trip, id=trip_id),
                 departure_airport = get_object_or_404(Airport, id=departure_airport),
@@ -96,7 +97,7 @@ def configtrip(request, trip_id, username):
                 duration = int((destination_datetime - departure_datetime).total_seconds() / 60),
                 number_connections = int(request.POST.get('stops'))
             )
-            master_flight.save()
+            flight.save()
         elif 'save_searched_flight' in request.POST:
             flight_details_dict = eval(dict(request.POST)['save_searched_flight'][0])
             if 'sub_flights' in flight_details_dict:
@@ -108,14 +109,14 @@ def configtrip(request, trip_id, username):
             destination_airport = get_object_or_404(Airport, id = request.GET.get('destination_airport'))
             departure_datetime = datetime.strptime(flight_details_dict['departure_time'], '%Y-%m-%d %H:%M:%S')
             destination_datetime = datetime.strptime(flight_details_dict['arrival_time'], '%Y-%m-%d %H:%M:%S')
-            master_flight = Flight.objects.create(
+            flight = Flight.objects.create(
                 direction = flight_direction,
                 trip = get_object_or_404(Trip, id=trip_id),
                 departure_airport = departure_airport,
                 arrival_airport = destination_airport,
                 departure_datetime = departure_datetime,
                 arrival_datetime = destination_datetime,
-                duration = int((destination_datetime - departure_datetime).total_seconds() / 60),
+                duration = flight_details_dict['duration'],
                 number_connections = num_stops - 1
             )
         elif 'save_searched_hotel' in request.POST:
@@ -172,7 +173,7 @@ def dependent_dates(request):
     return render(request, 'partials/dependent_dates.html', context)
 
 def add_trip(request):
-    context = {}
+    context = {'today': str(date.today() + timedelta(days=1))}
     return render(request, 'partials/add_trip.html', context)
 
 def add_destination(request):

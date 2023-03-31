@@ -38,7 +38,9 @@
                                 <input disabled type="date" name="end_date" placeholder="End date" class="w-full text-center font-serif bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-4" />
                             </div>
                         </div>
-                        <button class="px-5 py-2 font-serif w-2/3 text-white bg-custom-50 hover:bg-custom-100 font-medium rounded-lg text-sm">Add destination</button>
+                        <button class="px-5 py-2 font-serif w-2/3 text-white bg-custom-50 hover:bg-custom-100 font-medium rounded-lg text-sm">
+                            Add destination
+                        </button>
                     </form>
                 </div>
                 <div id="map_section" hx-get="{% url 'full_map' %}" hx-trigger="load" class="w-full" name="summarymap">

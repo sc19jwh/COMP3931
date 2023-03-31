@@ -8,24 +8,37 @@
     </head>
     <body>
         <div id="container" class="animate-fadeIn fixed top-0 bottom-0 left-0 right-0 bg-black bg-opacity-50 flex flex-col items-center justify-center h-screen w-screen">
-            <div class="animate-zoomIn w-3/4 h-3/4 bg-white rounded-lg shadow-lg">
+            <div id="white-box" style="overflow-y: scroll;" class="animate-zoomIn w-3/4 h-3/4 bg-white rounded-lg shadow-lg">
                 <div class="m-2 hover: cursor-pointer">
                     <svg _="on click remove #container" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
                         <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
                     </svg>
                 </div>
+                <div class="flex justify-center items-center">
+                    <img class="h-4 w-auto mb-2" src="{% static 'images/powered-by-skyscanner.svg' %}">
+                </div>
                 <div class="flex flex-col items-center justify-center">
                 {% for flight in direct_flights %}
                     <div class="flex mb-4 items-center p-4 bg-gray-50 rounded-lg shadow w-3/4 font-serif">
-                        <p>£{{flight.price}}</p>
-                        <p>{{flight.departure_time}} ({{flight.duration}} minutes)</p>
-                        <p>Stops: 0</p>
-                        <a class="" href="{{flight.link}}" target="_blank">Book now (new tab)</a>
-                        <form>
-                            {% csrf_token %}
-                            <input type="hidden" name="save_searched_flight" value="{{ flight }}">
-                            <button hx-post="?flight_direction={{flight_direction}}&departure_airport={{departure_airport.id}}&destination_airport={{destination_airport.id}}" hx-target="body">Save for this trip</button>
-                        </form>
+                        <div class="w-1/6">
+                            <img src="{{flight.airline_logo}}" class="w-3/4">
+                            <!-- <button _="on click go to url 'https://htmx.org' ">
+                                Go Check Out htmx
+                            </button> -->
+                            <!-- <button class="" href="{{flight.link}}" target="_blank">Book now (new tab)</button> -->
+                        </div>
+                        <div class="w-3/6">
+                            <!-- <p>{{flight}}</p> -->
+                            <p>{{flight.departure_time}} ({{flight.duration}} minutes)</p>
+                            <p>Stops: 0</p>
+                        </div>
+                        <div class="w-2/6">
+                            <form>
+                                {% csrf_token %}
+                                <input type="hidden" name="save_searched_flight" value="{{ flight }}">
+                                <button class="px-7 py-3 mr-2 bg-custom-50 text-white font-medium text-sm rounded-md hover:bg-custom-100 shadow-lg transition ease-in-out duration-300" hx-post="?flight_direction={{flight_direction}}&departure_airport={{departure_airport.id}}&destination_airport={{destination_airport.id}}" hx-target="body">Save for this trip</button>
+                            </form>
+                        </div>
                     </div>
                 {% endfor %}
                 {% for flight in connecting_flights %}

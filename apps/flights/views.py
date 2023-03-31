@@ -1,7 +1,8 @@
 # Django imports
 from django.shortcuts import render, get_object_or_404
 # Folder imports
-from .utils.flights import quick_flight_search, full_flight_search
+from .utils.sky import quick_flight_search
+# from .utils.flights import quick_flight_search, full_flight_search
 from .models import *
 from apps.trips.models import *
 
@@ -67,7 +68,6 @@ def search_results(request):
         direct = True
     else:
         direct = False
-    print(direct)
     # Get airport objects from IDs
     departure_airport = get_object_or_404(Airport, id = request.GET.get('departure_airport'))
     destination_airport = get_object_or_404(Airport, id = request.GET.get('arrival_airport'))
