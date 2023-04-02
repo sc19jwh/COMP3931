@@ -19,6 +19,8 @@
                     <form class="text-center" hx-post="" hx-target="body">
                         <!-- Invisible field identify which form -->
                         <input type="hidden" name="add_destination_form" value="1">
+                        <!-- Invisble field to identify next order -->
+                        <input type="hidden" name="next_order" value="{{next_order}}">
                         <select name="country" hx-get="{% url 'find_cities' %}" hx-trigger="change" hx-target="#cities" class="w-full text-center font-serif bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-4">
                             <option disabled selected>--- Select a country ---</option>
                             {% for country in countries%}
@@ -30,15 +32,8 @@
                                 <option>--- Select a city ---</option>
                             </select>
                         </div>
-                        <div class="flex flex-row justify-center">
-                            <div class="mr-2">
-                                <input hx-get="{% url 'dependent_dates' %}" min="{{min_date}}" hx-trigger="change" hx-target="#end_date_div" type="date" name="start_date" placeholder="Start date" class="w-full text-center font-serif bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-4" />
-                            </div>
-                            <div id="end_date_div" class="ml-2">
-                                <input disabled type="date" name="end_date" placeholder="End date" class="w-full text-center font-serif bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-4" />
-                            </div>
-                        </div>
-                        <button class="px-5 py-2 font-serif w-2/3 text-white bg-custom-50 hover:bg-custom-100 font-medium rounded-lg text-sm">
+                        <input type="number" placeholder="Number of nights" id="nights" name="nights" min="1" class="w-full text-center font-serif bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-4">
+                        <button type="submit" class="px-5 py-2 font-serif w-2/3 text-white bg-custom-50 hover:bg-custom-100 font-medium rounded-lg text-sm">
                             Add destination
                         </button>
                     </form>

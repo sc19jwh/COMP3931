@@ -1,5 +1,8 @@
+# Django imports
 from django.db import models
 from apps.trips import models as trips_models
+# Other imports
+from datetime import datetime, timedelta
 
 class Airport(models.Model):
     name = models.CharField(max_length=100)
@@ -34,6 +37,10 @@ class Flight(models.Model):
     arrival_datetime = models.DateTimeField()
     duration = models.IntegerField()
     number_connections = models.IntegerField(default=0)
+
+    def get_timezone_diff(self):
+        datetime_diff = self.arrival_datetime - self.departure_datetime
+        return datetime_diff - timedelta(minutes=self.duration)
 
     def __str__(self):
         return f"({self.trip.user.username}) {self.trip.title}, {self.direction}"

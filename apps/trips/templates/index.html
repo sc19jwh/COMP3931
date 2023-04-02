@@ -5,43 +5,21 @@
 <body class="bg-gray-50">
     <div class="mt-10 flex justify-center items-center">
         {% for city in cities %}
-            {% if forloop.first %}
-                <div id="image-{{ forloop.counter }}">
-                    <img class="object-contain h-48 w-96 bg-gray-300 bg-opacity-50" src="{{city.photo_url}}">
-                    <button type="button" class="mr-1 lg:mr-3 disabled:opacity-25 text-center enabled:hover:cursor-pointer px-5 py-2 text-white bg-custom-50 enabled:hover:bg-custom-100 font-medium rounded-lg text-sm" 
-                    _="on click toggle the *display of #image-{{ forloop.counter }} on click toggle the *display of #image-{{ forloop.counter|add:'1' }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
-                        </svg>
-                    </button>
-                </div>
-            {% elif forloop.last %}
-                <div id="image-{{ forloop.counter }}" style="display: none;">
-                    <img class="object-contain h-48 w-96 bg-gray-300 bg-opacity-50 animate-fadeInMedium" src="{{city.photo_url}}">
-                    <button type="button" class="mr-1 lg:mr-3 disabled:opacity-25 text-center enabled:hover:cursor-pointer px-5 py-2 text-white bg-custom-50 enabled:hover:bg-custom-100 font-medium rounded-lg text-sm" 
-                    _="on click toggle the *display of #image-{{ forloop.counter }} on click toggle the *display of #image-{{ forloop.counter|add:'-1' }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
-                        </svg>
-                    </button>
-                </div>
-            {% else %}
-                <div id="image-{{ forloop.counter }}" style="display: none;">
-                    <img class="object-contain h-48 w-96 bg-gray-300 bg-opacity-50 animate-fadeInMedium" src="{{city.photo_url}}">
-                    <button type="button" class="mr-1 lg:mr-3 disabled:opacity-25 text-center enabled:hover:cursor-pointer px-5 py-2 text-white bg-custom-50 enabled:hover:bg-custom-100 font-medium rounded-lg text-sm" 
-                    _="on click toggle the *display of #image-{{ forloop.counter }} on click toggle the *display of #image-{{ forloop.counter|add:'-1' }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
-                        </svg>
-                    </button>
-                    <button type="button" class="mr-1 lg:mr-3 disabled:opacity-25 text-center enabled:hover:cursor-pointer px-5 py-2 text-white bg-custom-50 enabled:hover:bg-custom-100 font-medium rounded-lg text-sm" 
-                    _="on click toggle the *display of #image-{{ forloop.counter }} on click toggle the *display of #image-{{ forloop.counter|add:'1' }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
-                        </svg>
-                    </button>
-                </div>
-            {% endif %}
+            <div id="image-{{ forloop.counter }}" {% if forloop.first %}{% else %} style="display: none;" {% endif %}>
+                <img class="object-contain h-48 w-96 bg-gray-300 bg-opacity-50 animate-fadeInMedium" src="{{city.photo_url}}">
+                <button {% if forloop.first %} disabled {% endif %} type="button" class="mr-1 lg:mr-3 disabled:opacity-25 text-center enabled:hover:cursor-pointer px-5 py-2 text-white bg-custom-50 enabled:hover:bg-custom-100 font-medium rounded-lg text-sm" 
+                _="on click toggle the *display of #image-{{ forloop.counter }} on click toggle the *display of #image-{{ forloop.counter|add:'-1' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+                    </svg>
+                </button>
+                <button {% if forloop.last %} disabled {% endif %} type="button" class="mr-1 lg:mr-3 disabled:opacity-25 text-center enabled:hover:cursor-pointer px-5 py-2 text-white bg-custom-50 enabled:hover:bg-custom-100 font-medium rounded-lg text-sm" 
+                _="on click toggle the *display of #image-{{ forloop.counter }} on click toggle the *display of #image-{{ forloop.counter|add:'1' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                    </svg>
+                </button>
+            </div>
         {% endfor %}
     </div>
     <br><br>

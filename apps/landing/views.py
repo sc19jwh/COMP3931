@@ -16,7 +16,3 @@ def showcase1(request):
 def faqs(request):
     context = {'title': 'Home', 'profile': Profile.objects.get(user=request.user)}
     return render(request, 'faqs.html', context)
-
-def join(request):
-    context = {'title': 'Home', 'profile': Profile.objects.get(user=request.user)}
-    return render(request, 'join.html', context)

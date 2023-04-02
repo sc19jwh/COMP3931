@@ -1,9 +1,0 @@
-<!-- Triggered on change of start date input box -->
-<!-- Set minimum of end date to the day of start_date - ensures end_date is always > start_date -->
-<!-- If start_date has been reset i.e. start_date = NULL, send back a disabled box -->
-
-{% if start_date %}
-    <input type="date" min="{{start_date}}" name="end_date" placeholder="End date" class="w-full text-center font-serif bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-4" />
-{% else %}
-<input disabled type="date" name="end_date" placeholder="End date" class="w-full text-center font-serif bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-4" />
-{% endif %}

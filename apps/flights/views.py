@@ -17,7 +17,7 @@ def enter_flight(request):
     flight_direction = request.GET.get('flight_direction')
     trip = get_object_or_404(Trip, id=trip_id)
     if flight_direction == "outbound":
-        earliest_destination = trip.destination_set.order_by('start_date').first()
+        earliest_destination = trip.destination_set.order_by('order').first()
         departure_airports = Airport.objects.all()
         arrival_interrailairports = InterrailAirport.objects.filter(city=earliest_destination.city)
         # Get arrival airports as Airport objects
@@ -25,7 +25,7 @@ def enter_flight(request):
         for airport in arrival_interrailairports:
             arrival_airports.append(airport.airport)
     else:
-        last_destination = trip.destination_set.order_by('end_date').last()
+        last_destination = trip.destination_set.order_by('order').last()
         departure_interrailairports = InterrailAirport.objects.filter(city=last_destination.city)
         # Get departure airports as Airport objects
         departure_airports = []
@@ -41,7 +41,7 @@ def search_flight(request):
     flight_direction = request.GET.get('flight_direction')
     # If outbound flight, find the earliest destination's start date and find a flight to that destination on that date
     if flight_direction == "outbound":
-        earliest_destination = trip.destination_set.order_by('start_date').first()
+        earliest_destination = trip.destination_set.order_by('order').first()
         departure_airports = Airport.objects.all()
         arrival_interrailairports = InterrailAirport.objects.filter(city=earliest_destination.city)
         # Get arrival airports as Airport objects
@@ -50,7 +50,7 @@ def search_flight(request):
             arrival_airports.append(airport.airport)
     # If inbound flight, find the last destination's end date and find a flight from that destination on that date
     else:
-        last_destination = trip.destination_set.order_by('end_date').last()
+        last_destination = trip.destination_set.order_by('order').last()
         departure_interrailairports = InterrailAirport.objects.filter(city=last_destination.city)
         # Get departure airports as Airport objects
         departure_airports = []
@@ -73,11 +73,11 @@ def search_results(request):
     destination_airport = get_object_or_404(Airport, id = request.GET.get('arrival_airport'))
     # If outbound flight configure dates as trip start date
     if flight_direction == "outbound":
-        earliest_destination = trip.destination_set.order_by('start_date').first()
+        earliest_destination = trip.destination_set.order_by('order').first()
         session_token, direct_flights, connecting_flights = quick_flight_search("GBP", departure_airport.iata_code, destination_airport.iata_code, earliest_destination.start_date.year, earliest_destination.start_date.month, earliest_destination.start_date.day, direct)
     # If inbound flight configure dates as trip end date
     else:
-        last_destination = trip.destination_set.order_by('end_date').last()
+        last_destination = trip.destination_set.order_by('order').last()
         session_token, direct_flights, connecting_flights = quick_flight_search("GBP", departure_airport.iata_code, destination_airport.iata_code, last_destination.start_date.year, last_destination.start_date.month, last_destination.start_date.day, direct)
     context = {'direct_flights': direct_flights, 'connecting_flights': connecting_flights, 'flight_direction': flight_direction, 'departure_airport': departure_airport, 'destination_airport': destination_airport}
     return render(request, 'partials/search_results.html', context)

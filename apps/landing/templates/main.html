@@ -82,20 +82,16 @@
         </div>
     </section>
 
-    <section id="features" class="h-auto" hx-get="{% url 'features' %}" hx-trigger="revealed">
+    <section id="features" class="h-screen" hx-get="{% url 'features' %}" hx-trigger="revealed">
         {% include 'features.html' %}
     </section>
 
-    <section id="showcase1" class="h-auto" hx-get="{% url 'showcase1' %}" hx-trigger="revealed">
+    <section id="showcase1" class="h-screen" hx-get="{% url 'showcase1' %}" hx-trigger="revealed">
         {% include 'showcase1.html' %}
     </section>
 
-    <section id="faqs" class="h-auto" hx-get="{% url 'faqs' %}" hx-trigger="revealed">
+    <section id="faqs" class="h-screen" hx-get="{% url 'faqs' %}" hx-trigger="revealed">
         {% include 'faqs.html' %}
-    </section>
-
-    <section id="join" class="h-auto" hx-get="{% url 'join' %}" hx-trigger="revealed">
-        {% include 'join.html' %}
     </section>
 
     <footer class="bg-gray-100 flex items-center justify-between h-16 py-5 px-10 text-gray-600 font-serif">

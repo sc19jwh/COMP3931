@@ -22,8 +22,8 @@ from .utils.geofuncs import lat_long_distance, dijkstra, least_transfers
 def home(request):
     countries = Country.objects.filter(is_interrail=True)
     cities = City.objects.all()
-    airports = Airport.objects.all()
-    context = {'title': 'Home', 'countries': countries, 'cities': cities, 'profile': Profile.objects.get(user=request.user), 'airports': airports}
+    # airports = Airport.objects.all()
+    context = {'title': 'Home', 'countries': countries, 'cities': cities, 'profile': Profile.objects.get(user=request.user)}
     return render(request, 'index.html', context)
 
 @login_required
@@ -49,9 +49,6 @@ def mytrips(request, username):
             trip = get_object_or_404(Trip, id=request.POST.get('delete_trip_form'))
             trip.delete()
     trips = Trip.objects.filter(user=request.user)
-    for trip in trips:
-        trip.start_date = trip.destination_set.aggregate(Min('start_date'))['start_date__min']
-        trip.end_date = trip.destination_set.aggregate(Max('end_date'))['end_date__max']
     context = {'title': 'My Trips', 'profile': Profile.objects.get(user=request.user), 'trips': trips}
     return render(request, 'mytrips.html', context)
 
@@ -63,23 +60,33 @@ def configtrip(request, trip_id, username):
     if request.method == 'POST':
         # If POST adding destination
         if 'add_destination_form' in request.POST:
+            # Get destinations equal to or greater than that order and push them up one spot
+            adjust_orders = Destination.objects.filter(order__gte=int(request.POST.get('next_order')))
+            for destination in adjust_orders:
+                destination.order += 1
+                destination.save()
             destination = Destination.objects.create(
                 trip=get_object_or_404(Trip, id=trip_id),
                 country=get_object_or_404(Country, id=request.POST.get('country')),
                 city=get_object_or_404(City, id=request.POST.get('city')),
-                start_date=request.POST.get('start_date'),
-                end_date=request.POST.get('end_date')
+                order = int(request.POST.get('next_order')),
+                nights = request.POST.get('nights')
             )
         # If POST deleting destination
         elif 'delete_destination_form' in request.POST:
             destination = get_object_or_404(Destination, id=request.POST.get('delete_destination_form'))
             # If the first destination of trip is being deleted, delete any configured outbound flight
-            if destination.id == trip.destination_set.order_by('start_date').first().id:
+            if destination.id == trip.destination_set.order_by('order').first().id:
                 Flight.objects.filter(trip_id=trip.id, direction='outbound').delete()
             # If the last destination of trip is being deleted, delete any configured inbound flight
-            if destination.id == trip.destination_set.order_by('end_date').last().id:
+            if destination.id == trip.destination_set.order_by('order').last().id:
                 Flight.objects.filter(trip_id=trip.id, direction='inbound').delete()
             destination.delete()
+            # Get destinations greater than that order and push them down one spot
+            adjust_orders = Destination.objects.filter(order__gt=destination.order)
+            for destination in adjust_orders:
+                destination.order -= 1
+                destination.save()
         # If POST adding flights
         elif 'enter_flight_form' in request.POST:
             flight_direction = request.POST.get('enter_flight_form')
@@ -101,7 +108,7 @@ def configtrip(request, trip_id, username):
         elif 'save_searched_flight' in request.POST:
             flight_details_dict = eval(dict(request.POST)['save_searched_flight'][0])
             if 'sub_flights' in flight_details_dict:
-                num_stops = len(flight_details_dict['sub_flights'])
+                num_stops = len(flight_details_dict['sub_flights']) - 1
             else:
                 num_stops = 0
             flight_direction = request.GET.get('flight_direction')
@@ -117,7 +124,7 @@ def configtrip(request, trip_id, username):
                 departure_datetime = departure_datetime,
                 arrival_datetime = destination_datetime,
                 duration = flight_details_dict['duration'],
-                number_connections = num_stops - 1
+                number_connections = num_stops
             )
         elif 'save_searched_hotel' in request.POST:
             destination = get_object_or_404(Destination, id = request.GET.get('destination_id'))
@@ -156,10 +163,10 @@ def configtrip(request, trip_id, username):
     countries = Country.objects.all()
     outbound_flight = Flight.objects.filter(trip=trip, direction="outbound").first()
     inbound_flight = Flight.objects.filter(trip=trip, direction="inbound").first()
-    destinations = trip.destination_set.order_by('start_date', 'end_date')
+    destinations = trip.destination_set.order_by('order')
     context = {'title': 'My Trips', 'trip': trip, 'destinations': destinations, 'countries': countries, 'profile': Profile.objects.get(user=request.user), 'outbound_flight': outbound_flight,
-               'inbound_flight': inbound_flight, 'current_date': date.today(), 'first_destination': trip.destination_set.order_by('start_date').first(),
-               'last_destination': trip.destination_set.order_by('start_date').last()}
+               'inbound_flight': inbound_flight, 'current_date': date.today(), 'first_destination': trip.destination_set.order_by('order').first(),
+               'last_destination': trip.destination_set.order_by('order').last()}
     return render(request, 'configtrip.html', context)
 
 def find_cities(request):
@@ -168,25 +175,15 @@ def find_cities(request):
     context = {'cities': cities}
     return render(request, 'partials/find_cities.html', context)
 
-def dependent_dates(request):
-    context = {'start_date': request.GET.get('start_date')}
-    return render(request, 'partials/dependent_dates.html', context)
-
 def add_trip(request):
     context = {'today': str(date.today() + timedelta(days=1))}
     return render(request, 'partials/add_trip.html', context)
 
 def add_destination(request):
     trip = Trip.objects.get(id=request.GET.get('trip'))
-    # If there is more than 1 destination already configured, set min start date as end date of prior destination
-    if len(trip.destination_set.all()) > 0:
-        last_destination_date = trip.destination_set.order_by('start_date').last().end_date
-        min_date = str(last_destination_date)
-    # If this is the first destination, set min start date to tomorrow
-    else:
-        min_date = str(date.today() + timedelta(days=1))
+    next_order = request.GET.get('next_order')
     countries = Country.objects.filter(is_interrail=True)
-    context = {'countries': countries, 'min_date': min_date}
+    context = {'countries': countries, 'next_order': next_order}
     return render(request, 'partials/add_destination.html', context)
 
 def add_travel(request):

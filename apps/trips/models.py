@@ -2,6 +2,8 @@ from django.db import models
 from django.db.models import Min, Max
 # Import default django User table
 from django.contrib.auth.models import User
+# Other imports
+from datetime import datetime, timedelta
 
 class Country(models.Model):
     name = models.CharField(max_length=50)
@@ -38,9 +40,22 @@ class Destination(models.Model):
     trip = models.ForeignKey("Trip", on_delete=models.CASCADE)
     country = models.ForeignKey("Country", on_delete=models.CASCADE)
     city = models.ForeignKey("City", on_delete=models.CASCADE)
-    start_date = models.DateField(blank=True, null=True)
-    end_date = models.DateField(blank=True, null=True)
+    order = models.IntegerField(default=1)
     nights = models.IntegerField(default=1)
+
+    @property
+    def start_date(self):
+        if self.order == 1:
+            return self.trip.start_date
+        else:
+            previous_destination = self.trip.destination_set.get(order=self.order-1)
+            return previous_destination.end_date
+
+    @property
+    def end_date(self):
+        start_date = self.start_date
+        end_date = start_date + timedelta(days=self.nights)
+        return end_date
 
     def __str__(self):
         return f"{self.trip.id} - {self.city.name}"

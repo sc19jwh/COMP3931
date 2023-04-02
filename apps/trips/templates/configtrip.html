@@ -8,7 +8,7 @@
 
 {% if outbound_flight %}
     <p class="mb-4 flex flex-row items-center font-medium text-custom-50">
-        {{outbound_flight.departure_airport.iata_code}} -> {{outbound_flight.arrival_airport.iata_code}} ({{outbound_flight.duration}} minutes)
+        {{outbound_flight.departure_airport.iata_code}} -> {{outbound_flight.arrival_airport.iata_code}} ({{outbound_flight.duration}} minutes) - Time difference = {{outbound_flight.get_timezone_diff}}
     </p>
 {% else %}
     {% if trip.destination_set.all|length >= 1 %}
@@ -24,6 +24,8 @@
     {% endif %}
 {% endif %}
 
+<button hx-get="{% url 'add_destination' %}?trip={{trip.id}}&next_order=1" hx-target="body" hx-swap="beforeend" class="text-center mt-4 mb-4 w-1/5 px-5 py-2 font-serif text-white bg-custom-50 hover:bg-custom-100 font-medium rounded-lg text-sm">Add a destination</button>
+
 {% for destination in destinations %}
     <div class="items-center p-4 bg-white rounded-lg shadow w-3/4 font-serif">
         <div class="flex">
@@ -33,7 +35,7 @@
             </div>
             <div class="w-2/6 flex flex-row items-center">
                 <img src="https://flagcdn.com/h240/{{destination.city.country.alpha2code}}.png" class="my-2 w-3 h-2 object-cover">
-                <p class="text-lg font-medium ml-2">{{ destination.city.name }}</p>
+                <p class="text-lg font-medium ml-2">{{ destination.city.name }} ({{destination.order}})</p>
             </div>
             <div class="w-2/6 pl-4">
                 <div class="flex flex-row items-center">
@@ -88,6 +90,7 @@
             {% endwith %}
         </div>
     </div>
+    <button hx-get="{% url 'add_destination' %}?trip={{trip.id}}&next_order={{destination.order|add:1}}" hx-target="body" hx-swap="beforeend" class="text-center mt-4 w-1/5 px-5 py-2 font-serif text-white bg-custom-50 hover:bg-custom-100 font-medium rounded-lg text-sm">Add a destination</button>
     <!-- Vertical line to connect to next destination -->
     {% if not forloop.last %}
         <div class="h-7 border-l border-gray-400"></div>
@@ -112,8 +115,6 @@
         <div class="h-7 border-l border-gray-400"></div>
     {% endif %}
 {% endfor %}
-
-<button hx-get="{% url 'add_destination' %}?trip={{trip.id}}" hx-target="body" hx-swap="beforeend" class="text-center mt-4 w-1/5 px-5 py-2 font-serif text-white bg-custom-50 hover:bg-custom-100 font-medium rounded-lg text-sm">Add a destination</button>
 
 {% if inbound_flight %}
     <p class="mt-4 flex flex-row items-center font-medium text-custom-50">
