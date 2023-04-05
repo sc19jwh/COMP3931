@@ -9,4 +9,5 @@ urlpatterns = [
     path('partials/add_trip', views.add_trip, name='add_trip'),
     path('partials/add_destination', views.add_destination, name='add_destination'),
     path('partials/add_travel', views.add_travel, name='add_travel'),
+    path('partials/trip_summary', views.trip_summary, name='trip_summary'),
 ]

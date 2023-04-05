@@ -27,7 +27,7 @@ class City(models.Model):
 
 class Trip(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    title = models.CharField(max_length=50, blank=True, null=True)
+    title = models.CharField(max_length=25, blank=True, null=True)
     start_date = models.DateField(blank = True, null = True)
     journey_times = models.DecimalField(max_digits=4, decimal_places=1, blank=True, null=True)
     budget = models.DecimalField(max_digits=4, decimal_places=1, blank=True, null=True)
@@ -56,6 +56,9 @@ class Destination(models.Model):
         start_date = self.start_date
         end_date = start_date + timedelta(days=self.nights)
         return end_date
+
+    class Meta:
+        ordering = ["order"]
 
     def __str__(self):
         return f"{self.trip.id} - {self.city.name}"

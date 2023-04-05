@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, Http404
 from django.contrib.auth import authenticate, login, logout
 from django.core.files.base import ContentFile
-from django.db.models import Min, Max
+from django.db.models import Min, Max, Q
 from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
 # Other imports
@@ -23,6 +23,9 @@ def home(request):
     countries = Country.objects.filter(is_interrail=True)
     cities = City.objects.all()
     # airports = Airport.objects.all()
+    if request.method == 'POST':
+        # print(request.POST)
+        print(request.POST.get('test'))
     context = {'title': 'Home', 'countries': countries, 'cities': cities, 'profile': Profile.objects.get(user=request.user)}
     return render(request, 'index.html', context)
 
@@ -49,7 +52,11 @@ def mytrips(request, username):
             trip = get_object_or_404(Trip, id=request.POST.get('delete_trip_form'))
             trip.delete()
     trips = Trip.objects.filter(user=request.user)
-    context = {'title': 'My Trips', 'profile': Profile.objects.get(user=request.user), 'trips': trips}
+    if len(trips) == 0:
+        middle = True
+    else:
+        middle = False
+    context = {'title': 'My Trips', 'profile': Profile.objects.get(user=request.user), 'trips': trips, 'middle': middle}
     return render(request, 'mytrips.html', context)
 
 @login_required
@@ -60,8 +67,21 @@ def configtrip(request, trip_id, username):
     if request.method == 'POST':
         # If POST adding destination
         if 'add_destination_form' in request.POST:
+            order_to_add = int(request.POST.get('next_order'))
+            # Only perform if destinations already exist on trip
+            if trip.destination_set.count() > 1:
+                # Look up order - if order is 1 remove any outbound flights, if order is the new greatest, remove any inbound flights
+                if order_to_add == 1:
+                    Flight.objects.filter(trip_id=trip.id, direction='outbound').delete()
+                if order_to_add > int(trip.destination_set.order_by('order').last().order):
+                    Flight.objects.filter(trip_id=trip.id, direction='inbound').delete()
+                # If adding a new destination between two configured destinations, delete any transport between them
+                if order_to_add > 1 and order_to_add <= int(trip.destination_set.order_by('order').last().order):
+                    start_dest = Destination.objects.get(trip = trip, order = order_to_add-1)
+                    end_dest = Destination.objects.get(trip = trip, order = order_to_add)
+                    DestinationTransport.objects.filter(departure_destination = start_dest, arrival_destination = end_dest).delete()
             # Get destinations equal to or greater than that order and push them up one spot
-            adjust_orders = Destination.objects.filter(order__gte=int(request.POST.get('next_order')))
+            adjust_orders = Destination.objects.filter(order__gte=order_to_add)
             for destination in adjust_orders:
                 destination.order += 1
                 destination.save()
@@ -69,7 +89,7 @@ def configtrip(request, trip_id, username):
                 trip=get_object_or_404(Trip, id=trip_id),
                 country=get_object_or_404(Country, id=request.POST.get('country')),
                 city=get_object_or_404(City, id=request.POST.get('city')),
-                order = int(request.POST.get('next_order')),
+                order = order_to_add,
                 nights = request.POST.get('nights')
             )
         # If POST deleting destination
@@ -164,9 +184,13 @@ def configtrip(request, trip_id, username):
     outbound_flight = Flight.objects.filter(trip=trip, direction="outbound").first()
     inbound_flight = Flight.objects.filter(trip=trip, direction="inbound").first()
     destinations = trip.destination_set.order_by('order')
+    if len(destinations) == 0:
+        middle = True
+    else:
+        middle = False
     context = {'title': 'My Trips', 'trip': trip, 'destinations': destinations, 'countries': countries, 'profile': Profile.objects.get(user=request.user), 'outbound_flight': outbound_flight,
                'inbound_flight': inbound_flight, 'current_date': date.today(), 'first_destination': trip.destination_set.order_by('order').first(),
-               'last_destination': trip.destination_set.order_by('order').last()}
+               'last_destination': trip.destination_set.order_by('order').last(), 'middle': middle}
     return render(request, 'configtrip.html', context)
 
 def find_cities(request):
@@ -205,3 +229,8 @@ def add_travel(request):
                 'shortest': shortest_array, 'least': least_array}
         return render(request, 'partials/add_travel.html', context)
         return HttpResponse(status=200)
+
+def trip_summary(request):
+    trip = get_object_or_404(Trip, id = request.GET.get('trip_id'))
+    context = {'trip': trip}
+    return render(request, 'partials/trip_summary.html', context)

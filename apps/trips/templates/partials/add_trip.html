@@ -20,11 +20,16 @@
                         <input type="hidden" name="add_trip_form" value="1">
                         <div id="step-1" class="flex flex-col items-center justify-center">
                             <h1 class="p-2 mb-4 font-semibold">Give your trip a name:</h1>
-                            <input type="text" id="triptitle" name="triptitle" class="w-full lg:w-2/3 text-center bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-4" placeholder="Trip Name">
-                            <input type="date" min="{{today}}" name="start_date" class="w-full lg:w-2/3 text-center font-serif bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-4" />
+                            <input type="text" id="triptitle" name="triptitle" maxlength="25" class="w-full lg:w-2/3 text-center bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-4" placeholder="Trip Name (Max 25 characters)">
+                            <input type="date" min="{{today}}" id="start_date" name="start_date" class="w-full lg:w-2/3 text-center font-serif bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-4" />
                             <button type="button" class="disabled:opacity-25 text-center enabled:hover:cursor-pointer px-5 py-2 w-3/4 lg:w-1/3 text-white bg-custom-50 enabled:hover:bg-custom-100 font-medium rounded-lg text-sm" 
                             _="on keyup from #triptitle
-                                    if the #triptitle's value is empty
+                                    if #triptitle's value is empty or #start_date's value is empty
+                                        add @disabled then exit
+                                    end
+                                    remove @disabled
+                                    on change from #start_date
+                                    if #triptitle's value is empty or #start_date's value is empty
                                         add @disabled then exit
                                     end
                                     remove @disabled

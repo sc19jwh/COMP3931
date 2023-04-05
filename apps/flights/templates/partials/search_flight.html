@@ -15,6 +15,16 @@
                     </svg>
                 </div>
                 <div class="px-10 pb-10 pt-1 justify-center items-center text-center">
+                    <div class="flex flex-col items-center">
+                        <div class="w-full">
+                            <input type="search" name="search" placeholder="Airport name" autocomplete="off" hx-post="{% url 'airport_search' %}" hx-trigger="keyup changed, search" hx-target="#search-results"
+                            class="w-full bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2">
+                
+                            <div class="w-full" id="search-results">
+                                <!-- Airports go here -->
+                            </div>
+                        </div>
+                    </div>
                     <select name="departure_airport" class="w-full text-center font-serif bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-4">
                         <option disabled selected>--- Select an airport ---</option>
                         {% for airport in departure_airports%}

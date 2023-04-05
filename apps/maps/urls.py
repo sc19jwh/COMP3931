@@ -6,4 +6,5 @@ urlpatterns = [
     path('partials/get_travel_map', views.get_travel_map, name='get_travel_map'),
     path('partials/get_route_map', views.get_route_map, name='get_route_map'),
     path('partials/get_hotels_map', views.get_hotels_map, name='get_hotels_map'),
+    path('partials/get_trip_map', views.get_trip_map, name='get_trip_map'),
 ]

@@ -1,5 +1,6 @@
 # Django imports
 from django.shortcuts import render, get_object_or_404
+from django.db.models import Q
 # Folder imports
 from .utils.sky import quick_flight_search
 # from .utils.flights import quick_flight_search, full_flight_search
@@ -81,3 +82,16 @@ def search_results(request):
         session_token, direct_flights, connecting_flights = quick_flight_search("GBP", departure_airport.iata_code, destination_airport.iata_code, last_destination.start_date.year, last_destination.start_date.month, last_destination.start_date.day, direct)
     context = {'direct_flights': direct_flights, 'connecting_flights': connecting_flights, 'flight_direction': flight_direction, 'departure_airport': departure_airport, 'destination_airport': destination_airport}
     return render(request, 'partials/search_results.html', context)
+
+def airport_search(request):
+    airports = []
+    if request.method == "POST":
+        search_term = request.POST.get('search')
+        if len(search_term) > 0:
+            airports = Airport.objects.filter(
+                Q(name__icontains=search_term) | 
+                Q(country__name__icontains=search_term) |
+                Q(iata_code__icontains=search_term)
+            )[:3]
+    context = {'airports': airports}
+    return render(request, 'partials/airport_search.html', context)

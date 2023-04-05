@@ -5,7 +5,7 @@ from django.http import HttpResponse, Http404
 import folium
 import ast
 # Folder imports
-from apps.trips.models import Destination, City, TravelRoute
+from apps.trips.models import *
 from apps.trips.utils.geofuncs import get_lat_long, lat_long_distance
 
 def get_travel_map(request):
@@ -31,7 +31,7 @@ def get_route_map(request):
     # Get city objects for each city in string array
     cities = []
     for city in route_array:
-        city_object = start_city = get_object_or_404(City, name = city)
+        city_object = get_object_or_404(City, name = city)
         cities.append(city_object)
     # Use custom formula and distance to calculate a custom zoom level
     zoom = 6 - (lat_long_distance(cities[0].latitude, cities[0].longitude, cities[len(cities)-1].latitude, cities[len(cities)-1].longitude) / 500)
@@ -79,4 +79,25 @@ def get_hotels_map(request):
         for hotel in hotels:
             folium.Marker(location=[hotel["position"]["latitude"], hotel["position"]["longitude"]], popup=hotel["name"], icon=folium.Icon(color='orange', icon='hotel', prefix='fa'), tooltip=hotel["name"]).add_to(map)
     # Return the HTML as a HttpResponse
+    return HttpResponse(map._repr_html_())
+
+def get_trip_map(request):
+    # Get TRIP from GET request
+    trip = get_object_or_404(Trip, id = request.GET.get('trip_id'))
+    cities = []
+    for destination in Destination.objects.filter(trip=trip):
+        city = destination.city
+        cities.append(city)
+    # Use custom formula and distance to calculate a custom zoom level
+    zoom = 6 - (lat_long_distance(cities[0].latitude, cities[0].longitude, cities[len(cities)-1].latitude, cities[len(cities)-1].longitude) / 500)
+    # Create a map, with latitude and longitude centered around the start and end locations
+    map = folium.Map(location=[(cities[0].latitude + cities[0].latitude) / 2, (cities[len(cities)-1].longitude + cities[len(cities)-1].longitude) / 2], zoom_start=zoom)
+    # Loop through the city objects plotting each point
+    for i, city in enumerate(cities):
+        folium.Marker(location=[city.latitude, city.longitude], popup=city.name, icon=folium.Icon(color='orange', icon=str(i+1), prefix='fa'), tooltip=city.name,).add_to(map)
+    # Loop through the city objects plotting routes between each
+    for i in range (len(cities) - 1):
+        folium.PolyLine(locations=[[cities[i].latitude, cities[i].longitude], [cities[i+1].latitude, cities[i+1].longitude]], color='blue', dash_array=[5, 5]).add_to(map)
+    # Return the HTML as a HttpResponse
+    # return HttpResponse(200)
     return HttpResponse(map._repr_html_())

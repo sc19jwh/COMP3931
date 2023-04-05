@@ -3,7 +3,7 @@
 {% block content %}
 
 <body class="bg-gray-50">
-    
+
     <nav class="bg-white shadow">
         <div class="px-2 sm:px-10 flex justify-between items-center h-16">
                 <div class="flex items-center justify-center">
@@ -74,10 +74,10 @@
         </div>
     </nav>
     
-    <div class="bg-cover flex flex-col items-center justify-center py-28 px-2 sm:px-10 min-h-screen">
+    <!-- If we want to y align middle (justify-center), then set a variable for the view middle = True -->
+    <div class="bg-cover flex flex-col {% if middle %} justify-center {% endif %} items-center py-28 px-2 sm:px-10 min-h-screen -mt-16">
         {% block mainbody %}{% endblock mainbody %}
     </div>
-    
 
     <footer class="bg-gray-100 flex items-center justify-between h-16 py-5 px-10 text-gray-600 font-serif">
         <div class="flex">
