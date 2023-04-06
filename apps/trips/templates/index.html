@@ -3,6 +3,22 @@
 {% block content %} 
 
 <body class="bg-gray-50">
+
+    <div
+    data-skyscanner-widget="HotelSearchWidget"
+    data-locale="en-GB"
+    data-market="UK"
+    data-currency="GBP"
+    data-destination-coords="50,50"
+    data-button-colour="#5F9595"
+    data-powered-by-logo-colour="dark"
+    data-powered-by-size="1.2"
+    data-hotel-check-in-date="2023-04-06"
+    data-hotel-check-out-date="2023-04-07"
+    data-responsive="true"
+    ></div>
+    <script src="https://widgets.skyscanner.net/widget-server/js/loader.js" async></script>
+
     <div class="mt-10 flex justify-center items-center">
         {% for city in cities %}
             <div id="image-{{ forloop.counter }}" {% if forloop.first %}{% else %} style="display: none;" {% endif %}>
