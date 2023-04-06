@@ -6,7 +6,7 @@ import folium
 import ast
 # Folder imports
 from apps.trips.models import *
-from apps.trips.utils.geofuncs import get_lat_long, lat_long_distance
+from apps.trips.utils.geofuncs import lat_long_distance
 
 def get_travel_map(request):
     # Get the start and end point destination IDs

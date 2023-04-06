@@ -32,7 +32,7 @@ def home(request):
 @login_required
 def mytrips(request, username):
     if User.objects.get(username=username) != request.user:
-        raise Http404
+        return HttpResponse(status=401)
     if request.method == 'POST':
         # If POST adding trip
         if 'add_trip_form' in request.POST:
@@ -63,7 +63,7 @@ def mytrips(request, username):
 def configtrip(request, trip_id, username):
     trip = get_object_or_404(Trip, id=trip_id)
     if User.objects.get(username=username) != request.user:
-        raise Http404
+        return HttpResponse(status=401)
     if request.method == 'POST':
         # If POST adding destination
         if 'add_destination_form' in request.POST:
@@ -200,7 +200,7 @@ def find_cities(request):
     return render(request, 'partials/find_cities.html', context)
 
 def add_trip(request):
-    context = {'today': str(date.today() + timedelta(days=1))}
+    context = {'today': str(date.today() + timedelta(days=1)), 'popup_title': 'Create new trip'}
     return render(request, 'partials/add_trip.html', context)
 
 def add_destination(request):
@@ -211,26 +211,55 @@ def add_destination(request):
     return render(request, 'partials/add_destination.html', context)
 
 def add_travel(request):
-    if request.method == "GET":
-        # Get city object of both start and end city
-        start_dest = get_object_or_404(Destination, id = request.GET.get('start'))
-        end_dest = get_object_or_404(Destination, id = request.GET.get('end'))
-        # Check if direct route exists between two cities
-        try:
-            direct_route = TravelRoute.objects.get(start_city = start_dest.city, end_city = end_dest.city)
-            shortest_array = [start_dest.city.name, end_dest.city.name]
-            least_array = [start_dest.city.name, end_dest.city.name]
-        # If no direct route, using dijkstra to calculate the shortest and least connecting routes
-        except TravelRoute.DoesNotExist:
-            # Calculate two routes between the city, shortest and least connections
-            shortest_array = dijkstra(City.objects.all(), TravelRoute.objects.all(), start_dest.city.name, end_dest.city.name)
-            least_array = least_transfers(City.objects.all(), TravelRoute.objects.all(), start_dest.city.name, end_dest.city.name)
-        context = {'start': request.GET.get('start'), 'end': request.GET.get('end'), 'start_dest': start_dest, 'end_dest': end_dest,
-                'shortest': shortest_array, 'least': least_array}
-        return render(request, 'partials/add_travel.html', context)
-        return HttpResponse(status=200)
+    # Get city object of both start and end city
+    start_dest = get_object_or_404(Destination, id = request.GET.get('start'))
+    end_dest = get_object_or_404(Destination, id = request.GET.get('end'))
+    # Check if direct route exists between two cities
+    try:
+        direct_route = TravelRoute.objects.get(start_city = start_dest.city, end_city = end_dest.city)
+        shortest_array = [start_dest.city.name, end_dest.city.name]
+        least_array = [start_dest.city.name, end_dest.city.name]
+        shortest_length_hours, shortest_length_mins = divmod(direct_route.duration, 60)
+        least_length_hours, least_length_mins = divmod(direct_route.duration, 60)
+    # If no direct route, using dijkstra to calculate the shortest and least connecting routes
+    except TravelRoute.DoesNotExist:
+        # Calculate two routes between the city, shortest and least connections
+        shortest_array, shortest_length = dijkstra(City.objects.all(), TravelRoute.objects.all(), start_dest.city.name, end_dest.city.name)
+        least_array, least_length = least_transfers(City.objects.all(), TravelRoute.objects.all(), start_dest.city.name, end_dest.city.name)
+        # Convert to hours and minutes
+        shortest_length_hours, shortest_length_mins = divmod(shortest_length, 60)
+        least_length_hours, least_length_mins = divmod(least_length, 60)
+    context = {'start': request.GET.get('start'), 'end': request.GET.get('end'), 'start_dest': start_dest, 'end_dest': end_dest,
+            'shortest': shortest_array, 'least': least_array, 'popup_title': f'{start_dest.city.name} - {end_dest.city.name}',
+            'shortest_length_hours': shortest_length_hours, 'shortest_length_mins': shortest_length_mins, 'least_length_hours': least_length_hours,
+            'least_length_mins': least_length_mins}
+    return render(request, 'partials/add_travel.html', context)
+    return HttpResponse(status=200)
 
 def trip_summary(request):
     trip = get_object_or_404(Trip, id = request.GET.get('trip_id'))
-    context = {'trip': trip}
+    context = {'trip': trip, 'popup_title': f"Trip Summary - {trip.title}"}
     return render(request, 'partials/trip_summary.html', context)
+
+def journey_summary(request):
+    route = eval(request.GET.get('route'))
+    travel_routes = TravelRoute.objects.all()
+    journey_times_hours = []
+    journey_times_mins = []
+    journey_types = []
+    for i in range(0, len(route)-1):
+        for travel_route in travel_routes:
+            if travel_route.start_city.name == route[i] and travel_route.end_city.name == route[i + 1]:
+                # Once found add to duration
+                hours, mins = divmod(travel_route.duration, 60)
+                journey_times_hours.append(hours)
+                journey_times_mins.append(mins)
+                journey_types.append(travel_route.type.capitalize())
+    # Add an extra spacing element to the times and types arrays to make them the same length as the route array
+    journey_times_hours.append(0)
+    journey_times_mins.append(0)
+    journey_types.append('N/A')
+    # Combine together for looping in tepmlate
+    journey_zip = zip(route, journey_times_hours, journey_times_mins, journey_types)
+    context = {'popup_title': f"{route[i]} - {route[len(route)-1]}", 'route': journey_zip}
+    return render(request, 'partials/journey_summary.html', context)
