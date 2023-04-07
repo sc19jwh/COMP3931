@@ -112,7 +112,7 @@
                 </div>
                 
                 <div class="flex flex-col items-center justify-center mb-3">
-                    <button hx-get="trip/{{trip.id}}" hx-target="body" hx-push-url="true" class="flex items-center text-center text-white bg-custom-50 hover:bg-custom-100 font-medium rounded-full text-sm px-3 py-1.5 transition ease-in-out duration-300">
+                    <button hx-get="{% url 'configtrip' username=user.username trip_id=trip.id %}" hx-target="body" hx-push-url="true" class="flex items-center text-center text-white bg-custom-50 hover:bg-custom-100 font-medium rounded-full text-sm px-3 py-1.5 transition ease-in-out duration-300">
                         Configure Trip
                         <span class="ml-2">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-fill" viewBox="0 0 16 16">

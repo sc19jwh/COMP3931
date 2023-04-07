@@ -62,6 +62,7 @@ def mytrips(request, username):
 @login_required
 def configtrip(request, trip_id, username):
     trip = get_object_or_404(Trip, id=trip_id)
+    print(trip)
     if User.objects.get(username=username) != request.user:
         return HttpResponse(status=401)
     if request.method == 'POST':
@@ -94,7 +95,7 @@ def configtrip(request, trip_id, username):
                     end_dest = Destination.objects.get(trip = trip, order = order_to_add)
                     DestinationTransport.objects.filter(departure_destination = start_dest, arrival_destination = end_dest).delete()
             # Get destinations equal to or greater than that order and push them up one spot
-            adjust_orders = Destination.objects.filter(order__gte=order_to_add)
+            adjust_orders = Destination.objects.filter(trip = trip, order__gte=order_to_add)
             for destination in adjust_orders:
                 destination.order += 1
                 destination.save()
@@ -124,7 +125,7 @@ def configtrip(request, trip_id, username):
                 Flight.objects.filter(trip_id=trip.id, direction='inbound').delete()
             destination.delete()
             # Get destinations greater than that order and push them down one spot
-            adjust_orders = Destination.objects.filter(order__gt=destination.order)
+            adjust_orders = Destination.objects.filter(trip = trip, order__gt=destination.order)
             for destination in adjust_orders:
                 destination.order -= 1
                 destination.save()
@@ -247,7 +248,7 @@ def find_cities(request):
     return render(request, 'partials/find_cities.html', context)
 
 def add_trip(request):
-    context = {'today': str(date.today() + timedelta(days=1)), 'popup_title': 'Create new trip'}
+    context = {'tomorrow': str(date.today() + timedelta(days=1)), 'popup_title': 'Create new trip'}
     return render(request, 'partials/add_trip.html', context)
 
 def add_destination(request):
