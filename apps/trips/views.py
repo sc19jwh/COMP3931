@@ -1,6 +1,6 @@
 # Django imports
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.core.files.base import ContentFile
 from django.db.models import Min, Max, Q
@@ -65,18 +65,29 @@ def configtrip(request, trip_id, username):
     if User.objects.get(username=username) != request.user:
         return HttpResponse(status=401)
     if request.method == 'POST':
-        # If POST adding destination
-        if 'add_destination_form' in request.POST:
+        if 'edit_trip_details_form' in request.POST:
+            new_title = request.POST.get('triptitle')
+            new_date = datetime.strptime(request.POST.get('start_date'), '%Y-%m-%d').date()
+            # If title is modified, write the change
+            if new_title != trip.title:
+                trip.title = new_title
+                trip.save()
+            # If date is modified, write the change
+            if new_date != trip.start_date:
+                trip.start_date = new_date
+                trip.save()
+                # If date changed remove any flights
+                flights = Flight.objects.filter(trip_id=trip.id).delete()
+        elif 'add_destination_form' in request.POST:
             order_to_add = int(request.POST.get('next_order'))
             # Only perform if destinations already exist on trip
             if trip.destination_set.count() > 1:
-                # Look up order - if order is 1 remove any outbound flights, if order is the new greatest, remove any inbound flights
+                # Look up order - if order is 1 remove any outbound flights and always remove inbound flight as adding any new destination will modify end date
                 if order_to_add == 1:
                     Flight.objects.filter(trip_id=trip.id, direction='outbound').delete()
-                if order_to_add > int(trip.destination_set.order_by('order').last().order):
+                else:
                     Flight.objects.filter(trip_id=trip.id, direction='inbound').delete()
-                # If adding a new destination between two configured destinations, delete any transport between them
-                if order_to_add > 1 and order_to_add <= int(trip.destination_set.order_by('order').last().order):
+                    # If adding a new destination between two configured destinations, delete any transport between them
                     start_dest = Destination.objects.get(trip = trip, order = order_to_add-1)
                     end_dest = Destination.objects.get(trip = trip, order = order_to_add)
                     DestinationTransport.objects.filter(departure_destination = start_dest, arrival_destination = end_dest).delete()
@@ -92,6 +103,14 @@ def configtrip(request, trip_id, username):
                 order = order_to_add,
                 nights = request.POST.get('nights')
             )
+        elif 'edit_destination_form' in request.POST:
+            # Get destination and modified number of nights
+            destination = get_object_or_404(Destination, id=request.POST.get('edit_destination_form'))
+            # Write new number of nights to destination
+            destination.nights = int(request.POST.get('new_nights'))
+            destination.save()
+            # Delete any inbound flights that exist on trip as this effects end dates
+            Flight.objects.filter(trip_id=destination.trip.id, direction='inbound').delete()
         # If POST deleting destination
         elif 'delete_destination_form' in request.POST:
             destination = get_object_or_404(Destination, id=request.POST.get('delete_destination_form'))
@@ -207,7 +226,9 @@ def add_destination(request):
     trip = Trip.objects.get(id=request.GET.get('trip'))
     next_order = request.GET.get('next_order')
     countries = Country.objects.filter(is_interrail=True)
-    context = {'countries': countries, 'next_order': next_order}
+    # Check if any flights exist for trip - will control whether warning is needed or not
+    inbound_flight = Flight.objects.filter(trip_id=trip.id, direction='inbound')
+    context = {'countries': countries, 'next_order': next_order, 'inbound_flight': inbound_flight}
     return render(request, 'partials/add_destination.html', context)
 
 def add_travel(request):
@@ -263,3 +284,20 @@ def journey_summary(request):
     journey_zip = zip(route, journey_times_hours, journey_times_mins, journey_types)
     context = {'popup_title': f"{route[i]} - {route[len(route)-1]}", 'route': journey_zip}
     return render(request, 'partials/journey_summary.html', context)
+
+def edit_destination(request):
+    destination = get_object_or_404(Destination, id = request.GET.get('destination_id'))
+    nights = int(request.GET.get('nights'))
+    # Check if any flights exist for trip - will control whether warning is needed or not
+    inbound_flight = Flight.objects.filter(trip_id=destination.trip.id, direction='inbound')
+    context = {'popup_title': 'Edit Destination', 'destination': destination, 'nights': nights,
+               'inbound_flight': inbound_flight}
+    return render(request, 'partials/edit_destination.html', context)
+
+def edit_trip_details(request):
+    trip = get_object_or_404(Trip, id = request.GET.get('trip_id'))
+    # Check if any flights exist for trip - will control whether warning is needed or not
+    flights = Flight.objects.filter(trip_id=trip.id)
+    context = {'popup_title': 'Edit Trip Details', 'trip': trip, 'flights': flights,
+               'tomorrow': str(date.today() + timedelta(days=1))}
+    return render(request, 'partials/edit_trip_details.html', context)

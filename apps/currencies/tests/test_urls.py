@@ -2,6 +2,7 @@ from django.test import SimpleTestCase
 from django.urls import resolve, reverse
 from apps.currencies.views import *
 
+# Verify mapping between URLs and expected View Functions
 class URLResolveTest(SimpleTestCase):
 
     def test_resolve_currency_url(self):

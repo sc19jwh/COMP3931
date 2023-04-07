@@ -33,6 +33,11 @@
                             </select>
                         </div>
                         <input type="number" placeholder="Number of nights" id="nights" name="nights" min="1" class="w-full text-center font-serif bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-4">
+                        {% if inbound_flight %}
+                            <p class="text-sm font-light font-serif text-red-600 text-center mb-4">
+                                Warning: Adding a new destination will require your inbound flights to be reconfigured.
+                            </p>
+                        {% endif %}
                         <button type="submit" class="px-5 py-2 font-serif w-2/3 text-white bg-custom-50 hover:bg-custom-100 font-medium rounded-lg text-sm">
                             Add destination
                         </button>

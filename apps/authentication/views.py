@@ -1,6 +1,6 @@
 # Django imports
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.core.files.base import ContentFile
 from django.db.models import Min, Max
@@ -16,7 +16,7 @@ from .forms import CreateUserForm, AuthenticationForm
 def signin(request):
     warning = False
     if request.user.is_authenticated:
-        return redirect('home')
+        return redirect('mytrips')
     else:
         form = AuthenticationForm()
         if request.method == 'POST':
@@ -27,7 +27,7 @@ def signin(request):
                 user = authenticate(username=username, password=password)
                 if user is not None:
                     login(request, user)
-                    return redirect('home')
+                    return redirect('mytrips', username)
             else:
                 warning = True
     context = {'title': 'Login', 'form': form, 'warning': warning}
@@ -40,7 +40,7 @@ def signout(request):
 
 def register(request):
     if request.user.is_authenticated:
-        return redirect('home')
+        return redirect('mytrips')
     # Get user creation form from forms.py
     form = CreateUserForm()
     if request.method == "POST":

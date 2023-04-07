@@ -2,6 +2,16 @@
 {% load static %}
 {% block mainbody %}
 
+<p>{{trip.title}}</p>
+<p>{{trip.start_date}}</p>
+<div class="text-center mb-6 w-1/5">
+    <button hx-get="{% url 'edit_trip_details' %}?trip_id={{trip.id}}" hx-target="body" hx-swap="beforeend" class="text-custom-50 hover:text-white border border-custom-50 hover:bg-custom-50 rounded-full p-1 transition ease-in-out duration-300 hover:cursor-pointer">
+        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+            <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+        </svg>
+    </button>
+</div>
+
 {% if middle == False %}
     {% if outbound_flight %}
         <p class="mb-4 flex flex-row items-center font-medium text-custom-50">
@@ -59,6 +69,13 @@
                     </div>
                 </div>
                 <div class="w-1/6 flex justify-end items-center">
+                    <div class="text-center mt-6 w-1/5">
+                        <button hx-get="{% url 'edit_destination' %}?destination_id={{destination.id}}&nights={{destination.nights}}" hx-target="body" hx-swap="beforeend" class="text-custom-50 hover:text-white border border-custom-50 hover:bg-custom-50 rounded-full p-1 transition ease-in-out duration-300 hover:cursor-pointer">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+                            </svg>
+                        </button>
+                    </div>
                     <form class="text-center mt-6 w-1/5" hx-post="{{trip.id}}" hx-confirm="Are you sure you want to delete {{destination.city.name}} from your trip?" hx-target="body">
                         <!-- Invisible field to store trip id and identify which form -->
                         <input type="hidden" name="delete_destination_form" value="{{destination.id}}">
