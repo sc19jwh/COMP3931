@@ -1556,6 +1556,10 @@ video {
   text-transform: uppercase;
 }
 
+.italic {
+  font-style: italic;
+}
+
 .leading-snug {
   line-height: 1.375;
 }

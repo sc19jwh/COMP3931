@@ -13,4 +13,5 @@ urlpatterns = [
     path('partials/journey_summary', views.journey_summary, name='journey_summary'),
     path('partials/edit_destination', views.edit_destination, name='edit_destination'),
     path('partials/edit_trip_details', views.edit_trip_details, name='edit_trip_details'),
+    path('partials/edit_travel', views.edit_travel, name='edit_travel'),
 ]

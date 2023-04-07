@@ -126,24 +126,25 @@
         <!-- Vertical line to connect to next destination -->
         {% if not forloop.last %}
             <div class="h-7 border-l border-gray-400"></div>
-            {% if destination.departure_destination.all %}
-                <div class="my-2 text-sm font-light text-gray-500 text-center font-serif">
-                    <button disabled class="flex flex-row items-center font-medium text-custom-50 hover:underline hover:text-custom-100">
-                        Travel Already Configured
-                    </button>
-                </div>
-            {% else %}
-                {% with next_id=forloop.counter|add:1 %}
+            {% with next_id=forloop.counter|add:1 %}
                     {% with next_destination=destinations|slice:":"|slice:next_id|last %}
-                        <div class="my-2 text-sm font-light text-gray-500 text-center font-serif">
-                            <button hx-indicator="#spinner" hx-get="{% url 'add_travel' %}?start={{destination.id}}&end={{next_destination.id}}" hx-target="body" hx-swap="beforeend" class="flex flex-row items-center font-medium text-custom-50 hover:underline hover:text-custom-100">
-                                Configure
-                                <img style="width: 10px; height: 10px; padding-left: 2px;;" id="spinner" class="htmx-indicator" src="{% static 'images/loading.gif' %}"/>
-                            </button>
-                        </div>
-                    {% endwith %}
+                        {% if destination.departure_destination.all %}
+                            <div class="my-2 text-sm font-light text-gray-500 text-center font-serif">
+                                <button hx-indicator="#spinner" hx-get="{% url 'edit_travel' %}?start={{destination.id}}&end={{next_destination.id}}" hx-target="body" hx-swap="beforeend" class="flex flex-row items-center font-medium text-custom-50 hover:underline hover:text-custom-100">
+                                    Edit Configuration
+                                    <img style="width: 10px; height: 10px; padding-left: 2px;;" id="spinner" class="htmx-indicator" src="{% static 'images/loading.gif' %}"/>
+                                </button>
+                            </div>
+                        {% else %}
+                            <div class="my-2 text-sm font-light text-gray-500 text-center font-serif">
+                                <button hx-indicator="#spinner" hx-get="{% url 'add_travel' %}?start={{destination.id}}&end={{next_destination.id}}" hx-target="body" hx-swap="beforeend" class="flex flex-row items-center font-medium text-custom-50 hover:underline hover:text-custom-100">
+                                    Configure
+                                    <img style="width: 10px; height: 10px; padding-left: 2px;;" id="spinner" class="htmx-indicator" src="{% static 'images/loading.gif' %}"/>
+                                </button>
+                            </div>
+                    {% endif %}
                 {% endwith %}
-            {% endif %}
+            {% endwith %}
             <div class="h-7 border-l border-gray-400"></div>
         {% endif %}
     {% endfor %}

@@ -85,6 +85,8 @@ def configtrip(request, trip_id, username):
                 # Look up order - if order is 1 remove any outbound flights and always remove inbound flight as adding any new destination will modify end date
                 if order_to_add == 1:
                     Flight.objects.filter(trip_id=trip.id, direction='outbound').delete()
+                if order_to_add > int(trip.destination_set.order_by('order').last().order):
+                    Flight.objects.filter(trip_id=trip.id, direction='inbound').delete()
                 else:
                     Flight.objects.filter(trip_id=trip.id, direction='inbound').delete()
                     # If adding a new destination between two configured destinations, delete any transport between them
@@ -180,6 +182,32 @@ def configtrip(request, trip_id, username):
             hotel.set_images(hotel_details_dict['images'])
             hotel.save()
         elif 'add_travel_form' in request.POST:
+            route = request.POST['route_selection']
+            # Convert route to an array using ast (get params are always string, even though formatted [a,b,c])
+            route_array = ast.literal_eval(route)
+            # Create a master DestinationTransport object between the two destinations
+            destination_transport = DestinationTransport.objects.create(
+                departure_destination=get_object_or_404(Destination, id=request.POST['start_id']),
+                arrival_destination=get_object_or_404(Destination, id=request.POST['end_id'])
+            )
+            # Create sub TransportLegs for each journey between the two destinations
+            for i in range(len(route_array)-1):
+                start_city = get_object_or_404(City, name=route_array[i])
+                end_city = get_object_or_404(City, name=route_array[i+1])
+                route = get_object_or_404(TravelRoute, start_city=start_city, end_city=end_city)
+                transport_leg = TransportLeg.objects.create(
+                    trip_transport = destination_transport,
+                    route = route
+                )
+                # Attach sub journey to master journey
+                destination_transport.transport_legs.add(transport_leg)
+        elif 'edit_travel_form' in request.POST:
+            # Delete the route that was configured before
+            destination_transport = DestinationTransport.objects.filter(
+                departure_destination=get_object_or_404(Destination, id=request.POST['start_id']),
+                arrival_destination=get_object_or_404(Destination, id=request.POST['end_id'])
+            ).delete()
+            # Get the new route and add as normal
             route = request.POST['route_selection']
             # Convert route to an array using ast (get params are always string, even though formatted [a,b,c])
             route_array = ast.literal_eval(route)
@@ -301,3 +329,31 @@ def edit_trip_details(request):
     context = {'popup_title': 'Edit Trip Details', 'trip': trip, 'flights': flights,
                'tomorrow': str(date.today() + timedelta(days=1))}
     return render(request, 'partials/edit_trip_details.html', context)
+
+def edit_travel(request):
+    # Get city object of both start and end city
+    start_dest = get_object_or_404(Destination, id = request.GET.get('start'))
+    end_dest = get_object_or_404(Destination, id = request.GET.get('end'))
+    # Get the current saved route
+    saved_route_object = DestinationTransport.objects.get(departure_destination = start_dest, arrival_destination = end_dest)
+    saved_route_array = saved_route_object.get_route_array()
+    # Check if direct route exists between two cities
+    try:
+        direct_route = TravelRoute.objects.get(start_city = start_dest.city, end_city = end_dest.city)
+        shortest_array = [start_dest.city.name, end_dest.city.name]
+        least_array = [start_dest.city.name, end_dest.city.name]
+        shortest_length_hours, shortest_length_mins = divmod(direct_route.duration, 60)
+        least_length_hours, least_length_mins = divmod(direct_route.duration, 60)
+    # If no direct route, using dijkstra to calculate the shortest and least connecting routes
+    except TravelRoute.DoesNotExist:
+        # Calculate two routes between the city, shortest and least connections
+        shortest_array, shortest_length = dijkstra(City.objects.all(), TravelRoute.objects.all(), start_dest.city.name, end_dest.city.name)
+        least_array, least_length = least_transfers(City.objects.all(), TravelRoute.objects.all(), start_dest.city.name, end_dest.city.name)
+        # Convert to hours and minutes
+        shortest_length_hours, shortest_length_mins = divmod(shortest_length, 60)
+        least_length_hours, least_length_mins = divmod(least_length, 60)
+    context = {'start': request.GET.get('start'), 'end': request.GET.get('end'), 'start_dest': start_dest, 'end_dest': end_dest,
+            'shortest': shortest_array, 'least': least_array, 'popup_title': f'{start_dest.city.name} - {end_dest.city.name}',
+            'shortest_length_hours': shortest_length_hours, 'shortest_length_mins': shortest_length_mins, 'least_length_hours': least_length_hours,
+            'least_length_mins': least_length_mins, 'saved_route_array': saved_route_array}
+    return render(request, 'partials/edit_travel.html', context)

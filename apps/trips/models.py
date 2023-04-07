@@ -91,5 +91,12 @@ class DestinationTransport(models.Model):
     arrival_destination = models.ForeignKey("Destination", related_name="arrival_destination", on_delete=models.CASCADE, default = 1)
     transport_legs = models.ManyToManyField(TransportLeg, blank=True)
 
+    def get_route_array(self):
+        route = []
+        for leg in self.transport_legs.all():
+            route.append(leg.route.start_city.name)
+        route.append(self.arrival_destination.city.name)
+        return route
+
     def __str__(self):
         return str(self.departure_destination.trip.id) + ": " + self.departure_destination.city.name + " - " + self.arrival_destination.city.name
