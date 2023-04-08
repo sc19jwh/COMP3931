@@ -12,36 +12,42 @@ import base64
 from apps.trips.models import Country
 from .models import Profile
 from .forms import CreateUserForm, AuthenticationForm
+from .decorators import nationality_required, no_login_required
 
+# URL: user/signin
+# HTTP Method: GET, POST
+# Description: Authenticates a user based on Django authentication form
+@no_login_required
 def signin(request):
     warning = False
-    if request.user.is_authenticated:
-        return redirect('mytrips', request.user.username)
-    else:
-        form = AuthenticationForm()
-        if request.method == 'POST':
-            form = AuthenticationForm(request, data=request.POST)
-            if form.is_valid():
-                username = form.cleaned_data.get('username')
-                password = form.cleaned_data.get('password')
-                user = authenticate(username=username, password=password)
-                if user is not None:
-                    login(request, user)
-                    return redirect('mytrips', username)
-            else:
-                warning = True
+    form = AuthenticationForm()
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('mytrips', username)
+        else:
+            warning = True
     context = {'title': 'Login', 'form': form, 'warning': warning}
     return render(request, 'signin.html', context)
 
+# URL: user/signout
+# HTTP Method: GET
+# Description: Signs out the current user and redirects to landing page
 @login_required
 def signout(request):
     logout(request)
     return redirect('main')
 
+# URL: user/register
+# HTTP Method: GET, POST
+# Description: Facilitates user registration using CreateUserForm
+@no_login_required
 def register(request):
-    if request.user.is_authenticated:
-        return redirect('mytrips', request.user.username)
-    # Get user creation form from forms.py
     form = CreateUserForm()
     if request.method == "POST":
         form = CreateUserForm(request.POST)
@@ -56,9 +62,17 @@ def register(request):
             if user is not None:
                 login(request, user)
                 return redirect('setcountry')
+        else:
+            errors = form.errors.as_data()
+            context = {'title': 'Register', 'form': form, 'errors': errors}
+            return render(request, 'register.html', context)
     context = {'title': 'Register', 'form': form}
     return render(request, 'register.html', context)
 
+# URL: user/profile
+# HTTP Method: GET, POST
+# Description: Shows user account details and allows configuration of a profile image
+@nationality_required
 @login_required
 def profile(request):
     if request.method == 'POST':
@@ -70,6 +84,9 @@ def profile(request):
     context = {'title': 'User Profile', 'profile': Profile.objects.get(user=request.user)}
     return render(request, 'profile.html', context)
 
+# URL: user/setcountry
+# HTTP Method: GET, POST
+# Description: Allows user to configure their nationality
 @login_required
 def setcountry(request):
     if request.method == 'POST':
@@ -78,12 +95,15 @@ def setcountry(request):
         profile = request.user.profile
         profile.nationality = selected_country
         profile.save()
-        return redirect('home')
+        return redirect('mytrips', request.user.username)
     current_user_nationality = Profile.objects.get(user=request.user).nationality
     countries = Country.objects.filter()
     context = {'title': 'Set Country', 'countries': countries, 'current_user_nationality': current_user_nationality}
     return render(request, 'setcountry.html', context)
 
+# URL: user/partials/set_country_flag
+# HTTP Method: GET
+# Description: Facilitates live updating of user nationality flag as they select
 def set_country_flag(request):
     id = request.GET.get('country')
     if not id:

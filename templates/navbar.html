@@ -23,7 +23,8 @@
             <div class="relative">
                 <!-- User photo -->
                 <div class="flex flex-row items-center hover:cursor-pointer" _="on click toggle the *display of #dropdown">
-                    <img class="h-7 w-7 rounded-full" src="data:image/jpeg;base64,{{ profile.image }}" alt="">
+                    <!-- ATTRIBUTION: No user image obtained from icon-libary.com - https://icon-library.com/images/no-user-image-icon/no-user-image-icon-27.jpg -->
+                    <img class="h-7 w-7 rounded-full" src="{% if profile.image %} data:image/jpeg;base64,{{ profile.image }} {% else %} {% static 'images/noprofilepic.jpg' %} {% endif %}" alt="">
                     <!-- Drop down arrow -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="#333333" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
                         <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>

@@ -18,6 +18,7 @@ from apps.flights.models import *
 from apps.authentication.models import Profile
 from apps.hotels.models import Hotel
 from .utils.geofuncs import lat_long_distance, dijkstra, least_transfers
+from apps.authentication.decorators import nationality_required
 
 def home(request):
     countries = Country.objects.filter(is_interrail=True)
@@ -28,6 +29,7 @@ def home(request):
     context = {'title': 'Home', 'countries': countries, 'cities': cities, 'profile': Profile.objects.get(user=request.user)}
     return render(request, 'index.html', context)
 
+@nationality_required
 @login_required
 def mytrips(request, username):
     if User.objects.get(username=username) != request.user:
@@ -67,6 +69,7 @@ def mytrips(request, username):
     context = {'title': 'My Trips', 'profile': Profile.objects.get(user=request.user), 'trips': trips, 'middle': middle, 'selected_page': 'Dashboard'}
     return render(request, 'mytrips.html', context)
 
+@nationality_required
 @login_required
 def configtrip(request, trip_id, username):
     trip = get_object_or_404(Trip, id=trip_id)

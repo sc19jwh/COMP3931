@@ -2,7 +2,9 @@ from django.shortcuts import render
 from apps.trips.models import Country
 from apps.authentication.models import Profile
 from .utils.currency import getExchangeRates
+from apps.authentication.decorators import nationality_required
 
+@nationality_required
 def currency(request):
     countries = Country.objects.all()
     interrail_countries = Country.objects.filter(is_interrail=True)

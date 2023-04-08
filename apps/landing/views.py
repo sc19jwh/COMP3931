@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
 from apps.authentication.models import Profile
+from apps.authentication.decorators import no_login_required
 
+@no_login_required
 def main(request):
-    if request.user.is_authenticated:
-        return redirect('mytrips', request.user.username)
     context = {'title': 'Home'}
     return render(request, 'main.html', context)
 
