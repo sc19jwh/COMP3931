@@ -1,11 +1,12 @@
 {% extends "popup.html" %}
 {% load static %}
 {% block mainbody %}
+
     <form hx-post="" hx-target="body">
+        {% csrf_token %}
         <!-- Invisible field identify which form -->
         <input type="hidden" name="add_trip_form" value="1">
         <div id="step-1" class="flex flex-col items-center justify-center">
-            <h1 class="p-2 mb-2 font-semibold">Give your trip a name:</h1>
             <input type="text" autocomplete="off" id="triptitle" name="triptitle" maxlength="25" class="w-full lg:w-2/3 text-center bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-4 focus:outline-none" placeholder="Trip Name (Max 25 characters)">
             <input type="date" min="{{tomorrow}}" id="start_date" name="start_date" class="w-full lg:w-2/3 text-center bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-4 focus:outline-none" />
             <button type="button" class="disabled:opacity-25 flex items-center justify-center text-center text-white bg-custom-50 enabled:hover:bg-custom-100 font-medium rounded-full text-sm px-3 py-1.5 transition ease-in-out duration-300" 

@@ -2,12 +2,13 @@
 {% load static %}
 {% block mainbody %}
 <form hx-post="" hx-target="body">
+    {% csrf_token %}
     <!-- Invisible field identify which form -->
     <input type="hidden" name="edit_trip_details_form" value="{{trip.id}}">
     <input value="{{trip.title}}" type="text" autocomplete="off" id="triptitle" name="triptitle" maxlength="25" class="w-full text-center bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-4 focus:outline-none" placeholder="Trip Name (Max 25 characters)">
     <input value="{{ trip.start_date|date:'Y-m-d' }}" type="date" min="{{tomorrow}}" id="start_date" name="start_date" class="w-full text-center bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-4 focus:outline-none" />
     {% if flights %}
-        <p class="text-sm font-light font-serif text-red-600 text-center mb-4">
+        <p class="text-sm font-light text-red-600 text-center mb-4">
             Warning: Modifying trip dates will require all flights to be reconfigured.
         </p>
     {% endif %}

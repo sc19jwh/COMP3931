@@ -19,7 +19,7 @@
                 </div>
                 <div class="flex flex-col items-center justify-center">
                 {% for flight in direct_flights %}
-                    <div class="flex mb-4 items-center p-4 bg-gray-50 rounded-lg shadow w-3/4 font-serif">
+                    <div class="flex mb-4 items-center p-4 bg-gray-50 rounded-lg shadow w-3/4">
                         <div class="w-1/6">
                             <img src="{{flight.airline_logo}}" class="w-3/4">
                             <!-- <button _="on click go to url 'https://htmx.org' ">
@@ -42,7 +42,7 @@
                     </div>
                 {% endfor %}
                 {% for flight in connecting_flights %}
-                <div class="flex mb-4 items-center p-4 bg-gray-50 rounded-lg shadow w-3/4 font-serif">
+                <div class="flex mb-4 items-center p-4 bg-gray-50 rounded-lg shadow w-3/4">
                     <p>£{{flight.price}}</p>
                     <p>{{flight.departure_time}} ({{flight.duration}} minutes)</p>
                     <p>Stops: {{ flight.sub_flights|length|add:'-1' }}</p>

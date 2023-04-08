@@ -21,7 +21,7 @@
                     <input type="text" value="{{hotels}}" name="hotels" hidden>
                     <div>
                         {% for hotel in hotels %}
-                            <div class="flex mb-4 items-center p-4 bg-gray-50 rounded-lg shadow w-full font-serif">
+                            <div class="flex mb-4 items-center p-4 bg-gray-50 rounded-lg shadow w-full">
                                 <img class="h-10 w-auto" src="{{hotel.image}}">
                                 <p>{{hotel.name}}</p>
                                 <a href="{{hotel.url}}" target="_blank">Book now (new tab)</a>

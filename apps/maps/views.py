@@ -57,15 +57,16 @@ def get_route_map(request):
     return HttpResponse(map._repr_html_())
 
 def full_map(request):
-    # Create a map, with latitude and longitude centered on Europe
-    map = folium.Map(location=[51,10])
-    # Loop all cities
-    for city in City.objects.all():
-        folium.Marker(location=[city.latitude, city.longitude], popup=city.name, icon=folium.Icon(color='orange', icon='location-pin', prefix='fa'), tooltip=city.name,).add_to(map)
-    for route in TravelRoute.objects.all():
-        folium.PolyLine(locations=[[route.start_city.latitude, route.start_city.longitude], [route.end_city.latitude, route.end_city.longitude]], color='blue', dash_array=[5, 5]).add_to(map)
-    # Return the HTML as a HttpResponse
-    return HttpResponse(map._repr_html_())
+    # # Create a map, with latitude and longitude centered on Europe
+    # map = folium.Map(location=[51,10], zoom_start=4)
+    # # Loop all cities
+    # for city in City.objects.all():
+    #     folium.Marker(location=[city.latitude, city.longitude], popup=city.name, icon=folium.Icon(color='orange', icon='location-pin', prefix='fa'), tooltip=city.name,).add_to(map)
+    # for route in TravelRoute.objects.all():
+    #     folium.PolyLine(locations=[[route.start_city.latitude, route.start_city.longitude], [route.end_city.latitude, route.end_city.longitude]], color='blue', dash_array=[5, 5]).add_to(map)
+    # # Return the HTML as a HttpResponse
+    # return HttpResponse(map._repr_html_())
+    return render(request, 'map.html')
 
 def get_hotels_map(request):
     # Get the id of the city that the hotel search is in

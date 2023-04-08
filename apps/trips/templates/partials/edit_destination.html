@@ -2,11 +2,12 @@
 {% load static %}
 {% block mainbody %}
 <form hx-post="" hx-target="body">
+    {% csrf_token %}
     <!-- Invisible field identify which form -->
     <input type="hidden" name="edit_destination_form" value="{{destination.id}}">
-    <input type="number" placeholder="Number of nights" id="new_nights" name="new_nights" value="{{nights}}" min="1" class="focus:outline-none w-full text-center font-serif bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-4">
+    <input type="number" placeholder="Number of nights" id="new_nights" name="new_nights" value="{{nights}}" min="1" class="focus:outline-none w-full text-center bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-4">
     {% if inbound_flight %}
-        <p class="text-sm font-light font-serif text-red-600 text-center mb-4">
+        <p class="text-sm font-light text-red-600 text-center mb-4">
             Warning: Modifying destination dates will require your inbound flights to be reconfigured.
         </p>
     {% endif %}

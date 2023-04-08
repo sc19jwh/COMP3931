@@ -16,7 +16,7 @@ from .forms import CreateUserForm, AuthenticationForm
 def signin(request):
     warning = False
     if request.user.is_authenticated:
-        return redirect('mytrips')
+        return redirect('mytrips', request.user.username)
     else:
         form = AuthenticationForm()
         if request.method == 'POST':
@@ -36,11 +36,11 @@ def signin(request):
 @login_required
 def signout(request):
     logout(request)
-    return redirect('home')
+    return redirect('main')
 
 def register(request):
     if request.user.is_authenticated:
-        return redirect('mytrips')
+        return redirect('mytrips', request.user.username)
     # Get user creation form from forms.py
     form = CreateUserForm()
     if request.method == "POST":

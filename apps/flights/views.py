@@ -33,7 +33,7 @@ def enter_flight(request):
         for airport in departure_interrailairports:
             departure_airports.append(airport.airport)
         arrival_airports = Airport.objects.all()
-    context = {'departure_airports': departure_airports, 'arrival_airports': arrival_airports, 'flight_direction': flight_direction}
+    context = {'popup_title': 'Enter Flight', 'departure_airports': departure_airports, 'arrival_airports': arrival_airports, 'flight_direction': flight_direction}
     return render(request, 'partials/enter_flight.html', context)
 
 def search_flight(request):
@@ -58,7 +58,7 @@ def search_flight(request):
         for airport in departure_interrailairports:
             departure_airports.append(airport.airport)
         arrival_airports = Airport.objects.all()
-    context = {'departure_airports': departure_airports, 'arrival_airports': arrival_airports, 'trip_id': trip.id, 'flight_direction': flight_direction}
+    context = {'popup_title': 'Flight Search', 'departure_airports': departure_airports, 'arrival_airports': arrival_airports, 'trip_id': trip.id, 'flight_direction': flight_direction}
     return render(request, 'partials/search_flight.html', context)
 
 def search_results(request):

@@ -8,6 +8,7 @@
     </div>
 
     <form class="flex flex-col" hx-post="" hx-target="body">
+        {% csrf_token %}
         <input type="hidden" name="add_travel_form">
         <h1 class="mb-2.5 text-center font-semibold">Select a route:</h1>
         <div class="grid grid-cols-1 {% if shortest|length == least|length %}md:grid-cols-1{% else %}md:grid-cols-2{% endif %} gap-5">

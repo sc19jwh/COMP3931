@@ -6,7 +6,8 @@ from .utils.currency import getExchangeRates
 def currency(request):
     countries = Country.objects.all()
     interrail_countries = Country.objects.filter(is_interrail=True)
-    context = {'title': 'Currency', 'countries': countries, 'interrail_countries': interrail_countries, 'profile': Profile.objects.get(user=request.user)}
+    context = {'title': 'Currency', 'countries': countries, 'interrail_countries': interrail_countries, 'profile': Profile.objects.get(user=request.user),
+               'selected_page': 'Currency'}
     return render(request, 'conversion.html', context)
 
 def currency_conversion(request):

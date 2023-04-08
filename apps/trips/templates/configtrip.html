@@ -42,7 +42,7 @@
     </button>
 
     {% for destination in destinations %}
-        <div class="items-center p-4 bg-white rounded-lg shadow w-3/4 font-serif">
+        <div class="w-3/4 p-6 bg-white rounded-lg shadow hover:scale-105 transition ease-in-out duration-300">
             <div class="flex">
                 <div class="w-1/6">
                     <img src="{{destination.city.photo_url}}" class="my-2 h-2/3 object-cover object-center">
@@ -77,6 +77,7 @@
                         </button>
                     </div>
                     <form class="text-center mt-6 w-1/5" hx-post="{{trip.id}}" hx-confirm="Are you sure you want to delete {{destination.city.name}} from your trip?" hx-target="body">
+                        {% csrf_token %}
                         <!-- Invisible field to store trip id and identify which form -->
                         <input type="hidden" name="delete_destination_form" value="{{destination.id}}">
                         <button class="text-custom-50 hover:text-white border border-custom-50 hover:bg-custom-50 rounded-full p-1 transition ease-in-out duration-300 hover:cursor-pointer">
@@ -129,14 +130,14 @@
             {% with next_id=forloop.counter|add:1 %}
                     {% with next_destination=destinations|slice:":"|slice:next_id|last %}
                         {% if destination.departure_destination.all %}
-                            <div class="my-2 text-sm font-light text-gray-500 text-center font-serif">
+                            <div class="my-2 text-sm font-light text-gray-500 text-center">
                                 <button hx-indicator="#spinner" hx-get="{% url 'edit_travel' %}?start={{destination.id}}&end={{next_destination.id}}" hx-target="body" hx-swap="beforeend" class="flex flex-row items-center font-medium text-custom-50 hover:underline hover:text-custom-100">
                                     Edit Configuration
                                     <img style="width: 10px; height: 10px; padding-left: 2px;;" id="spinner" class="htmx-indicator" src="{% static 'images/loading.gif' %}"/>
                                 </button>
                             </div>
                         {% else %}
-                            <div class="my-2 text-sm font-light text-gray-500 text-center font-serif">
+                            <div class="my-2 text-sm font-light text-gray-500 text-center">
                                 <button hx-indicator="#spinner" hx-get="{% url 'add_travel' %}?start={{destination.id}}&end={{next_destination.id}}" hx-target="body" hx-swap="beforeend" class="flex flex-row items-center font-medium text-custom-50 hover:underline hover:text-custom-100">
                                     Configure
                                     <img style="width: 10px; height: 10px; padding-left: 2px;;" id="spinner" class="htmx-indicator" src="{% static 'images/loading.gif' %}"/>
