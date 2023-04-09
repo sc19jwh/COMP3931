@@ -1,0 +1,35 @@
+{% extends "popup.html" %}
+{% load static %}
+{% block mainbody %}
+    <div class="grid grid-cols-1 md:grid-cols-5 gap-5">
+        <div class="md:col-span-3">
+            <div id="map_section" hx-get="{% url 'get_trip_map' %}?trip_id={{trip.id}}" hx-trigger="load" class="w-full" name="summarymap">
+                <!-- Map inserted here -->
+            </div>
+        </div>
+
+        <div class="md:col-span-2">
+            {% for destination in trip.destination_set.all %}
+                {% if forloop.first %}
+                    <div class="flex items-center">
+                        <img class="w-3 h-3 rounded-full" src="https://flagcdn.com/h240/{{ destination.city.country.alpha2code }}.png" alt="">
+                        <p class="ml-3 font-bold text-sm">{{forloop.counter}}. {{destination.city.name}} ({{destination.nights}} nights)</p>
+                    </div>
+                    <div class="ml-1.5 h-5 border-l border-gray-700"></div>
+                {% elif forloop.last %}
+                    <!-- Don't show any durations or types for last as endpoint is reached -->
+                    <div class="flex items-center">
+                        <img class="w-3 h-3 rounded-full" src="https://flagcdn.com/h240/{{ destination.city.country.alpha2code }}.png" alt="">
+                        <p class="ml-3 font-bold text-sm">{{forloop.counter}}. {{destination.city.name}} ({{destination.nights}} nights)</p>
+                    </div>
+                {% else %}
+                    <div class="flex items-center">
+                        <img class="w-3 h-3 rounded-full" src="https://flagcdn.com/h240/{{ destination.city.country.alpha2code }}.png" alt="">
+                        <p class="ml-3 font-semibold text-sm">{{forloop.counter}}. {{destination.city.name}} ({{destination.nights}} nights)</p>
+                    </div>
+                    <div class="ml-1.5 h-5 border-l border-gray-700"></div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

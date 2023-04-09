@@ -1,15 +1,27 @@
+# Django imports
 from django.db import models
 from apps.trips import models as trips_models
+# Other imports
+from datetime import datetime, timedelta
 
 class Airport(models.Model):
     name = models.CharField(max_length=100)
-    city = models.ForeignKey(trips_models.City, on_delete=models.CASCADE)
+    country = models.ForeignKey(trips_models.Country, on_delete=models.CASCADE, null=True)
     iata_code = models.CharField(max_length=3)
-    distance = models.DecimalField(max_digits=20, decimal_places=17)
+    latitude = models.DecimalField(max_digits=20, decimal_places=17, blank=True, null=True)
+    longitude = models.DecimalField(max_digits=20, decimal_places=17, blank=True, null=True)
 
     def __str__(self):
-        return f"{self.name} ({self.iata_code}) - {self.city.name}"
+        return f"{self.name} ({self.iata_code})"
     
+class InterrailAirport(models.Model):
+    city = models.ForeignKey(trips_models.City, on_delete=models.CASCADE, null=True)
+    airport = models.ForeignKey(Airport, on_delete=models.CASCADE, null=True)
+    distance = models.DecimalField(max_digits=20, decimal_places=17, blank=True, null=True)
+    
+    def __str__(self):
+        return f"{self.airport.name} - {self.city.name}"
+
 class Flight(models.Model):
     direction = models.CharField(
         max_length=10,
@@ -24,17 +36,11 @@ class Flight(models.Model):
     departure_datetime = models.DateTimeField()
     arrival_datetime = models.DateTimeField()
     duration = models.IntegerField()
+    number_connections = models.IntegerField(default=0)
+
+    def get_timezone_diff(self):
+        datetime_diff = self.arrival_datetime - self.departure_datetime
+        return datetime_diff - timedelta(minutes=self.duration)
 
     def __str__(self):
         return f"({self.trip.user.username}) {self.trip.title}, {self.direction}"
-
-class SubFlight(models.Model):
-    master_flight = models.ForeignKey("Flight", on_delete=models.CASCADE)
-    sub_departure_airport = models.ForeignKey("Airport", on_delete=models.CASCADE, related_name='sub_departure_airport')
-    sub_arrival_airport = models.ForeignKey("Airport", on_delete=models.CASCADE, related_name='sub_arrival_airport')
-    sub_departure_datetime = models.DateTimeField()
-    sub_arrival_datetime = models.DateTimeField()
-    sub_duration = models.IntegerField()
-
-    def __str__(self):
-        return f"{self.master_flight} ({self.sub_departure_airport.city.name} - {self.sub_arrival_airport.city.name})"

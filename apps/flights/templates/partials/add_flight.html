@@ -8,14 +8,14 @@
     </head>
     <body>
         <div id="container" class="animate-fadeIn fixed top-0 bottom-0 left-0 right-0 bg-black bg-opacity-50 flex flex-col items-center justify-center h-screen w-screen">
-            <div class="animate-zoomIn w-1/2 h-1/2 bg-white rounded-lg shadow-lg">
+            <div class="animate-zoomIn w-1/2 h-1/2 bg-white rounded-lg shadow">
                 <div class="m-2 hover: cursor-pointer">
                     <svg _="on click remove #container" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
                         <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
                     </svg>
                 </div>
                 <div class="px-10 pb-10 pt-1 justify-center grid grid-cols-1 md:grid-cols-2 gap-10">
-                    <div _="on click remove #container" hx-get="{% url 'search_results' %}?trip_id={{trip_id}}&flight_direction={{flight_direction}}" hx-target="body" hx-swap="beforeend" class="flex flex-col items-center justify-center hover:scale-105 hover:cursor-pointer">
+                    <div _="on click remove #container" hx-get="{% url 'search_flight' %}?trip_id={{trip_id}}&flight_direction={{flight_direction}}" hx-target="body" hx-swap="beforeend" class="flex flex-col items-center justify-center hover:scale-105 hover:cursor-pointer">
                         <img class="w-2/3 h-auto" src="{% static 'images/search.png' %}">
                         <button id="search-button" class="mt-4 flex flex-row items-center font-medium text-custom-50 hover:underline hover:text-custom-100">
                             Search for flights

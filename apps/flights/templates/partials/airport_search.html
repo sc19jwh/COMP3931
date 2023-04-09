@@ -1,0 +1,17 @@
+{% if airports %}
+    <div class="w-full">
+        <div class="absolute bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block" style="overflow-y: scroll;">
+            {% for airport in airports %}
+                <div hx-post="{% url 'search_flight' %}?test=1" class="flex items-center px-5 py-3 hover:cursor-pointer hover:bg-gray-100">
+                    <div class="w-1/12 mr-2">
+                        <img src="https://flagcdn.com/h240/{{airport.country.alpha2code}}.png" class="w-full h-auto object-cover">
+                    </div>
+                    <div class="w-11/12 flex flex-col ml-2">
+                        <p class="font-semibold">{{airport.name}} ({{airport.iata_code}})</p>
+                        <p class="">{{airport.country.name}}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}

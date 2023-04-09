@@ -2,6 +2,8 @@ from django.db import models
 from django.db.models import Min, Max
 # Import default django User table
 from django.contrib.auth.models import User
+# Other imports
+from datetime import datetime, timedelta
 
 class Country(models.Model):
     name = models.CharField(max_length=50)
@@ -19,13 +21,19 @@ class City(models.Model):
     latitude = models.DecimalField(max_digits=20, decimal_places=17, blank=True, null=True)
     longitude = models.DecimalField(max_digits=20, decimal_places=17, blank=True, null=True)
     skyscanner_id = models.IntegerField(blank=True,null=True)
+    budget = models.DecimalField(max_digits=4, decimal_places=1, blank=True, null=True)
+    climate = models.DecimalField(max_digits=4, decimal_places=1, blank=True, null=True)
+    food_culture = models.DecimalField(max_digits=4, decimal_places=1, blank=True, null=True)
+    tourist_attractions = models.DecimalField(max_digits=4, decimal_places=1, blank=True, null=True)
+    nightlife_level = models.DecimalField(max_digits=4, decimal_places=1, blank=True, null=True)
 
     def __str__(self):
         return self.name
 
 class Trip(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    title = models.CharField(max_length=50, blank=True, null=True)
+    title = models.CharField(max_length=25, blank=True, null=True)
+    start_date = models.DateField(blank = True, null = True)
     journey_times = models.DecimalField(max_digits=4, decimal_places=1, blank=True, null=True)
     budget = models.DecimalField(max_digits=4, decimal_places=1, blank=True, null=True)
     climate = models.DecimalField(max_digits=4, decimal_places=1, blank=True, null=True)
@@ -33,17 +41,29 @@ class Trip(models.Model):
     tourist_attractions = models.DecimalField(max_digits=4, decimal_places=1, blank=True, null=True)
     nightlife_level = models.DecimalField(max_digits=4, decimal_places=1, blank=True, null=True)
 
-    def get_start_and_end_dates(self):
-        start_date = self.destination_set.all().aggregate(Min('start_date'))['start_date__min']
-        end_date = self.destination_set.all().aggregate(Max('end_date'))['end_date__max']
-        return start_date, end_date
-
 class Destination(models.Model):
     trip = models.ForeignKey("Trip", on_delete=models.CASCADE)
     country = models.ForeignKey("Country", on_delete=models.CASCADE)
     city = models.ForeignKey("City", on_delete=models.CASCADE)
-    start_date = models.DateField()
-    end_date = models.DateField()
+    order = models.IntegerField(default=1)
+    nights = models.IntegerField(default=1)
+
+    @property
+    def start_date(self):
+        if self.order == 1:
+            return self.trip.start_date
+        else:
+            previous_destination = self.trip.destination_set.get(order=self.order-1)
+            return previous_destination.end_date
+
+    @property
+    def end_date(self):
+        start_date = self.start_date
+        end_date = start_date + timedelta(days=self.nights)
+        return end_date
+
+    class Meta:
+        ordering = ["order"]
 
     def __str__(self):
         return f"{self.trip.id} - {self.city.name}"
@@ -75,6 +95,13 @@ class DestinationTransport(models.Model):
     departure_destination = models.ForeignKey("Destination", related_name="departure_destination", on_delete=models.CASCADE, default=1)
     arrival_destination = models.ForeignKey("Destination", related_name="arrival_destination", on_delete=models.CASCADE, default = 1)
     transport_legs = models.ManyToManyField(TransportLeg, blank=True)
+
+    def get_route_array(self):
+        route = []
+        for leg in self.transport_legs.all():
+            route.append(leg.route.start_city.name)
+        route.append(self.arrival_destination.city.name)
+        return route
 
     def __str__(self):
         return str(self.departure_destination.trip.id) + ": " + self.departure_destination.city.name + " - " + self.arrival_destination.city.name

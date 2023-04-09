@@ -2,11 +2,16 @@ from django.shortcuts import render
 from apps.trips.models import Country
 from apps.authentication.models import Profile
 from .utils.currency import getExchangeRates
+from apps.authentication.decorators import nationality_required
+from django.contrib.auth.decorators import login_required
 
+@login_required(redirect_field_name=None)
+@nationality_required
 def currency(request):
     countries = Country.objects.all()
     interrail_countries = Country.objects.filter(is_interrail=True)
-    context = {'title': 'Currency', 'countries': countries, 'interrail_countries': interrail_countries, 'profile': Profile.objects.get(user=request.user)}
+    context = {'title': 'Currency', 'countries': countries, 'interrail_countries': interrail_countries, 'profile': Profile.objects.get(user=request.user),
+               'selected_page': 'Currency'}
     return render(request, 'conversion.html', context)
 
 def currency_conversion(request):

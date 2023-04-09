@@ -28,14 +28,12 @@ INSTALLED_APPS = [
     'apps.landing.apps.LandingConfig',
     'apps.maps.apps.MapsConfig',
     'apps.flights.apps.FlightsConfig',
-    'apps.hotels.apps.HotelsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -103,11 +101,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/London'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -121,4 +119,5 @@ STATICFILES_DIRS = [ BASE_DIR / "static/", ]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = "/"
+LOGIN_URL = '/user/signin'
+LOGIN_REDIRECT_URL = '/user/signin'
