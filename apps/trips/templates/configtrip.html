@@ -98,21 +98,7 @@
                 </button>
             </div>
             <div id="hi" style="display: none;" class="flex items-center justify-center mt-4">
-                {% with hotel=destination.hotel_set.first %}
-                    {% if hotel %}
-                        <p>Hotel name: {{ hotel.name }}</p>
-                        <p><a href="{{ hotel.hotel_url }}">Website</a></p>
-                        {% for image in hotel.get_images %}
-                            <img src="{{ image }}" class="w-10 h-auto">
-                        {% endfor %}
-                    {% else %}
-                        <button hx-indicator="#spinner" hx-get="{% url 'search_hotel' %}?destination_id={{destination.id}}" hx-target="body" hx-swap="beforeend" class="flex flex-row items-center font-medium text-custom-50 hover:underline hover:text-custom-100">
-                            Search for hotels
-                            <img style="width: 10px; height: 10px; padding-left: 2px;;" id="spinner" class="htmx-indicator" src="{% static 'images/loading.gif' %}"/>
-                        </button>
-                        
-                    {% endif %}
-                {% endwith %}
+                <p>hello</p>
             </div>
         </div>
         

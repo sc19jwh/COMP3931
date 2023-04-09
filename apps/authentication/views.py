@@ -1,6 +1,6 @@
 # Django imports
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.contrib.auth import authenticate, login, logout
 from django.core.files.base import ContentFile
 from django.db.models import Min, Max
@@ -38,7 +38,7 @@ def signin(request):
 # URL: user/signout
 # HTTP Method: GET
 # Description: Signs out the current user and redirects to landing page
-@login_required
+@login_required(redirect_field_name=None)
 def signout(request):
     logout(request)
     return redirect('main')
@@ -73,7 +73,7 @@ def register(request):
 # HTTP Method: GET, POST
 # Description: Shows user account details and allows configuration of a profile image
 @nationality_required
-@login_required
+@login_required(redirect_field_name=None)
 def profile(request):
     if request.method == 'POST':
         image_data = request.FILES['photo'].read()
@@ -87,13 +87,11 @@ def profile(request):
 # URL: user/setcountry
 # HTTP Method: GET, POST
 # Description: Allows user to configure their nationality
-@login_required
+@login_required(redirect_field_name=None)
 def setcountry(request):
     if request.method == 'POST':
-        selected_country_pk = request.POST.get('country')
-        selected_country = Country.objects.get(pk=selected_country_pk)
         profile = request.user.profile
-        profile.nationality = selected_country
+        profile.nationality = Country.objects.get(id=request.POST.get('country'))
         profile.save()
         return redirect('mytrips', request.user.username)
     current_user_nationality = Profile.objects.get(user=request.user).nationality
@@ -108,6 +106,8 @@ def set_country_flag(request):
     id = request.GET.get('country')
     if not id:
         id = request.GET.get('country2')
+        if not id:
+            return HttpResponseBadRequest("Bad request") 
     country = Country.objects.get(id=id)
     context = {'countryid': country.alpha2code}
     return render(request, 'partials/set_country_flag.html', context)

@@ -1,5 +1,9 @@
 import requests
+from dotenv import load_dotenv
+import os
 
 def getExchangeRates(currency):
-    response = requests.get('https://v6.exchangerate-api.com/v6/a915480af636a1707912d345/latest/' + currency)
+    load_dotenv()
+    api_key = os.getenv('currency_api_key')
+    response = requests.get(f'https://v6.exchangerate-api.com/v6/{api_key}/latest/' + currency)
     return response.json()['conversion_rates']

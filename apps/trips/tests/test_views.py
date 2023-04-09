@@ -1,6 +1,7 @@
 from django.test import TestCase, Client
 from django.urls import resolve, reverse
 from apps.trips.views import *
+from apps.trips.models import Country
 from django.contrib.auth.models import User
 from decimal import Decimal
 from datetime import datetime
@@ -12,9 +13,10 @@ class ViewAuthRedirectTest(TestCase):
         self.client = Client()
         # Create first user account
         self.username = 'someusername'
-        self.password = 'somepassword'
+        self.password = 'Somepassword20'
         self.user = User.objects.create_user(username=self.username, password=self.password)
-        self.profile = Profile.objects.create(user=self.user)
+        self.country = Country.objects.create(name = "Great Britain", alpha2code = "GB", currency = "GBP", is_interrail = True)
+        self.profile = Profile.objects.create(user=self.user, nationality=self.country)
         # Create a trip object
         self.trip = Trip.objects.create(
             user=self.user,
@@ -31,7 +33,7 @@ class ViewAuthRedirectTest(TestCase):
         self.alt_username = 'alternativeuser'
         self.alt_password = 'alternativepassword'
         self.alt_user = User.objects.create_user(username=self.alt_username, password=self.alt_password)
-        self.alt_profile = Profile.objects.create(user=self.alt_user)
+        self.alt_profile = Profile.objects.create(user=self.alt_user, nationality=self.country)
 
     # Log user in and make sure they can access <username>/mytrips
     def test_mytrips_url_logged_in(self):
@@ -80,15 +82,15 @@ class MytripsFunctionalityTest(TestCase):
         self.client = Client()
         # Create first user account and login
         self.username = 'someusername'
-        self.password = 'somepassword'
+        self.password = 'Somepassword20'
         self.user = User.objects.create_user(username=self.username, password=self.password)
-        self.profile = Profile.objects.create(user=self.user)
+        self.country = Country.objects.create(name = "Great Britain", alpha2code = "GB", currency = "GBP", is_interrail = True)
+        self.profile = Profile.objects.create(user=self.user, nationality=self.country)
         self.client.login(username=self.username, password=self.password)
 
     def test_add_trip(self):
-        # Pass data to add trip
-        data = {
-            'add_trip_form': 'add_trip',
+        # POST data
+        response = self.client.post(reverse('mytrips', args=[self.username]), {'add_trip_form': 'add_trip',
             'triptitle': 'Unit Test Trip',
             'start_date': '2024-03-01',
             'journeytime': '50.1',
@@ -97,9 +99,7 @@ class MytripsFunctionalityTest(TestCase):
             'food': '30.7',
             'tourism': '15.5',
             'nightlife': '12.4'
-        }
-        # POST data
-        response = self.client.post(reverse('mytrips', args=[self.username]), data)
+        })
         # Get newly created trip
         trip = Trip.objects.get(user=self.user, title='Unit Test Trip')
         # Check that model exactly matches inputted data
@@ -124,10 +124,8 @@ class MytripsFunctionalityTest(TestCase):
             tourist_attractions=15.5,
             nightlife_level=12.4
         )
-        # Pass newly created trip's id
-        data = {'delete_trip_form': trip.id}
         # POST the data
-        response = self.client.post(reverse('mytrips', args=[self.username]), data)
+        response = self.client.post(reverse('mytrips', args=[self.username]), {'delete_trip_form': trip.id})
         # Ensure that the delete has been performed
         with self.assertRaises(Trip.DoesNotExist):
             Trip.objects.get(id=trip.id)
@@ -139,7 +137,8 @@ class ConfigTripFunctionalityTest(TestCase):
         self.client = Client()
         # Create first user account and login
         self.username = 'someusername'
-        self.password = 'somepassword'
+        self.password = 'Somepassword20'
         self.user = User.objects.create_user(username=self.username, password=self.password)
-        self.profile = Profile.objects.create(user=self.user)
+        self.country = Country.objects.create(name = "Great Britain", alpha2code = "GB", currency = "GBP", is_interrail = True)
+        self.profile = Profile.objects.create(user=self.user, nationality=self.country)
         self.client.login(username=self.username, password=self.password)

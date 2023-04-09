@@ -3,7 +3,6 @@ from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
 # Folder imports
 from .utils.sky import quick_flight_search
-# from .utils.flights import quick_flight_search, full_flight_search
 from .models import *
 from apps.trips.models import *
 

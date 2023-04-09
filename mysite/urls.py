@@ -14,8 +14,6 @@ urlpatterns = [
     path('maps/', include('apps.maps.urls')),
     # Include all flights urls
     path('flights/', include('apps.flights.urls')),
-    # Include all hotels urls
-    path('hotels/', include('apps.hotels.urls')),
     # Include admin page
     path('admin/', admin.site.urls),
 ]

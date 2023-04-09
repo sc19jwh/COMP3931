@@ -21,9 +21,9 @@
                     <div id = "flag1">
                         <img src="https://flagcdn.com/h240/{{profile.nationality.alpha2code}}.png" class="mb-4 w-24 h-16 object-cover mx-auto">
                     </div>
-                    <select hx-get="{% url 'set_country_flag' %}"hx-trigger="change" hx-target="#flag1" class="text-center bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block w-full p-2 mb-4" name="country" id="country">
+                    <select hx-get="{% url 'set_country_flag' %}" hx-trigger="change" hx-target="#flag1" class="text-center bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block w-full p-2 mb-4" name="country" id="country">
                         {% for country in countries %}
-                        <option value="{{ country.pk }}" {% if country.pk == profile.nationality.pk %} selected {% endif %}>{{ country.name }} - {{ country.currency }}</option>
+                            <option value="{{ country.pk }}" {% if country.pk == profile.nationality.pk %} selected {% endif %}>{{ country.name }} - {{ country.currency }}</option>
                         {% endfor %}
                     </select>
                 </div>

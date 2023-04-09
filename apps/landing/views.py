@@ -9,12 +9,12 @@ def main(request):
 
 def features(request):
     context = {'title': 'Home'}
-    return render(request, 'features.html', context)
+    return render(request, 'partials/features.html', context)
 
 def showcase1(request):
     context = {'title': 'Home'}
-    return render(request, 'showcase1.html', context)
+    return render(request, 'partials/showcase1.html', context)
 
 def faqs(request):
     context = {'title': 'Home'}
-    return render(request, 'faqs.html', context)
+    return render(request, 'partials/faqs.html', context)

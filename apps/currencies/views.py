@@ -3,7 +3,9 @@ from apps.trips.models import Country
 from apps.authentication.models import Profile
 from .utils.currency import getExchangeRates
 from apps.authentication.decorators import nationality_required
+from django.contrib.auth.decorators import login_required
 
+@login_required(redirect_field_name=None)
 @nationality_required
 def currency(request):
     countries = Country.objects.all()

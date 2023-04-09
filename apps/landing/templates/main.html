@@ -55,15 +55,15 @@
     </section>
 
     <section id="features" class="h-screen" hx-get="{% url 'features' %}" hx-trigger="revealed">
-        {% include 'features.html' %}
+        {% include 'partials/features.html' %}
     </section>
 
     <section id="showcase1" class="h-screen" hx-get="{% url 'showcase1' %}" hx-trigger="revealed">
-        {% include 'showcase1.html' %}
+        {% include 'partials/showcase1.html' %}
     </section>
 
     <section id="faqs" class="h-screen" hx-get="{% url 'faqs' %}" hx-trigger="revealed">
-        {% include 'faqs.html' %}
+        {% include 'partials/faqs.html' %}
     </section>
 
     <footer class="bg-gray-100 flex items-center justify-between h-16 py-5 px-10 text-gray-600">

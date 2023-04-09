@@ -1,6 +1,6 @@
 # Django imports
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 # Other imports
 import folium
 import ast
@@ -10,8 +10,13 @@ from apps.trips.utils.geofuncs import lat_long_distance
 
 def get_travel_map(request):
     # Get the start and end point destination IDs
-    start = get_object_or_404(Destination, id=request.GET.get('start'))
-    end = get_object_or_404(Destination, id=request.GET.get('end'))
+    start_id = request.GET.get('start')
+    end_id = request.GET.get('end')
+    if start_id is None or end_id is None:
+        return HttpResponseBadRequest("Missing start and/or end parameters.")
+    # Get the destination objects
+    start = get_object_or_404(Destination, id=start_id)
+    end = get_object_or_404(Destination, id=end_id)
     # Use custom formula and distance to calculate a custom zoom level
     zoom = 6 - (lat_long_distance(start.city.latitude, start.city.longitude, end.city.latitude, end.city.longitude) / 500)
     # Create a map, with latitude and longitude centered around the two locations
@@ -26,6 +31,8 @@ def get_travel_map(request):
 def get_route_map(request):
     # Get route from GET request
     route = request.GET.get('route')
+    if route is None:
+        return HttpResponseBadRequest("Missing route.")
     # Convert route to an array using ast (get params are always string, even though formatted [a,b,c])
     route_array = ast.literal_eval(route)
     # Get city objects for each city in string array
@@ -57,16 +64,16 @@ def get_route_map(request):
     return HttpResponse(map._repr_html_())
 
 def full_map(request):
-    # # Create a map, with latitude and longitude centered on Europe
-    # map = folium.Map(location=[51,10], zoom_start=4)
-    # # Loop all cities
-    # for city in City.objects.all():
-    #     folium.Marker(location=[city.latitude, city.longitude], popup=city.name, icon=folium.Icon(color='orange', icon='location-pin', prefix='fa'), tooltip=city.name,).add_to(map)
-    # for route in TravelRoute.objects.all():
-    #     folium.PolyLine(locations=[[route.start_city.latitude, route.start_city.longitude], [route.end_city.latitude, route.end_city.longitude]], color='blue', dash_array=[5, 5]).add_to(map)
-    # # Return the HTML as a HttpResponse
-    # return HttpResponse(map._repr_html_())
-    return render(request, 'map.html')
+    # Create a map, with latitude and longitude centered on Europe
+    map = folium.Map(location=[51,10], zoom_start=4)
+    # Loop all cities
+    for city in City.objects.all():
+        folium.Marker(location=[city.latitude, city.longitude], popup=city.name, icon=folium.Icon(color='orange', icon='location-pin', prefix='fa'), tooltip=city.name,).add_to(map)
+    for route in TravelRoute.objects.all():
+        folium.PolyLine(locations=[[route.start_city.latitude, route.start_city.longitude], [route.end_city.latitude, route.end_city.longitude]], color='blue', dash_array=[5, 5]).add_to(map)
+    # Return the HTML as a HttpResponse
+    return HttpResponse(map._repr_html_())
+    # return render(request, 'map.html')
 
 def get_hotels_map(request):
     # Get the id of the city that the hotel search is in
@@ -84,7 +91,10 @@ def get_hotels_map(request):
 
 def get_trip_map(request):
     # Get TRIP from GET request
-    trip = get_object_or_404(Trip, id = request.GET.get('trip_id'))
+    trip_id = request.GET.get('trip_id')
+    if trip_id is None:
+        return HttpResponseBadRequest("Missing trip id.")
+    trip = get_object_or_404(Trip, id = trip_id)
     cities = []
     for destination in Destination.objects.filter(trip=trip):
         city = destination.city

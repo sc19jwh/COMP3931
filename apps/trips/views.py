@@ -6,31 +6,35 @@ from django.core.files.base import ContentFile
 from django.db.models import Min, Max, Q
 from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 # Other imports
 import base64
 import folium
 import ast
 from datetime import datetime, date, timedelta
 import decimal
+import random
+import csv
 # Folder imports
 from .models import *
 from apps.flights.models import *
 from apps.authentication.models import Profile
-from apps.hotels.models import Hotel
 from .utils.geofuncs import lat_long_distance, dijkstra, least_transfers
 from apps.authentication.decorators import nationality_required
+from .utils.recommender import recommend_next_destination, recommend_first_destination
 
 def home(request):
     countries = Country.objects.filter(is_interrail=True)
     cities = City.objects.all()
+    trip = Trip.objects.get(id=102)
+    routes = TravelRoute.objects.all()
+    existing_route = [City.objects.get(id=1), City.objects.get(id=2), City.objects.get(id=3)]
     # airports = Airport.objects.all()
-    if request.method == 'POST':
-        print(request.POST.get('test'))
     context = {'title': 'Home', 'countries': countries, 'cities': cities, 'profile': Profile.objects.get(user=request.user)}
     return render(request, 'index.html', context)
 
 @nationality_required
-@login_required
+@login_required(redirect_field_name=None)
 def mytrips(request, username):
     if User.objects.get(username=username) != request.user:
         return HttpResponse(status=401)
@@ -70,7 +74,7 @@ def mytrips(request, username):
     return render(request, 'mytrips.html', context)
 
 @nationality_required
-@login_required
+@login_required(redirect_field_name=None)
 def configtrip(request, trip_id, username):
     trip = get_object_or_404(Trip, id=trip_id)
     if User.objects.get(username=username) != request.user:
@@ -178,20 +182,6 @@ def configtrip(request, trip_id, username):
                 duration = flight_details_dict['duration'],
                 number_connections = num_stops
             )
-        elif 'save_searched_hotel' in request.POST:
-            destination = get_object_or_404(Destination, id = request.GET.get('destination_id'))
-            hotel_details_dict = eval(dict(request.POST)['save_searched_hotel'][0])
-            hotel = Hotel.objects.create(
-                destination = destination,
-                name = hotel_details_dict['name'],
-                hotel_url = hotel_details_dict['url'].split('?', 1)[0],
-                latitude = hotel_details_dict['position']['latitude'],
-                longitude = hotel_details_dict['position']['longitude'],
-                star_rating = hotel_details_dict['numberOfStars'],
-                custom_rating = hotel_details_dict['reviews']['reviewSummaryScore']
-            )
-            hotel.set_images(hotel_details_dict['images'])
-            hotel.save()
         elif 'add_travel_form' in request.POST:
             route = request.POST['route_selection']
             # Convert route to an array using ast (get params are always string, even though formatted [a,b,c])
@@ -264,11 +254,15 @@ def add_trip(request):
 def add_destination(request):
     trip = Trip.objects.get(id=request.GET.get('trip'))
     next_order = request.GET.get('next_order')
-    countries = Country.objects.filter(is_interrail=True)
+    if int(next_order) == 1:
+        recommended = recommend_first_destination(trip, City.objects.all())[:5]
+    else:
+        existing_route = [destination.city for destination in trip.destination_set.all()]
+        recommended = recommend_next_destination(trip, City.objects.all(), TravelRoute.objects.all(), Destination.objects.get(trip = trip, order=int(next_order)-1).city, existing_route)[:5]
     # Check if any flights exist for trip - will control whether warning is needed or not
     inbound_flight = Flight.objects.filter(trip_id=trip.id, direction='inbound')
-    context = {'countries': countries, 'next_order': next_order, 'inbound_flight': inbound_flight,
-               'popup_title': 'Add Destination'}
+    context = {'countries': Country.objects.filter(is_interrail=True), 'next_order': next_order, 'inbound_flight': inbound_flight,
+               'popup_title': 'Add Destination', 'recommended': recommended, 'cities': City.objects.all()}
     return render(request, 'partials/add_destination.html', context)
 
 def add_travel(request):

@@ -1,15 +1,18 @@
 import requests
 import json
 import datetime
+from dotenv import load_dotenv
+import os
 
 # INPUT: session_token string derived from 'quick search' and True/False value for direct flights 
 # OUTPUT: 2 dictionaries of flight information
 # e.g. full_flight_search(session_token, True)
 def full_flight_search(session_token, direct):
+    load_dotenv()
     # Create url by combining base url and session_token from previous step
     url = "https://partners.api.skyscanner.net/apiservices/v3/flights/live/search/poll/" + session_token
     headers = {
-        "x-api-key": "prtl6749387986743898559646983194"
+        "x-api-key": os.getenv('skyscanner_api_key')
     }
     # Load as JSON
     response = json.loads(requests.post(url, headers=headers).text)
@@ -22,11 +25,12 @@ def full_flight_search(session_token, direct):
 # OUTPUT: 2 dictionaries of flight information and a session_token of the search
 # e.g. quick_flight_search("GBP", "MAN", "NAP", 2023, 6, 12, True)
 def quick_flight_search(currency, departure_code, destination_code, year, month, day, direct):
+    load_dotenv()
     # URL 
     url = "https://partners.api.skyscanner.net/apiservices/v3/flights/live/search/create"
     # Using pulic API key
     headers = {
-        "x-api-key": "prtl6749387986743898559646983194"
+        "x-api-key": os.getenv('skyscanner_api_key')
     }
     # Search data
     data = {

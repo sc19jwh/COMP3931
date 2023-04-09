@@ -2,9 +2,20 @@
 {% load static %}
 {% block mainbody %}
 
-    <div class="flex flex-col items-center text-center justify-center mb-2.5">
-        <div id="map_section" hx-get="{% url 'full_map' %}" hx-trigger="load" class="w-4/5 md:w-3/5" name="summarymap">
+    <div class="grid grid-cols-1 md:grid-cols-7 gap-5 mb-5">
+        <div id="map_section" hx-get="{% url 'full_map' %}" hx-trigger="load" class="md:col-span-4 w-full" name="summarymap">
             <!-- Map inserted here -->
+        </div>
+        <div class="md:col-span-3">
+            <h1 class="mb-2.5 text-center md:text-left font-semibold">Recommended for you:</h1>
+            {% for similarity, city in recommended %}
+                <div class="flex items-center">
+                    <img src="https://flagcdn.com/h240/{{ city.country.alpha2code }}.png" class="h-3 w-3 mr-2.5">
+                    <button hx-get="{% url 'find_cities' %}?country={{city.country.id}}" hx-trigger="click" hx-target="#cities" _="on click wait 0.05s then set #country_box's value to '{{city.country.pk}}'
+                    set #city_box's value to '{{city.pk}}' remove @disabled from #city_box"
+                    class="hover:underline hover:text-custom-50 hover:cursor-pointer">{{forloop.counter}}. {{city.name}}</button>
+                </div>
+            {% endfor %}
         </div>
     </div>
 
@@ -21,8 +32,11 @@
             {% endfor %}
         </select>
         <div id="cities">
-            <select id="city_box" disabled name="city" class="w-full text-center bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-5 focus:outline-none">
+            <select id="city_box" disabled name="city" class="focus:outline-none w-full text-center bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-5">
                 <option>--- Select a city ---</option>
+                {% for city in cities %}
+                    <option value="{{city.pk}}">{{city.name}}</option>
+                {% endfor %}
             </select>
         </div>
         <input id="nights_box" type="number" placeholder="Number of nights" id="nights" name="nights" min="1" class="w-full text-center focus:outline-none bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-5">

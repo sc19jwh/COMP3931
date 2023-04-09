@@ -28,14 +28,12 @@ INSTALLED_APPS = [
     'apps.landing.apps.LandingConfig',
     'apps.maps.apps.MapsConfig',
     'apps.flights.apps.FlightsConfig',
-    'apps.hotels.apps.HotelsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'crispy_forms',
 ]
 
 MIDDLEWARE = [

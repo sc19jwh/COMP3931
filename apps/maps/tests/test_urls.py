@@ -17,10 +17,6 @@ class URLResolveTest(SimpleTestCase):
         url = reverse('get_route_map')
         self.assertEquals(resolve(url).func, get_route_map)
 
-    def test_resolve_get_hotels_map_url(self):
-        url = reverse('get_hotels_map')
-        self.assertEquals(resolve(url).func, get_hotels_map)
-
     def test_resolve_get_trip_map_url(self):
         url = reverse('get_trip_map')
         self.assertEquals(resolve(url).func, get_trip_map)
