@@ -15,28 +15,34 @@
         {% endfor %}
     </select>
     <div class="flex flex-row">
-        <input type="checkbox" id="direct_flights" name="direct_flights" class="p-2 mb-5">
+        <input type="checkbox" id="direct_flights" name="direct_flights" class="p-2 mb-5 text-sm">
         <label for="direct_flights" class="p-2 mb-5">Direct Flights Only</label>
     </div>
-    <button class="disabled:opacity-25 flex items-center justify-center text-center text-white bg-custom-50 enabled:hover:bg-custom-100 font-medium rounded-full text-sm px-3 py-1.5 transition ease-in-out duration-300" 
-    hx-get="{% url 'search_results' %}?trip_id={{trip_id}}&flight_direction={{flight_direction}}" hx-target="body" hx-swap="beforeend" hx-include="[name='departure_airport'], [name='arrival_airport'], [name='direct_flights']"
-    _="on click remove #container 
-    on change from #departure_airport
-    if #departure_airport's value is '--- Select a departure airport ---' or #arrival_airport's value is '--- Select an arrival airport ---' 
-        add @disabled then exit
-    end
-    remove @disabled
-    on change from #arrival_airport
-    if #departure_airport's value is '--- Select a departure airport ---' or #arrival_airport's value is '--- Select an arrival airport ---' 
-        add @disabled then exit
-    end
-    remove @disabled" disabled>
-        Search Flights
-        <span class="ml-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-            </svg>
-        </span>
-    </button>
+    {% if key_found == False %}
+        <p class="text-xs text-red-600 text-center">
+            Search flights is not available (no API key found).
+        </p>
+    {% else %}
+        <button class="disabled:opacity-25 flex items-center justify-center text-center text-white bg-custom-50 enabled:hover:bg-custom-100 font-medium rounded-full text-sm px-3 py-1.5 transition ease-in-out duration-300" 
+        hx-get="{% url 'search_results' %}?trip_id={{trip_id}}&flight_direction={{flight_direction}}" hx-target="body" hx-swap="beforeend" hx-include="[name='departure_airport'], [name='arrival_airport'], [name='direct_flights']"
+        _="on click remove #container 
+        on change from #departure_airport
+        if #departure_airport's value is '--- Select a departure airport ---' or #arrival_airport's value is '--- Select an arrival airport ---' 
+            add @disabled then exit
+        end
+        remove @disabled
+        on change from #arrival_airport
+        if #departure_airport's value is '--- Select a departure airport ---' or #arrival_airport's value is '--- Select an arrival airport ---' 
+            add @disabled then exit
+        end
+        remove @disabled" disabled>
+            Search Flights
+            <span class="ml-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                </svg>
+            </span>
+        </button>
+    {% endif %}
 </div>
 {% endblock %}

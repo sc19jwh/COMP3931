@@ -36,3 +36,15 @@ class URLResolveTest(SimpleTestCase):
     def test_resolve_journey_summary_url(self):
         url = reverse('journey_summary')
         self.assertEquals(resolve(url).func, journey_summary)
+
+    def test_resolve_edit_destination_url(self):
+        url = reverse('edit_destination')
+        self.assertEquals(resolve(url).func, edit_destination)
+
+    def test_resolve_edit_trip_details_url(self):
+        url = reverse('edit_trip_details')
+        self.assertEquals(resolve(url).func, edit_trip_details)
+
+    def test_resolve_edit_travel_url(self):
+        url = reverse('edit_travel')
+        self.assertEquals(resolve(url).func, edit_travel)

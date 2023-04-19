@@ -16,14 +16,18 @@
                 <option value="{{airport.pk}}">{{airport.name}}</option>
             {% endfor %}
         </select>
-        <input id="departure_time" type="datetime-local" name="departure_datetime" class="w-full text-center focus:outline-none bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-5" />
-        <input id="arrival_time" type="datetime-local" name="destination_datetime" class="w-full text-center focus:outline-none bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-5" />
-        <input type="number" placeholder="Number of stops" id="stops" name="stops" min="0" max="10" class="w-full text-center focus:outline-none bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-5">
+        <input id="departure_time" type="datetime-local" min="{{min_date}}T00:00" name="departure_datetime" class="w-full text-center focus:outline-none bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-5" 
+        _="on change remove @disabled from #arrival_time set #arrival_time's @min to #departure_time's value"/>
+        <input disabled id="arrival_time" min="" type="datetime-local" name="destination_datetime" class="w-full text-center focus:outline-none bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-5" />
+        <input type="number" placeholder="Number of stops" id="num_stops" name="stops" min="0" max="10" class="w-full text-center focus:outline-none bg-gray-50 border border-gray-300 text-black text-sm rounded-lg block p-2 mb-5">
         <div class="flex justify-center">
             <button type="submit" class="disabled:opacity-25 flex items-center justify-center text-center text-white bg-custom-50 enabled:hover:bg-custom-100 font-medium rounded-full text-sm px-3 py-1.5 transition ease-in-out duration-300" 
             _="on change from #flight_form
             if #departure_airport's value is '--- Select a departure airport ---' or 
-            #destination_airport's value is '--- Select an arrival airport ---'
+            #destination_airport's value is '--- Select an arrival airport ---' or
+            #num_stops's value is empty or
+            #departure_time's value is empty or
+            #arrival_time's value is empty
                 add @disabled then exit
             end
             remove @disabled" disabled>

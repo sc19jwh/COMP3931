@@ -23,16 +23,9 @@ from .utils.geofuncs import lat_long_distance, dijkstra, least_transfers
 from apps.authentication.decorators import nationality_required
 from .utils.recommender import recommend_next_destination, recommend_first_destination
 
-def home(request):
-    countries = Country.objects.filter(is_interrail=True)
-    cities = City.objects.all()
-    trip = Trip.objects.get(id=102)
-    routes = TravelRoute.objects.all()
-    existing_route = [City.objects.get(id=1), City.objects.get(id=2), City.objects.get(id=3)]
-    # airports = Airport.objects.all()
-    context = {'title': 'Home', 'countries': countries, 'cities': cities, 'profile': Profile.objects.get(user=request.user)}
-    return render(request, 'index.html', context)
-
+# URL: <username>/mytrips
+# HTTP Method: GET, POST
+# Description: Dashboard page for list of user trips, handles POST requests to add and delete trips also 
 @nationality_required
 @login_required(redirect_field_name=None)
 def mytrips(request, username):
@@ -73,6 +66,9 @@ def mytrips(request, username):
     context = {'title': 'My Trips', 'profile': Profile.objects.get(user=request.user), 'trips': trips, 'middle': middle, 'selected_page': 'Dashboard'}
     return render(request, 'mytrips.html', context)
 
+# URL: <username>/trip/<trip.id>
+# HTTP Method: GET, POST
+# Description: Summary page for trip details, handles POST requests for adding, edit, deleting destinations, travel, flights
 @nationality_required
 @login_required(redirect_field_name=None)
 def configtrip(request, trip_id, username):
@@ -228,6 +224,8 @@ def configtrip(request, trip_id, username):
                 )
                 # Attach sub journey to master journey
                 destination_transport.transport_legs.add(transport_leg)
+        elif 'delete_flight_form' in request.POST:
+            Flight.objects.filter(trip_id=trip.id, direction = request.POST.get('delete_flight_form')).delete()
     countries = Country.objects.all()
     outbound_flight = Flight.objects.filter(trip=trip, direction="outbound").first()
     inbound_flight = Flight.objects.filter(trip=trip, direction="inbound").first()
@@ -241,16 +239,25 @@ def configtrip(request, trip_id, username):
                'last_destination': trip.destination_set.order_by('order').last(), 'middle': middle}
     return render(request, 'configtrip.html', context)
 
+# URL: partials/find_cities
+# HTTP Method: GET
+# Description: Return list of cities when passed a given country 
 def find_cities(request):
     country = request.GET.get('country')
     cities = City.objects.filter(country=country)
     context = {'cities': cities}
     return render(request, 'partials/find_cities.html', context)
 
+# URL: partials/add_trip
+# HTTP Method: GET
+# Description: Pop up to create a new trip
 def add_trip(request):
     context = {'tomorrow': str(date.today() + timedelta(days=1)), 'popup_title': 'Create new trip'}
     return render(request, 'partials/add_trip.html', context)
 
+# URL: partials/add_destination
+# HTTP Method: GET
+# Description: Pop up to create a new destination
 def add_destination(request):
     trip = Trip.objects.get(id=request.GET.get('trip'))
     next_order = request.GET.get('next_order')
@@ -265,6 +272,9 @@ def add_destination(request):
                'popup_title': 'Add Destination', 'recommended': recommended, 'cities': City.objects.all()}
     return render(request, 'partials/add_destination.html', context)
 
+# URL: partials/add_travel
+# HTTP Method: GET
+# Description: Pop up to add a travel journey between two destinations
 def add_travel(request):
     # Get city object of both start and end city
     start_dest = get_object_or_404(Destination, id = request.GET.get('start'))
@@ -291,11 +301,17 @@ def add_travel(request):
     return render(request, 'partials/add_travel.html', context)
     return HttpResponse(status=200)
 
+# URL: partials/trip_summary
+# HTTP Method: GET
+# Description: Pop up to generate a summary of a trip
 def trip_summary(request):
     trip = get_object_or_404(Trip, id = request.GET.get('trip_id'))
     context = {'trip': trip, 'popup_title': f"Trip Summary - {trip.title}"}
     return render(request, 'partials/trip_summary.html', context)
 
+# URL: partials/journey_summary
+# HTTP Method: GET
+# Description: Sub pop up to display summary of proposed route 
 def journey_summary(request):
     route = eval(request.GET.get('route'))
     travel_routes = TravelRoute.objects.all()
@@ -319,6 +335,9 @@ def journey_summary(request):
     context = {'popup_title': f"{route[i]} - {route[len(route)-1]}", 'route': journey_zip}
     return render(request, 'partials/journey_summary.html', context)
 
+# URL: partials/edit_destination
+# HTTP Method: GET
+# Description: Pop up to edit the duration of a stay in a city
 def edit_destination(request):
     destination = get_object_or_404(Destination, id = request.GET.get('destination_id'))
     nights = int(request.GET.get('nights'))
@@ -328,6 +347,9 @@ def edit_destination(request):
                'inbound_flight': inbound_flight}
     return render(request, 'partials/edit_destination.html', context)
 
+# URL: partials/edit_trip_details
+# HTTP Method: GET
+# Description: Pop up to edit the dates and title of a trip
 def edit_trip_details(request):
     trip = get_object_or_404(Trip, id = request.GET.get('trip_id'))
     # Check if any flights exist for trip - will control whether warning is needed or not
@@ -336,6 +358,9 @@ def edit_trip_details(request):
                'tomorrow': str(date.today() + timedelta(days=1))}
     return render(request, 'partials/edit_trip_details.html', context)
 
+# URL: partials/edit_Travel
+# HTTP Method: GET
+# Description: Pop up to edit and view the travel configuration between two cities
 def edit_travel(request):
     # Get city object of both start and end city
     start_dest = get_object_or_404(Destination, id = request.GET.get('start'))

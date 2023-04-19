@@ -14,7 +14,6 @@ module.exports = {
         extend: {
           colors: {
             custom: {"50":"#5F9595", "100": "#4C7777"},
-            disabled: {"50":"#5F9595"}
           },
           keyframes: {
             fadeIn: {

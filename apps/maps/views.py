@@ -8,6 +8,9 @@ import ast
 from apps.trips.models import *
 from apps.trips.utils.geofuncs import lat_long_distance
 
+# URL: maps/partials/get_travel_map
+# HTTP Method: GET
+# Description: Generate map for start and end destination
 def get_travel_map(request):
     # Get the start and end point destination IDs
     start_id = request.GET.get('start')
@@ -28,6 +31,9 @@ def get_travel_map(request):
     # Return the HTML as a HttpResponse
     return HttpResponse(map._repr_html_())
 
+# URL: partials/features
+# HTTP Method: GET
+# Description: Generate map for route between two destinations including transfer stations
 def get_route_map(request):
     # Get route from GET request
     route = request.GET.get('route')
@@ -63,6 +69,9 @@ def get_route_map(request):
     # Return the HTML as a HttpResponse
     return HttpResponse(map._repr_html_())
 
+# URL: partials/features
+# HTTP Method: GET
+# Description: Generate map for all interrail cities and travel routes
 def full_map(request):
     # Create a map, with latitude and longitude centered on Europe
     map = folium.Map(location=[51,10], zoom_start=4)
@@ -75,20 +84,9 @@ def full_map(request):
     return HttpResponse(map._repr_html_())
     # return render(request, 'map.html')
 
-def get_hotels_map(request):
-    # Get the id of the city that the hotel search is in
-    city = get_object_or_404(City, id=request.GET.get('city_id'))
-    # Create a map, with latitude and longitude centered around the two locations
-    map = folium.Map(location=[city.latitude, city.longitude], zoom_start=12)
-    if request.method == 'POST':
-        # Get hotels from POST include
-        hotels = eval(request.POST.get('hotels'))
-        # Plot each hotel
-        for hotel in hotels:
-            folium.Marker(location=[hotel["position"]["latitude"], hotel["position"]["longitude"]], popup=hotel["name"], icon=folium.Icon(color='orange', icon='hotel', prefix='fa'), tooltip=hotel["name"]).add_to(map)
-    # Return the HTML as a HttpResponse
-    return HttpResponse(map._repr_html_())
-
+# URL: partials/features
+# HTTP Method: GET
+# Description: Generate summary map for all cities on trip
 def get_trip_map(request):
     # Get TRIP from GET request
     trip_id = request.GET.get('trip_id')

@@ -5,13 +5,23 @@ from django.db.models import Q
 from .utils.sky import quick_flight_search
 from .models import *
 from apps.trips.models import *
+# Other imports
+from datetime import datetime, date, timedelta
+from dotenv import load_dotenv
+import os
 
+# URL: flights/partials/add_flight
+# HTTP Method: GET
+# Description: Intermediate screen to select way to add flight
 def add_flight(request):
     flight_direction = request.GET.get('flight_direction')
     trip_id = request.GET.get('trip_id')
-    context = {'flight_direction': flight_direction, 'trip_id': trip_id}
+    context = {'flight_direction': flight_direction, 'trip_id': trip_id, 'popup_title': f'Add an {flight_direction} flight'}
     return render(request, 'partials/add_flight.html', context)
 
+# URL: flights/partials/enter_flight
+# HTTP Method: GET
+# Description: Facilitats the manual entry of flight information
 def enter_flight(request):
     trip_id = request.GET.get('trip_id')
     flight_direction = request.GET.get('flight_direction')
@@ -24,6 +34,8 @@ def enter_flight(request):
         arrival_airports = []
         for airport in arrival_interrailairports:
             arrival_airports.append(airport.airport)
+        # Take 1 days off the minimum date for outbound flights to allow for long journeys
+        min_date = str(trip.start_date - timedelta(days=1))
     else:
         last_destination = trip.destination_set.order_by('order').last()
         departure_interrailairports = InterrailAirport.objects.filter(city=last_destination.city)
@@ -32,10 +44,22 @@ def enter_flight(request):
         for airport in departure_interrailairports:
             departure_airports.append(airport.airport)
         arrival_airports = Airport.objects.all()
-    context = {'popup_title': 'Enter Flight', 'departure_airports': departure_airports, 'arrival_airports': arrival_airports, 'flight_direction': flight_direction}
+        min_date = str(last_destination.end_date)
+    context = {'popup_title': 'Enter Flight', 'departure_airports': departure_airports, 'arrival_airports': arrival_airports, 'flight_direction': flight_direction,
+               'min_date': min_date}
     return render(request, 'partials/enter_flight.html', context)
 
+# URL: flight/partials/search_flight
+# HTTP Method: GET
+# Description: Allows search to be created for given flight criteria
 def search_flight(request):
+    # Check API key can be found
+    load_dotenv()
+    skyscanner_key = os.getenv('skyscanner_api_key')
+    if skyscanner_key:
+        key_found = True
+    else:
+        key_found = False
     # Get trip and flight direction from get request
     trip = get_object_or_404(Trip, id=request.GET.get('trip_id'))
     flight_direction = request.GET.get('flight_direction')
@@ -57,9 +81,13 @@ def search_flight(request):
         for airport in departure_interrailairports:
             departure_airports.append(airport.airport)
         arrival_airports = Airport.objects.all()
-    context = {'popup_title': 'Flight Search', 'departure_airports': departure_airports, 'arrival_airports': arrival_airports, 'trip_id': trip.id, 'flight_direction': flight_direction}
+    context = {'popup_title': 'Flight Search', 'departure_airports': departure_airports, 'arrival_airports': arrival_airports, 'trip_id': trip.id, 'flight_direction': flight_direction,
+               'key_found': key_found}
     return render(request, 'partials/search_flight.html', context)
 
+# URL: flight/partials/search_results
+# HTTP Method: GET
+# Description: Displays flight search criteria
 def search_results(request):
     # Get trip id, direction and direct flights flag from parameters
     trip = get_object_or_404(Trip, id=request.GET.get('trip_id'))
@@ -79,18 +107,6 @@ def search_results(request):
     else:
         last_destination = trip.destination_set.order_by('order').last()
         session_token, direct_flights, connecting_flights = quick_flight_search("GBP", departure_airport.iata_code, destination_airport.iata_code, last_destination.start_date.year, last_destination.start_date.month, last_destination.start_date.day, direct)
-    context = {'direct_flights': direct_flights, 'connecting_flights': connecting_flights, 'flight_direction': flight_direction, 'departure_airport': departure_airport, 'destination_airport': destination_airport}
+    context = {'direct_flights': direct_flights, 'connecting_flights': connecting_flights, 'flight_direction': flight_direction, 'departure_airport': departure_airport, 'destination_airport': destination_airport, 
+               'popup_title': f'{departure_airport} - {destination_airport}', 'trip_id': trip.id}
     return render(request, 'partials/search_results.html', context)
-
-def airport_search(request):
-    airports = []
-    if request.method == "POST":
-        search_term = request.POST.get('search')
-        if len(search_term) > 0:
-            airports = Airport.objects.filter(
-                Q(name__icontains=search_term) | 
-                Q(country__name__icontains=search_term) |
-                Q(iata_code__icontains=search_term)
-            )[:3]
-    context = {'airports': airports}
-    return render(request, 'partials/airport_search.html', context)

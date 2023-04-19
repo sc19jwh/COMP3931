@@ -20,7 +20,3 @@ class URLResolveTest(SimpleTestCase):
     def test_resolve_search_results_url(self):
         url = reverse('search_results')
         self.assertEquals(resolve(url).func, search_results)
-
-    def test_resolve_airport_search_url(self):
-        url = reverse('airport_search')
-        self.assertEquals(resolve(url).func, airport_search)
