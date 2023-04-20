@@ -63,7 +63,7 @@
         <div class="flex justify-between">
             <ul class="flex">
                 <li>
-                    <a href="#" class="mr-5 hover:text-custom-50 hover:underline">Credits</a>
+                    <a hx-get="{% url 'credits' %}" hx-target="body" hx-push-url="true" class="mr-5 hover:text-custom-50 hover:underline hover:cursor-pointer">Credits</a>
                 </li>
                 <li>
                     <a href="https://github.com/sc19jwh/COMP3931" target="_blank" class="hover:text-custom-50 hover:underline">GitHub</a>

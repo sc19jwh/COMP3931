@@ -4,6 +4,7 @@ from django.db.models import Q
 # Folder imports
 from .utils.sky import quick_flight_search
 from .models import *
+from apps.authentication.models import Profile
 from apps.trips.models import *
 # Other imports
 from datetime import datetime, date, timedelta
@@ -66,7 +67,7 @@ def search_flight(request):
     # If outbound flight, find the earliest destination's start date and find a flight to that destination on that date
     if flight_direction == "outbound":
         earliest_destination = trip.destination_set.order_by('order').first()
-        departure_airports = Airport.objects.all()
+        departure_airports = Airport.objects.filter(country = Profile.objects.get(user=request.user).nationality).order_by('name')
         arrival_interrailairports = InterrailAirport.objects.filter(city=earliest_destination.city)
         # Get arrival airports as Airport objects
         arrival_airports = []
@@ -80,7 +81,7 @@ def search_flight(request):
         departure_airports = []
         for airport in departure_interrailairports:
             departure_airports.append(airport.airport)
-        arrival_airports = Airport.objects.all()
+        arrival_airports = Airport.objects.filter(country = Profile.objects.get(user=request.user).nationality).order_by('name')
     context = {'popup_title': 'Flight Search', 'departure_airports': departure_airports, 'arrival_airports': arrival_airports, 'trip_id': trip.id, 'flight_direction': flight_direction,
                'key_found': key_found}
     return render(request, 'partials/search_flight.html', context)

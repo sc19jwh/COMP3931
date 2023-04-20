@@ -30,3 +30,10 @@ def showcase1(request):
 def faqs(request):
     context = {'title': 'Home'}
     return render(request, 'partials/faqs.html', context)
+
+# URL: /credits
+# HTTP Method: GET
+# Description: Credits page
+def credits(request):
+    context = {'title': 'Credits'}
+    return render(request, 'credits.html', context)

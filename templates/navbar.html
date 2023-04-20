@@ -18,7 +18,7 @@
                     <!-- Main NavBar -->
                     <button hx-get="{% url 'mytrips' user.username %}" hx-target="body" hx-push-url="true" class="hidden sm:flex text-sm font-semibold mr-4 {% if selected_page == 'Dashboard' %} text-gray-800 border-b-2 border-custom-50 {% else %} text-gray-500 {% endif %} hover:text-gray-800 hover:border-b-2 hover:border-custom-50 px-3 py-5">Dashboard</button>
                     <button hx-get="{% url 'currency' %}" hx-target="body" hx-push-url="true" class="hidden sm:flex text-sm font-semibold mr-4 {% if selected_page == 'Currency' %} text-gray-800 border-b-2 border-custom-50 {% else %} text-gray-500 {% endif %} hover:text-gray-800 hover:border-b-2 hover:border-custom-50 px-3 py-5">Currency</button>
-                    <button class="hidden sm:flex text-sm font-semibold mr-4 {% if selected_page == 'Credits' %} text-gray-800 border-b-2 border-custom-50 {% else %} text-gray-500 {% endif %} hover:text-gray-800 hover:border-b-2 hover:border-custom-50 px-3 py-5">Credits</button>
+                    <button hx-get="{% url 'credits' %}" hx-target="body" hx-push-url="true" class="hidden sm:flex text-sm font-semibold mr-4 {% if selected_page == 'Credits' %} text-gray-800 border-b-2 border-custom-50 {% else %} text-gray-500 {% endif %} hover:text-gray-800 hover:border-b-2 hover:border-custom-50 px-3 py-5">Credits</button>
                 </div>
             <div class="relative">
                 <!-- User photo -->
@@ -68,7 +68,7 @@
         <div class="flex justify-between">
             <ul class="flex">
                 <li>
-                    <a href="#" class="mr-5 hover:text-custom-50 hover:underline">Credits</a>
+                    <a hx-get="{% url 'credits' %}" hx-target="body" hx-push-url="true" class="mr-5 hover:text-custom-50 hover:underline hover:cursor-pointer">Credits</a>
                 </li>
                 <li>
                     <a href="https://github.com/sc19jwh/COMP3931" target="_blank" class="hover:text-custom-50 hover:underline">GitHub</a>
