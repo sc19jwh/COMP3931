@@ -13,10 +13,10 @@ class URLResolveTest(SimpleTestCase):
         url = reverse('features')
         self.assertEquals(resolve(url).func, features)
 
-    def test_resolve_showcase1_url(self):
-        url = reverse('showcase1')
-        self.assertEquals(resolve(url).func, showcase1)
-
     def test_resolve_faqs_url(self):
         url = reverse('faqs')
         self.assertEquals(resolve(url).func, faqs)
+
+    def test_resolve_credits_url(self):
+        url = reverse('credits')
+        self.assertEquals(resolve(url).func, credits)
