@@ -20,11 +20,9 @@ class City(models.Model):
     photo_url = models.CharField(max_length=250, blank=True, null=True)
     latitude = models.DecimalField(max_digits=20, decimal_places=17, blank=True, null=True)
     longitude = models.DecimalField(max_digits=20, decimal_places=17, blank=True, null=True)
-    budget = models.DecimalField(max_digits=4, decimal_places=1, blank=True, null=True)
+    accom_budget = models.DecimalField(max_digits=4, decimal_places=1, blank=True, null=True)
+    food_budget = models.DecimalField(max_digits=4, decimal_places=1, blank=True, null=True)
     climate = models.DecimalField(max_digits=4, decimal_places=1, blank=True, null=True)
-    food_culture = models.DecimalField(max_digits=4, decimal_places=1, blank=True, null=True)
-    tourist_attractions = models.DecimalField(max_digits=4, decimal_places=1, blank=True, null=True)
-    nightlife_level = models.DecimalField(max_digits=4, decimal_places=1, blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -34,11 +32,9 @@ class Trip(models.Model):
     title = models.CharField(max_length=25, blank=True, null=True)
     start_date = models.DateField(blank = True, null = True)
     journey_times = models.DecimalField(max_digits=4, decimal_places=1, blank=True, null=True)
-    budget = models.DecimalField(max_digits=4, decimal_places=1, blank=True, null=True)
+    accom_budget = models.DecimalField(max_digits=4, decimal_places=1, blank=True, null=True)
+    food_budget = models.DecimalField(max_digits=4, decimal_places=1, blank=True, null=True)
     climate = models.DecimalField(max_digits=4, decimal_places=1, blank=True, null=True)
-    food_culture = models.DecimalField(max_digits=4, decimal_places=1, blank=True, null=True)
-    tourist_attractions = models.DecimalField(max_digits=4, decimal_places=1, blank=True, null=True)
-    nightlife_level = models.DecimalField(max_digits=4, decimal_places=1, blank=True, null=True)
 
 class Destination(models.Model):
     trip = models.ForeignKey("Trip", on_delete=models.CASCADE)

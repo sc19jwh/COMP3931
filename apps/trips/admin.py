@@ -6,10 +6,10 @@ class CountryAdmin(admin.ModelAdmin):
     list_display= ('name', 'alpha2code', 'currency', 'is_interrail')
 
 class CityAdmin(admin.ModelAdmin):
-    list_display= ('name', 'country', 'latitude', 'longitude', 'photo_url', 'budget', 'climate', 'food_culture', 'tourist_attractions', 'nightlife_level')
+    list_display= ('name', 'country', 'latitude', 'longitude', 'photo_url', 'accom_budget', 'food_budget', 'climate')
 
 class TripAdmin(admin.ModelAdmin):
-    list_display= ('user', 'title', 'journey_times', 'budget', 'climate', 'food_culture', 'tourist_attractions', 'nightlife_level')
+    list_display= ('user', 'title', 'journey_times', 'accom_budget', 'food_budget', 'climate')
 
 class DestinationAdmin(admin.ModelAdmin):
     list_display= ('trip', 'country', 'city')

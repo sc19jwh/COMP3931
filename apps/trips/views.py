@@ -39,11 +39,9 @@ def mytrips(request, username):
                 title=request.POST.get('triptitle'),
                 start_date=request.POST.get('start_date'),
                 journey_times=decimal.Decimal(request.POST.get('journeytime')),
-                budget=decimal.Decimal(request.POST.get('budget')),
                 climate=decimal.Decimal(request.POST.get('climate')),
-                food_culture=decimal.Decimal(request.POST.get('food')),
-                tourist_attractions=decimal.Decimal(request.POST.get('tourism')),
-                nightlife_level=decimal.Decimal(request.POST.get('nightlife'))
+                food_budget=decimal.Decimal(request.POST.get('food_budget')),
+                accom_budget=decimal.Decimal(request.POST.get('accom_budget'))
             )
         # If POST deleting trip
         elif 'delete_trip_form' in request.POST:
@@ -244,7 +242,8 @@ def configtrip(request, trip_id, username):
 # Description: Return list of cities when passed a given country 
 def find_cities(request):
     country = request.GET.get('country')
-    cities = City.objects.filter(country=country)
+    print(country)
+    cities = City.objects.filter(country=country).order_by('name')
     context = {'cities': cities}
     return render(request, 'partials/find_cities.html', context)
 
