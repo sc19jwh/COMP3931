@@ -31,11 +31,6 @@ class LandingTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'partials/faqs.html')
 
-    def test_features(self):
-        response = self.client.get(reverse('features'))
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'partials/features.html')
-
     def test_credits(self):
         response = self.client.get(reverse('credits'))
         self.assertEqual(response.status_code, 200)

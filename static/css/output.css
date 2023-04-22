@@ -676,11 +676,6 @@ video {
   margin-bottom: 0.625rem;
 }
 
-.mx-36 {
-  margin-left: 9rem;
-  margin-right: 9rem;
-}
-
 .mr-2 {
   margin-right: 0.5rem;
 }
@@ -1167,8 +1162,8 @@ video {
   gap: 1.25rem;
 }
 
-.gap-16 {
-  gap: 4rem;
+.gap-20 {
+  gap: 5rem;
 }
 
 .gap-2\.5 {
@@ -1405,16 +1400,6 @@ video {
   padding-right: 2rem;
 }
 
-.py-10 {
-  padding-top: 2.5rem;
-  padding-bottom: 2.5rem;
-}
-
-.py-12 {
-  padding-top: 3rem;
-  padding-bottom: 3rem;
-}
-
 .text-left {
   text-align: left;
 }
@@ -1482,16 +1467,8 @@ video {
   font-weight: 400;
 }
 
-.uppercase {
-  text-transform: uppercase;
-}
-
 .italic {
   font-style: italic;
-}
-
-.leading-snug {
-  line-height: 1.375;
 }
 
 .text-gray-500 {
@@ -1537,11 +1514,6 @@ video {
 .text-white {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
-}
-
-.text-gray-900 {
-  --tw-text-opacity: 1;
-  color: rgb(17 24 39 / var(--tw-text-opacity));
 }
 
 .text-green-600 {
@@ -1793,6 +1765,11 @@ video {
     line-height: 2.5rem;
   }
 
+  .md\:text-lg {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+  }
+
   .md\:text-sm {
     font-size: 0.875rem;
     line-height: 1.25rem;
@@ -1806,16 +1783,6 @@ video {
   .md\:text-3xl {
     font-size: 1.875rem;
     line-height: 2.25rem;
-  }
-
-  .md\:text-lg {
-    font-size: 1.125rem;
-    line-height: 1.75rem;
-  }
-
-  .md\:text-base {
-    font-size: 1rem;
-    line-height: 1.5rem;
   }
 }
 
