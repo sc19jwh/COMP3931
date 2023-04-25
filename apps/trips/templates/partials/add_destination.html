@@ -11,7 +11,7 @@
             {% for similarity, city in recommended %}
                 <div class="flex items-center">
                     <img src="https://flagcdn.com/h240/{{ city.country.alpha2code }}.png" class="h-3 w-3 mr-2.5">
-                    <button hx-get="{% url 'find_cities' %}?country={{city.country.id}}" hx-trigger="click" hx-target="#cities" _="on click wait 0.05s then set #country_box's value to '{{city.country.pk}}'
+                    <button hx-get="{% url 'find_cities' %}?country={{city.country.id}}" hx-trigger="click" hx-target="#cities" _="on click wait 0.2s then set #country_box's value to '{{city.country.pk}}'
                     set #city_box's value to '{{city.pk}}' remove @disabled from #city_box"
                     class="hover:underline hover:text-custom-50 hover:cursor-pointer">{{forloop.counter}}. {{city.name}}</button>
                 </div>

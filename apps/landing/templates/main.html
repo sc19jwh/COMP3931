@@ -4,7 +4,7 @@
 
 <body class="bg-white">
 
-    <section class="h-screen flex flex-col mx-10 sm:mx-16 md:mx-24 lg:mx-32">
+    <section class="min-h-screen flex flex-col mx-10 sm:mx-16 md:mx-24 lg:mx-32">
         <nav class="h-16">
             <div class="flex justify-between items-center h-16">
                 <!-- Logo -->
@@ -20,7 +20,7 @@
             </div>
         </nav>
         <div class="flex-grow flex-col flex items-center justify-center">
-            <div class="grid grid-cols-1 md:grid-cols-7 gap-20">
+            <div class="grid grid-cols-1 md:grid-cols-7 gap-10">
                 <div class="col-span-3">
                     <h1 class="animate-fadeInLong text-3xl md:text-4xl xl:text-5xl font-bold mb-10">Interrail planning made easier</h1>
                     <p class="mb-10 text-lg text-gray-600">Let RailWizard work its magic - plan your next interrail adventure with ease!</p>
@@ -48,7 +48,7 @@
         </div>
     </section>
 
-    <section id="faqs" class="h-screen" hx-get="{% url 'faqs' %}" hx-trigger="revealed">
+    <section id="faqs" class="min-h-screen" hx-get="{% url 'faqs' %}" hx-trigger="revealed">
         {% include 'partials/faqs.html' %}
     </section>
 

@@ -1162,8 +1162,8 @@ video {
   gap: 1.25rem;
 }
 
-.gap-20 {
-  gap: 5rem;
+.gap-0 {
+  gap: 0px;
 }
 
 .gap-2\.5 {
@@ -1176,6 +1176,14 @@ video {
 
 .gap-4 {
   gap: 1rem;
+}
+
+.gap-20 {
+  gap: 5rem;
+}
+
+.gap-10 {
+  gap: 2.5rem;
 }
 
 .gap-x-2 {
