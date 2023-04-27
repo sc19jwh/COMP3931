@@ -14,3 +14,4 @@ Build instructions for running the web application locally are included below.
 4. Install the requirements using `pip install -r requirements.txt`
 5. __OPTIONAL__: Run `npm run build` to build the tailwindcss files (this step is only necessary if making source code changes, the included output.css file in the repository is otherwise up to date with all styling) 
 6. Run `python manage.py runserver` to start the application - you will then be able to access the web application at port number 8000 (or at the alternative port number chosen).
+7. __OPTIONAL__: Additionally, `python manage.py test apps` can be used to run the included unit tests. Running `python manage.py test apps/<app_name>` will run the unit tests for an individual Django app.
