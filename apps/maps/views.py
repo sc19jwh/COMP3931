@@ -82,7 +82,6 @@ def full_map(request):
         folium.PolyLine(locations=[[route.start_city.latitude, route.start_city.longitude], [route.end_city.latitude, route.end_city.longitude]], color='blue', dash_array=[5, 5]).add_to(map)
     # Return the HTML as a HttpResponse
     return HttpResponse(map._repr_html_())
-    # return render(request, 'map.html')
 
 # URL: partials/features
 # HTTP Method: GET

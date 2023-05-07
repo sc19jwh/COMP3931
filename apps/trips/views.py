@@ -19,7 +19,7 @@ import csv
 from .models import *
 from apps.flights.models import *
 from apps.authentication.models import Profile
-from .utils.geofuncs import lat_long_distance, dijkstra, least_transfers
+from .utils.geofuncs import lat_long_distance, dijkstra
 from apps.authentication.decorators import nationality_required
 from .utils.recommender import recommend_next_destination, recommend_first_destination
 
@@ -288,8 +288,8 @@ def add_travel(request):
     # If no direct route, using dijkstra to calculate the shortest and least connecting routes
     except TravelRoute.DoesNotExist:
         # Calculate two routes between the city, shortest and least connections
-        shortest_array, shortest_length = dijkstra(City.objects.all(), TravelRoute.objects.all(), start_dest.city.name, end_dest.city.name)
-        least_array, least_length = least_transfers(City.objects.all(), TravelRoute.objects.all(), start_dest.city.name, end_dest.city.name)
+        shortest_array, shortest_length = dijkstra(City.objects.all(), TravelRoute.objects.all(), start_dest.city.name, end_dest.city.name, "shortest")
+        least_array, least_length = dijkstra(City.objects.all(), TravelRoute.objects.all(), start_dest.city.name, end_dest.city.name, "least")
         # Convert to hours and minutes
         shortest_length_hours, shortest_length_mins = divmod(shortest_length, 60)
         least_length_hours, least_length_mins = divmod(least_length, 60)
@@ -377,8 +377,8 @@ def edit_travel(request):
     # If no direct route, using dijkstra to calculate the shortest and least connecting routes
     except TravelRoute.DoesNotExist:
         # Calculate two routes between the city, shortest and least connections
-        shortest_array, shortest_length = dijkstra(City.objects.all(), TravelRoute.objects.all(), start_dest.city.name, end_dest.city.name)
-        least_array, least_length = least_transfers(City.objects.all(), TravelRoute.objects.all(), start_dest.city.name, end_dest.city.name)
+        shortest_array, shortest_length = dijkstra(City.objects.all(), TravelRoute.objects.all(), start_dest.city.name, end_dest.city.name, "shortest")
+        least_array, least_length = dijkstra(City.objects.all(), TravelRoute.objects.all(), start_dest.city.name, end_dest.city.name, "least")
         # Convert to hours and minutes
         shortest_length_hours, shortest_length_mins = divmod(shortest_length, 60)
         least_length_hours, least_length_mins = divmod(least_length, 60)

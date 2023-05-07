@@ -1,3 +1,12 @@
+<!-- 
+    URL: partials/add_trip
+    View: add_trip()
+    Description: Pop-up accessible from <username>/mytrips. Pop-up first asks for a trip title and a start date.
+    The user is then asked their travel preferences one-by-one to build the trip profile. They enter their
+    preferences using a silder from 0 to 100. Once each question is answered, a POST request is raised to 
+    <username>/mytrips and a trip is created.
+ -->
+
 {% extends "popup.html" %}
 {% load static %}
 {% block mainbody %}
@@ -24,6 +33,7 @@
                     on click toggle the *display of #step-1" disabled>
                 Next
                 <span class="ml-2">
+                    <!-- ATTRIBUTION: Obtained from Bootstrap icon library - https://icons.getbootstrap.com/ -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
                         <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
                     </svg>
@@ -57,6 +67,7 @@
                 <button type="button" class="disabled:opacity-25 flex items-center justify-center text-center text-white bg-custom-50 enabled:hover:bg-custom-100 font-medium rounded-full text-sm px-3 py-1.5 transition ease-in-out duration-300" 
                 _="on click toggle the *display of #step-2 on click toggle the *display of #step-1">
                     <span class="mr-2">
+                        <!-- ATTRIBUTION: Obtained from Bootstrap icon library - https://icons.getbootstrap.com/ -->
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
                         </svg>
@@ -67,6 +78,7 @@
                 _="on click toggle the *display of #step-3 on click toggle the *display of #step-2">
                     Next
                     <span class="ml-2">
+                        <!-- ATTRIBUTION: Obtained from Bootstrap icon library - https://icons.getbootstrap.com/ -->
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
                         </svg>
@@ -101,6 +113,7 @@
                 <button type="button" class="disabled:opacity-25 flex items-center justify-center text-center text-white bg-custom-50 enabled:hover:bg-custom-100 font-medium rounded-full text-sm px-3 py-1.5 transition ease-in-out duration-300" 
                 _="on click toggle the *display of #step-3 on click toggle the *display of #step-2">
                     <span class="mr-2">
+                        <!-- ATTRIBUTION: Obtained from Bootstrap icon library - https://icons.getbootstrap.com/ -->
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
                         </svg>
@@ -111,6 +124,7 @@
                 _="on click toggle the *display of #step-4 on click toggle the *display of #step-3">
                     Next
                     <span class="ml-2">
+                        <!-- ATTRIBUTION: Obtained from Bootstrap icon library - https://icons.getbootstrap.com/ -->
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
                         </svg>
@@ -145,6 +159,7 @@
                 <button type="button" class="disabled:opacity-25 flex items-center justify-center text-center text-white bg-custom-50 enabled:hover:bg-custom-100 font-medium rounded-full text-sm px-3 py-1.5 transition ease-in-out duration-300" 
                 _="on click toggle the *display of #step-4 on click toggle the *display of #step-3">
                     <span class="mr-2">
+                        <!-- ATTRIBUTION: Obtained from Bootstrap icon library - https://icons.getbootstrap.com/ -->
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
                         </svg>
@@ -155,6 +170,7 @@
                 _="on click toggle the *display of #step-5 on click toggle the *display of #step-4">
                     Next
                     <span class="ml-2">
+                        <!-- ATTRIBUTION: Obtained from Bootstrap icon library - https://icons.getbootstrap.com/ -->
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
                         </svg>
@@ -189,6 +205,7 @@
                 <button type="button" class="disabled:opacity-25 flex items-center justify-center text-center text-white bg-custom-50 enabled:hover:bg-custom-100 font-medium rounded-full text-sm px-3 py-1.5 transition ease-in-out duration-300" 
                 _="on click toggle the *display of #step-5 on click toggle the *display of #step-4">
                     <span class="mr-2">
+                        <!-- ATTRIBUTION: Obtained from Bootstrap icon library - https://icons.getbootstrap.com/ -->
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
                         </svg>
@@ -198,6 +215,7 @@
                 <button class="disabled:opacity-25 flex items-center justify-center text-center text-white bg-custom-50 enabled:hover:bg-custom-100 font-medium rounded-full text-sm px-3 py-1.5 transition ease-in-out duration-300">
                     Create
                     <span class="ml-2">
+                        <!-- ATTRIBUTION: Obtained from Bootstrap icon library - https://icons.getbootstrap.com/ -->
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                             <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>

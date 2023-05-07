@@ -12,7 +12,7 @@ def recommend_next_destination(trip, cities, routes, source_city, existing_route
     longest_journey = 0
     for city in other_cities:
         if city.name != source_city:
-            route, duration = dijkstra(cities, routes, source_city.name, city.name)
+            route, duration = dijkstra(cities, routes, source_city.name, city.name, "shortest")
             if duration > longest_journey:
                 longest_journey = duration
             if duration < shortest_journey:
@@ -21,9 +21,9 @@ def recommend_next_destination(trip, cities, routes, source_city, existing_route
     trip_profile = [trip.journey_times, trip.climate, trip.food_budget, trip.accom_budget]
     # Create empty array to store the similarities in
     similarities = []
-    # Loop through all the
+    # Loop through all the cities
     for city in other_cities:
-        route, duration = dijkstra(cities, routes, source_city.name, city.name)
+        route, duration = dijkstra(cities, routes, source_city.name, city.name, "shortest")
         # Scale journey time against longest and shortest possible journey to get value between 0-100
         scaled_journey = ((duration - shortest_journey) / (longest_journey - shortest_journey)) * 100
         # Create city profile for the city (include journey time)

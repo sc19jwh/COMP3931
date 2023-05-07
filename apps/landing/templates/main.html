@@ -1,3 +1,10 @@
+<!-- 
+    URL: /
+    View: main()
+    Description: Main landing page (only accessible if user is not logged in). Includes links to log in and 
+    register screens. Raises GET request to partials/faqs when user scrolls to content (triggers animations).
+ -->
+
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
@@ -12,6 +19,7 @@
                 <button hx-get="{% url 'signin' %}" hx-target="body" hx-push-url="true" class="flex items-center text-center border border-custom-50 text-custom-50 bg-white hover:text-white hover:bg-custom-50 font-medium rounded-full text-sm px-3 py-1.5 transition ease-in-out duration-300 mr-3">
                     Sign in
                     <span class="ml-2">
+                        <!-- ATTRIBUTION: Obtained from Bootstrap icon library - https://icons.getbootstrap.com/ -->
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
                             <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z"/>
                         </svg>
@@ -28,6 +36,7 @@
                         <button hx-get="{% url 'register' %}" hx-target="body" hx-push-url="true" class="animate-slideInLeft flex items-center text-center text-white bg-custom-50 hover:bg-custom-100 font-medium rounded-full text-sm p-3 transition ease-in-out duration-300 mr-3">
                             Join Now
                             <span class="ml-2">
+                                <!-- ATTRIBUTION: Obtained from Bootstrap icon library - https://icons.getbootstrap.com/ -->
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
                                     <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
                                 </svg>
@@ -41,6 +50,7 @@
                 </div>
             </div>
             <span class="animate-bounce mt-5">
+                <!-- ATTRIBUTION: Obtained from Bootstrap icon library - https://icons.getbootstrap.com/ -->
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
                 </svg>

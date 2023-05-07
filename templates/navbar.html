@@ -9,12 +9,13 @@
                 <div class="flex items-center justify-center">
                     <!-- Hamburger button for mobile devices -->
                     <button _="on click toggle the *display of #mobile_menu" type="button" class="sm:hidden mr-2 p-2 text-gray-500 hover:text-gray-800">
+                        <!-- ATTRIBUTION: Obtained from Bootstrap icon library - https://icons.getbootstrap.com/ -->
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#1F2937" class="bi bi-list" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
                         </svg>
                     </button>
                     <!-- Logo -->
-                    <img class="mr-7 h-7 w-auto hover:-rotate-12 hover:cursor-pointer" src="{% static 'images/logo.png' %}">
+                    <img hx-get="{% url 'main' %}" hx-target="body" hx-push-url="true" class="mr-7 h-7 w-auto hover:-rotate-12 hover:cursor-pointer" src="{% static 'images/logo.png' %}">
                     <!-- Main NavBar -->
                     <button hx-get="{% url 'mytrips' user.username %}" hx-target="body" hx-push-url="true" class="hidden sm:flex text-sm font-semibold mr-4 {% if selected_page == 'Dashboard' %} text-gray-800 border-b-2 border-custom-50 {% else %} text-gray-500 {% endif %} hover:text-gray-800 hover:border-b-2 hover:border-custom-50 px-3 py-5">Dashboard</button>
                     <button hx-get="{% url 'currency' %}" hx-target="body" hx-push-url="true" class="hidden sm:flex text-sm font-semibold mr-4 {% if selected_page == 'Currency' %} text-gray-800 border-b-2 border-custom-50 {% else %} text-gray-500 {% endif %} hover:text-gray-800 hover:border-b-2 hover:border-custom-50 px-3 py-5">Currency</button>
@@ -26,12 +27,14 @@
                     <!-- ATTRIBUTION: No user image obtained from icon-libary.com - https://icon-library.com/images/no-user-image-icon/no-user-image-icon-27.jpg -->
                     <img class="h-7 w-7 rounded-full" src="{% if profile.image %} data:image/jpeg;base64,{{ profile.image }} {% else %} {% static 'images/noprofilepic.jpg' %} {% endif %}" alt="">
                     <!-- Drop down arrow -->
+                    <!-- ATTRIBUTION: Obtained from Bootstrap icon library - https://icons.getbootstrap.com/ -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="#333333" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
                         <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
                     </svg>
                 </div>
                 <div id="dropdown" _="on mouseleave toggle the *display of me" style="display: none;" class="absolute right-0 mt-3 w-40 origin-top-right bg-white shadow">
                     <button hx-get="{% url 'profile' %}" hx-target="body" hx-push-url="true" class="text-start w-full flex flex-row items-center px-4 py-2 text-sm text-gray-800 hover:bg-gray-100" role="menuitem" tabindex="-1" id="user-menu-item-0">
+                        <!-- ATTRIBUTION: Obtained from Bootstrap icon library - https://icons.getbootstrap.com/ -->
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#333333" class="bi bi-person-circle" viewBox="0 0 16 16">
                             <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
                             <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
@@ -39,6 +42,7 @@
                         <span class="ml-2">Your Profile</span>
                     </button>
                     <button hx-get="{% url 'signout' %}" hx-target="body" hx-push-url="true" class="text-start w-full flex flex-row items-center px-4 py-2 text-sm text-gray-800 hover:bg-gray-100" role="menuitem" tabindex="-1" id="user-menu-item-2">
+                        <!-- ATTRIBUTION: Obtained from Bootstrap icon library - https://icons.getbootstrap.com/ -->
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#333333" class="bi bi-box-arrow-left" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0v2z"/>
                             <path fill-rule="evenodd" d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"/>
