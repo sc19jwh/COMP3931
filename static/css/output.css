@@ -1576,20 +1576,28 @@ video {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Scrollbar details - not possible using tailwind */
+
 ::-webkit-scrollbar {
   width: 8px;
 }
+
+/* Same as background colour - bg-gray-50 */
 
 ::-webkit-scrollbar-track {
   background: #F9FAFB;
 }
 
+/* Grey hex */
+
 ::-webkit-scrollbar-thumb {
-  background: #888;
+  background: #808080;
 }
 
+/* Dark grey hex */
+
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: #5A5A5A;
 }
 
 .hover\:-rotate-12:hover {

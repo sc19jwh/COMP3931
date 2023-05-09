@@ -16,12 +16,14 @@ SECRET_KEY = 'django-insecure-y#nd-&#f2=frl8ckhxqnlo#8n2bb^9fdt02^t-q@42=t+5&li&
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# Allow any host
 ALLOWED_HOSTS = ['*']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    # Import all apps
     'apps.trips.apps.TripsConfig',
     'apps.authentication.apps.AuthenticationConfig',
     'apps.currencies.apps.CurrenciesConfig',
@@ -111,6 +113,7 @@ USE_TZ = False
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
+# Set up link to tailwindcss static files
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [ BASE_DIR / "static/", ]
 
@@ -119,5 +122,6 @@ STATICFILES_DIRS = [ BASE_DIR / "static/", ]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Set the urls to auto redirect to
 LOGIN_URL = '/user/signin'
 LOGIN_REDIRECT_URL = '/user/signin'

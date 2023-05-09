@@ -107,7 +107,7 @@ def set_country_flag(request):
     if not id:
         id = request.GET.get('country2')
         if not id:
-            return HttpResponseBadRequest("Bad request") 
+            return HttpResponseBadRequest("Invalid") 
     country = Country.objects.get(id=id)
     context = {'countryid': country.alpha2code}
     return render(request, 'partials/set_country_flag.html', context)

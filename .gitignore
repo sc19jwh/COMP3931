@@ -1,3 +1,4 @@
+# Dont push the virtual environment, cache files or env files for API keys
 venv/
 *.pyc
 .env

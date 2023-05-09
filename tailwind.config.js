@@ -4,12 +4,14 @@ module.exports = {
       purgeLayersByDefault: true,
     },
     purge: {
-        enabled: false, //true for production build
+        enabled: false, // True for deployed app
+        // Scan these files
         content: [
             '**/templates/*.html',
             '**/templates/**/*.html'
         ]
     },
+    // Add some custom colours and animations
     theme: {
         extend: {
           colors: {

@@ -1,4 +1,6 @@
+# Import cosine from libary
 from sklearn.metrics.pairwise import cosine_similarity
+# Import shortest path function developed in geofuncs
 from apps.trips.utils.geofuncs import dijkstra
 
 # INPUT: trip object, queryset of cities, queryset of routes, sourc_city object, existing route as array of city objects
@@ -26,7 +28,7 @@ def recommend_next_destination(trip, cities, routes, source_city, existing_route
         route, duration = dijkstra(cities, routes, source_city.name, city.name, "shortest")
         # Scale journey time against longest and shortest possible journey to get value between 0-100
         scaled_journey = ((duration - shortest_journey) / (longest_journey - shortest_journey)) * 100
-        # Create city profile for the city (include journey time)
+        # Create context aware profile for the city (include journey time)
         city_profile = [scaled_journey, city.climate, city.food_budget, city.accom_budget]
         # Use cosine similarity to work out best cities
         cosine = cosine_similarity([trip_profile], [city_profile])[0][0]
@@ -43,7 +45,7 @@ def recommend_first_destination(trip, cities):
     trip_profile = [trip.climate, trip.food_budget, trip.accom_budget]
     # Create empty array to store the similarities in
     similarities = []
-    # Loop through all the
+    # Loop through all the cities
     for city in cities:
         # Create city profile for the city
         city_profile = [city.climate, city.food_budget, city.accom_budget]

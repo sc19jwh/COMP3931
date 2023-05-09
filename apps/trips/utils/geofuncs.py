@@ -1,10 +1,11 @@
+# Library imports
 from geopy.geocoders import Nominatim
 import h3
 import networkx
 
 # INPUT: lat and long of two places
 # OUTPUT: distance between the two points in km
-# e.g. distance - lat_long_distance(52.4796992, -1.9026911, 53.31067150, -4.6330966)
+# e.g. distance = lat_long_distance(52.4796992, -1.9026911, 53.31067150, -4.6330966)
 def lat_long_distance(lat1, long1, lat2, long2):
     distance = h3.point_dist((lat1, long1), (lat2, long2), unit='km')
     return distance

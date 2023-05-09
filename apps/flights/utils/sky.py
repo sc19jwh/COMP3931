@@ -4,23 +4,6 @@ import datetime
 from dotenv import load_dotenv
 import os
 
-# INPUT: session_token string derived from 'quick search' and True/False value for direct flights 
-# OUTPUT: 2 dictionaries of flight information
-# e.g. full_flight_search(session_token, True)
-def full_flight_search(session_token, direct):
-    load_dotenv()
-    # Create url by combining base url and session_token from previous step
-    url = "https://partners.api.skyscanner.net/apiservices/v3/flights/live/search/poll/" + session_token
-    headers = {
-        "x-api-key": os.getenv('skyscanner_api_key')
-    }
-    # Load as JSON
-    response = json.loads(requests.post(url, headers=headers).text)
-    # Call process function
-    session_token, direct_flights, connecting_flights = process_response(response, direct)
-    # Return the values returned from process function apart from session_token as will no longer be needed
-    return direct_flights, connecting_flights
-
 # INPUT: strings for currency, IATA Codes for departure/destination, integers for year/month/day, boolean for direct flights
 # OUTPUT: 2 dictionaries of flight information and a session_token of the search
 # e.g. quick_flight_search("GBP", "MAN", "NAP", 2023, 6, 12, True)

@@ -20,5 +20,3 @@ class ProfileModelTest(TestCase):
     # Ensure that string representatinon of profile object is correct
     def test_string(self):
         self.assertEqual(str(self.profile), 'someusername')
-        
-    
